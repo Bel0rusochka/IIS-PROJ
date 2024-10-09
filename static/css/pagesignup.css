@@ -61,14 +61,27 @@ body {
   align-items: flex-start; /* Align items to the top */
   justify-content: flex-start; /* Align items to the left */
   width: 100%;
-  padding: 30px;
   background-color: rgba(240, 240, 240, 1);
   border-radius: 10px;
+}
+.pagesignup-input {
+  width: 100%;
+  padding: 20px;
+  font-size: 15px;
+  font-family: Silkscreen;
+  color: rgba(0, 0, 0, 0.7);
+  border: none;
+  background-color: rgba(240, 240, 240, 1); /* Same background */
+  border-radius: 10px;
+  outline: none;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
 
 .pagesignup-text14,
 .pagesignup-text16,
+.pagesignup-text17,
 .pagesignup-text18,
+.pagesignup-text19,
 .pagesignup-text20 {
   position: absolute; /* Position labels absolutely */
   top: 5px; 

@@ -45,6 +45,19 @@ body {
   background-color: rgba(255, 251, 251, 1);
 
 }
+/* Style for input fields */
+.pagesignup-input {
+  width: 100%;
+  padding: 20px;
+  font-size: 15px;
+  font-family: Silkscreen;
+  color: rgba(0, 0, 0, 0.7);
+  border: none;
+  background-color: rgba(240, 240, 240, 1); /* Keep same background */
+  border-radius: 10px;
+  outline: none;
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
 
 .pagesignup-text12 {
   font-size: 48px;
@@ -59,10 +72,10 @@ body {
   align-items: flex-start; /* Align items to the top */
   justify-content: flex-start; /* Align items to the left */
   width: 100%;
-  padding: 30px;
   background-color: rgba(240, 240, 240, 1);
   border-radius: 10px;
 }
+
 
 .pagesignup-text16,
 .pagesignup-text20 {
