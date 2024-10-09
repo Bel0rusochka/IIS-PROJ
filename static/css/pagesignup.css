@@ -1,0 +1,126 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: rgba(229, 241, 255, 1); /* Full-screen background color */
+}
+
+.pagesignup-container {
+  display: flex;
+  min-height: 120vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagesignup-bluefit {
+  display: flex;
+  justify-content: space-between; /* Space out logo, icons, and search */
+  align-items: center; /* Vertically center items */
+  padding: 10px 20px; /* Padding instead of fixed width */
+  height: 77px; /* Keep header height */
+  background-color: rgba(205, 226, 250, 1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed; /* Keep header fixed at the top */
+  width: calc(100% - 40px); /* Ensure full width minus margin */
+  margin: 20px; /* Add margin around header */
+  box-sizing: border-box; /* Include padding in width */
+  
+}
+
+.pagesignup-text10 {
+  font-size: 32px;
+  font-family: Silkscreen, sans-serif;
+  color: rgba(0, 0, 0, 1);
+}
+
+.pagesignup-signup {
+  width: 500px; /* Optional: maximum width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 32px;
+  border: 1px solid rgba(195, 193, 193, 1);
+  border-radius: 20px;
+  background-color: rgba(255, 251, 251, 1);
+
+}
+
+.pagesignup-text12 {
+  font-size: 48px;
+  font-family: Silkscreen;
+}
+
+.pagesignup-emailormbph,
+.pagesignup-username,
+.pagesignup-fullname,
+.pagesignup-password {
+  position: relative; /* Position context for the labels */
+  border: 1px solid rgba(195, 193, 193, 1);
+  display: flex;
+  align-items: flex-start; /* Align items to the top */
+  justify-content: flex-start; /* Align items to the left */
+  width: 100%;
+  padding: 30px;
+  background-color: rgba(240, 240, 240, 1);
+  border-radius: 10px;
+}
+
+.pagesignup-text14,
+.pagesignup-text16,
+.pagesignup-text18,
+.pagesignup-text20 {
+  position: absolute; /* Position labels absolutely */
+  top: 5px; 
+  left: 10px;
+  font-size: 15px;
+  font-family: Silkscreen;
+  color: rgba(0, 0, 0, 0.7);
+  pointer-events: none; /* Prevent interactions with the label */
+
+}
+
+
+.pagesignup-buttonsingupbig {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  padding: 15px;
+  border: 1px solid rgba(35, 84, 143, 1);
+  border-radius: 10px;
+  background-color: rgba(205, 225, 248, 1);
+  font-size: 20px;
+  text-decoration: none; /* Ensure no underline on link */
+  color: inherit; /* Ensures the text color is consistent */
+}
+.pagesignup-text22 {
+  font-size: 32px;
+  font-family: Silkscreen;
+}
+
+.pagesignup-haveacc {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagesignup-text24 {
+  font-size: 20px;
+  font-family: Silkscreen;
+}
+
+.pagesignup-buttlogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid rgba(35, 84, 143, 1);
+  border-radius: 5px;
+  background-color: rgba(205, 225, 248, 1);
+}
+
+.pagesignup-text26 {
+  font-size: 16px;
+  font-family: Silkscreen;
+}

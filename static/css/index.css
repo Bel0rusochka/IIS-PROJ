@@ -1,0 +1,274 @@
+.projekt-header {
+  display: flex;
+  justify-content: space-between; /* Space out logo, icons, and search */
+  align-items: center; /* Vertically center items */
+  padding: 10px 20px; /* Padding instead of fixed width */
+  height: 77px; /* Keep header height */
+  background-color: rgba(205, 226, 250, 1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed; /* Keep header fixed at the top */
+  width: calc(100% - 40px); /* Ensure full width minus margin */
+  margin: 20px; /* Add margin around header */
+  box-sizing: border-box; /* Include padding in width */
+}
+
+.projekt-text1,
+.projekt-text2 {
+  font-size: 32px;
+  font-family: Silkscreen, sans-serif;
+  color: rgba(0, 0, 0, 1);
+}
+
+.projekt-text2 {
+  background-color: rgba(236, 245, 255, 1); /* Light blue background */
+  border-radius: 10px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
+}
+
+.projekt-text2:hover {
+  background-color: rgba(81, 99, 189, 1); /* Change background color on hover */
+  color: white; /* White text on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.projekt-mail,
+.projekt-notifications,
+.projekt-menu {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.projekt-menu {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+}
+
+.projekt-sidebar {
+  right: 0;
+  background-color: rgba(205, 226, 250, 1);
+  overflow-x: hidden;
+  visibility: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  gap: 30px;
+  width: 228px;
+  height: auto; /* Sidebar height grows based on its content */
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  top: 50%; /* Center the sidebar vertically */
+  transform: translateY(-40%); /* Adjust it to start from the center */
+}
+.projekt-sidebar .avatar{
+  height: 200px;
+}
+
+.projekt-menu {
+  cursor: pointer;
+  width: 54px;
+  height: 60px;
+}
+
+.projekt-sidebar a {
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 25px;
+  color: black;
+  display: block;
+  transition: 0.3s;
+}
+
+.projekt-sidebar a:hover {
+  color: #f1f1f1;
+}
+
+.projekt-sidebar-item {
+  color: rgba(35, 84, 143, 1);
+  font-size: 24px;
+  font-family: Silkscreen, sans-serif; /* Fallback font */
+  font-weight: 400;
+  text-align: left; /* Align text to the left */
+  text-decoration: none; /* Remove underline */
+  padding: 10px 0; /* Add vertical padding */
+  transition: color 0.3s; /* Add transition for hover effect */
+}
+
+.projekt-sidebar-item:hover {
+  color: rgba(15, 55, 100, 1); /* Change color on hover */
+}
+
+.closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#openSidebarBtn {
+  font-size: 30px;
+  cursor: pointer;
+  color: black;
+  padding: 10px;
+}
+
+.projekt-container {
+  width: calc(100% - 0); /* Adjust as needed */
+  display: flex;
+  min-height: 100vh;
+  align-items:  flex-start;
+  flex-direction: column;
+  transition: margin-right 0.5s; /* Add transition for smoother movement */
+}
+
+.projekt-foto {
+  display: flex; /* Use Flexbox for the gallery */
+  flex-wrap: wrap; /* Allows the items to wrap */
+  margin-top: 100px; /* Maintain the margin for spacing */
+  align-items: stretch;
+}
+
+.projekt-projekt {
+  width: 100%;
+  height: 990px;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.projekt-rectangle1 {
+  position: absolute;
+  top:20px;
+  left: 20px;
+  width: 1874px;
+  height: 77px;
+  margin-top: 0px;
+
+}
+
+.projekt-projekt {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next line */
+  position: relative; /* Required to position the child elements correctly */
+}
+
+.projekt-rectangle1 {
+  position: fixed; /* Keeps rectangle1 in its original position */
+  top: 20px;
+  left: 20px;
+  width: 1874px;
+  height: 77px;
+}
+
+.img1,
+.img2,
+.img3,
+.img4,
+.img5,
+.img6,
+.img7
+{
+  border-radius: 15px;
+  margin: 20px;
+  flex-grow: 1;
+}
+
+/* Set specific width and height for each rectangle, ensuring they align properly */
+.img7 {
+  width: 603px;
+}
+
+.img6{
+  width: 421px;
+}
+
+.img5 {
+  width: 594px;
+}
+
+.img4{
+  width: 537px;
+}
+
+.img3 {
+  width: 409px;
+}
+
+.img2 {
+  width: 683px;
+}
+
+.img1 {
+  width: 351px;
+}
+.projekt-foto img {
+  height: 470px; /* Set this to the height of the tallest rectangle */
+  object-fit: cover; /* Ensures the image covers the entire area without distortion */
+}
+
+.projekt-search1 {
+  gap: 10px;
+  width: 865px;
+  display: flex;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background-color: rgba(236, 245, 255, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+
+.projekt-group1 {
+  display: flex;
+  align-items: center;
+}
+
+.projekt-frame2 {
+  gap: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.projekt-text3 {
+  top: 3px;
+  left: 43px;
+  color: rgba(116, 114, 114, 1);
+  font-size: 20px;
+  font-family: Roboto;
+  font-weight: 400;
+}
+
+.projekt-text5 {
+  top: 4px;
+  left: 22px;
+  color: rgba(0, 0, 0, 1);
+  font-size: 64px;
+  font-family: Arial;
+  font-weight: 400;
+}
+
+
+.projekt-mail,
+.projekt-notifications {
+  width: 40px;
+  height: 40px;
+}
+
+.addPost{
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 80px;
+  position: fixed;
+  border: 1px solid rgba(81, 99, 189, 1);
+}
