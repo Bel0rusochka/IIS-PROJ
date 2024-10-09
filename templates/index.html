@@ -1,1 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FITstagram</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="twitter:card" content="summary_large_image" />
 
+    <!-- Reset CSS -->
+    <style>
+      html {
+        line-height: 1.15;
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        line-height: 1.15;
+        color: var(--dl-color-theme-neutral-dark);
+        background-color: var(--dl-color-theme-neutral-light);
+      }
+      * {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+      }
+      p, li, ul, pre, div, h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        padding: 0;
+      }
+      button {
+        background-color: transparent;
+        font-family: inherit;
+        font-size: 100%;
+        line-height: 1.15;
+      }
+      a {
+        color: inherit;
+        text-decoration: inherit;
+      }
+      img {
+        display: block;
+      }
+    </style>
+
+    <!-- Font Styles -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
+    />
+
+    <!-- Animation Styles -->
+    <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="../static/css/index.css" />
+  </head>
+  <body>
+    <div id="mySidebar" class="projekt-sidebar">
+      <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">×</a>
+      <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar" />
+      <a href="#" class="projekt-sidebar-item">New Post</a>
+      <a href="#" class="projekt-sidebar-item">My Profile</a>
+      <a href="#" class="projekt-sidebar-item">Communities</a>
+      <a href="#" class="projekt-sidebar-item">Direct</a>
+      <a href="#" class="projekt-sidebar-item">Settings</a>
+      <a href="#" class="projekt-sidebar-item">Help</a>
+      <a href="#" class="projekt-sidebar-item">Log Out</a>
+  </div>
+  
+    
+    <div class="projekt-container">
+      <div class="projekt-projekt">
+        <!-- Header Section -->
+        <div class="projekt-header">
+          <span class="projekt-text1">FITstagram</span>
+               <!-- Search Section -->
+        <div class="projekt-search1">
+          <div class="projekt-group1">
+            <img
+              alt="search2497"
+              src="../static/images/search.svg"
+              class="projekt-search2"
+            />
+            <span class="projekt-text3"><span>Search...</span></span>
+
+          </div>
+
+        </div>
+        <a href="pagesignup.html" class="singup-button">
+          <span class="projekt-text2">Sign Up</span>
+      </a>
+      
+
+          <!-- Icons Section -->
+          <div class="projekt-frame2">
+              <img alt="mail" src="../static/images/mail2498-3han.svg" class="projekt-mail" />
+              <img alt="notifications" src="../static/images/notifications2497-9iql.svg" class="projekt-notifications" />
+              <img alt="menu" src="../static/images/menu211-wd1k.svg" class="projekt-menu" onclick="toggleNav()" />
+          </div>
+      
+        </div>
+        <!-- Image Gallery Section -->
+        <div class="projekt-foto">
+          <img
+            alt="img1"
+            src="../static/images/img1.png"
+            class="img1"
+          />
+          <img
+            alt="img2"
+            src="../static/images/img2.png"
+            class="img2"
+          />
+          <img
+            alt="img3"
+            src="../static/images/img3.png"
+            class="img3"
+          />
+          <img
+            alt="img4"
+            src="../static/images/img4.png"
+            class="img4"
+          />
+          <img
+            alt="img5"
+            src="../static/images/img5.png"
+            class="img5"
+          />
+          <img
+            alt="img6"
+            src="../static/images/img6.png"
+            class="img6"
+          />
+          <img
+            alt="img7"
+            src="../static/images/img7.png"
+            class="img7"
+          />
+        </div>
+
+        <!-- Add New Section -->
+        <div class="addPost">
+          <img
+            alt="addPost"
+            src="../static/images/ellipse.png"
+          />
+          <span class="projekt-text5">+</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      function toggleNav() {
+        const sidebar = document.getElementById("mySidebar");
+        const container = document.querySelector('.projekt-container'); // Select the container
+        if (sidebar.style.width === "400px") {
+          sidebar.style.width = "0"; // Close the sidebar
+          container.style.marginRight = "0"; // Reset container margin
+          sidebar.style.visibility = "hidden"
+        } else {
+          sidebar.style.width = "400px"; // Open the sidebar
+          container.style.marginRight = "400px"; // Adjust the container to fit the sidebar
+          sidebar.style.visibility = "visible"
+
+        }
+      }
+    </script>
+      
+  </body>
+</html>
