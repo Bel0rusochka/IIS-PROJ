@@ -6,44 +6,6 @@
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
 
-    <!-- Reset CSS -->
-    <style>
-      html {
-        line-height: 1.15;
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        font-family: 'Inter', sans-serif;
-        font-weight: 400;
-        line-height: 1.15;
-        color: var(--dl-color-theme-neutral-dark);
-        background-color: var(--dl-color-theme-neutral-light);
-      }
-      * {
-        box-sizing: border-box;
-        border-width: 0;
-        border-style: solid;
-      }
-      p, li, ul, pre, div, h1, h2, h3, h4, h5, h6 {
-        margin: 0;
-        padding: 0;
-      }
-      button {
-        background-color: transparent;
-        font-family: inherit;
-        font-size: 100%;
-        line-height: 1.15;
-      }
-      a {
-        color: inherit;
-        text-decoration: inherit;
-      }
-      img {
-        display: block;
-      }
-    </style>
-    </style>
     <!-- Font Styles -->
     <link
       rel="stylesheet"
@@ -71,25 +33,24 @@
           <div class="pagesignup-signup">
             <span class="pagesignup-text12"><span>Sign up</span></span>
             <div class="pagesignup-emailormbph">
-              <span class="pagesignup-text14">
-                <span>email</span>
-              </span>
+              <input type="email" id="email" class="pagesignup-input" placeholder="email">
             </div>
             <div class="pagesignup-username">
-              <span class="pagesignup-text16"><span>username</span></span>
+              <input type="text" id="username" class="pagesignup-input" placeholder="username">
             </div>
             <div class="pagesignup-fullname">
-              <span class="pagesignup-text18"><span>name</span></span>
+              <input type="text" id="name" class="pagesignup-input" placeholder="name">
             </div>
             <div class="pagesignup-fullname">
-              <span class="pagesignup-text18"><span>surname</span></span>
+              <input type="text" id="surname" class="pagesignup-input" placeholder="surname">
             </div>
             <div class="pagesignup-password">
-              <span class="pagesignup-text20"><span>password</span></span>
+              <input type="password" id="password" class="pagesignup-input" placeholder="password">
             </div>
             <div class="pagesignup-password">
-              <span class="pagesignup-text20"><span>confirm password</span></span>
+              <input type="password" id="confirm_password" class="pagesignup-input" placeholder="confirm password">
             </div>
+            
             <a href="index.html" class="pagesignup-buttonsingupbig">
               <span class="pagesignup-text22"><span>sign up</span></span>
             </a>
