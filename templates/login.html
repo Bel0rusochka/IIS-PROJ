@@ -7,18 +7,9 @@
     <meta property="twitter:card" content="summary_large_image" />
 
     <!-- Font Styles -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"/>
 
   <body>
     <link rel="stylesheet" href="../static/css/style.css" />
@@ -28,30 +19,33 @@
         <span class="pagesignup-text10">FITstagram</span>
       </div>
       <div class="pagesignup-container">
-        <div class="pagesignup-pagesignup">
-          
-          <div class="pagesignup-signup">
+
+          <form class="pagesignup-signup" method="POST" action="/login">
             <span class="pagesignup-text12"><span>Log In</span></span>
+
             <div class="pagesignup-username">
-              <input type="text" id="username" class="pagesignup-input" placeholder="username">
+              <input type="text" id="login_email" name="login_email"  class="pagesignup-input" placeholder="login_email">
             </div>
+
             <div class="pagesignup-password">
-              <input type="password" id="password" class="pagesignup-input" placeholder="password">
+              <input type="password" id="password" name="password" class="pagesignup-input" placeholder="password">
             </div>
             
-            <a href="index.html" class="pagesignup-buttonsingupbig">
-              <span class="pagesignup-text22"><span>Log In</span></span>
-            </a>
+            <button type="submit" class="pagesignup-buttonsingupbig">
+              <span class="pagesignup-text22"><span>Log in</span></span>
+            </button>
+
             <div class="pagesignup-haveacc">
               <span class="pagesignup-text24">
                 <span>Dont have an account?</span>
               </span>
-              <a  href="pagesignup.html"  class="pagesignup-buttlogin">
+              <a  href="{{url_for('signup')}}"  class="pagesignup-buttlogin">
                 <span class="pagesignup-text26"><span>sign up</span></span>
               </a>
             </div>
-          </div>
-        </div>
+
+        </form>
+
       </div>
     </div>
   </body>

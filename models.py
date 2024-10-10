@@ -9,7 +9,7 @@ groups_users = db.Table('group_users',
 class Users(db.Model):
     login = db.Column(db.String(60), primary_key = True)
     mail = db.Column(db.String(60),nullable=False)
-    password = db.Column(db.String(60),nullable=False)
+    password = db.Column(db.String(32),nullable=False)
     name = db.Column(db.String(60),nullable=False)
     surname = db.Column(db.String(60),nullable=False)
     is_banned = db.Column(db.Boolean, default=False)
