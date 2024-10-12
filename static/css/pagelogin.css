@@ -6,7 +6,7 @@ body {
 
 .pagesignup-container {
   display: flex;
-  min-height: 120vh;
+  padding: 50px; 
   align-items: center;
   justify-content: center;
 }
@@ -20,7 +20,6 @@ body {
   background-color: rgba(205, 226, 250, 1);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: fixed; /* Keep header fixed at the top */
   width: calc(100% - 40px); /* Ensure full width minus margin */
   margin: 20px; /* Add margin around header */
   box-sizing: border-box; /* Include padding in width */

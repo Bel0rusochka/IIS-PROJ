@@ -60,13 +60,13 @@
           </div>
 
         </div>
-        <a href="pagesignup.html" class="singup-button">
+        <a href="pagesignup.html"  id="signupButton" class="singup-button">
           <span class="projekt-text2">Sign Up</span>
-      </a>
+        </a>
       
 
           <!-- Icons Section -->
-          <div class="projekt-frame2">
+          <div class="projekt-frame2" id="iconContainer">
               <img alt="mail" src="../static/images/mail2498-3han.svg" class="projekt-mail" />
               <img alt="notifications" src="../static/images/notifications2497-9iql.svg" class="projekt-notifications" />
               <img alt="menu" src="../static/images/menu211-wd1k.svg" class="projekt-menu" onclick="toggleNav()" />
@@ -113,31 +113,38 @@
         </div>
 
         <!-- Add New Section -->
-        <div class="addPost">
-          <img
-            alt="addPost"
-            src="../static/images/ellipse.png"
-          />
-          <span class="projekt-text5">+</span>
+        <div class="addPost" onclick="togglePopup()">
+          <div class="ellipse">
+            <span class="projekt-text5">+</span>
+          </div>
         </div>
+
+    <!-- Popup Modal -->
+    <div id="popupModal" class="popup-modal">
+      <div class="popup-content">
+        <div class="popup-header">
+          <span class="close-popup" onclick="togglePopup()">×</span>
+          <h2 class="popup-title">New Post</h2>
+          <button type="button" class="post-button" onclick="submitPost()">Post</button>
+        </div>
+        
+        <form>
+          <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
+            <p>Drag & Drop image here</p>
+            <p>or</p>
+            <span class="image-upload-label">Click to Upload Image</span>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" />
+          </div>
+
+          <textarea id="caption" rows="4" placeholder="Write a caption..."></textarea>
+
+          <input type="text" id="tags" placeholder="Add tags separated by commas" />
+        </form>
       </div>
     </div>
-    <script>
-      function toggleNav() {
-        const sidebar = document.getElementById("mySidebar");
-        const container = document.querySelector('.projekt-container'); // Select the container
-        if (sidebar.style.width === "400px") {
-          sidebar.style.width = "0"; // Close the sidebar
-          container.style.marginRight = "0"; // Reset container margin
-          sidebar.style.visibility = "hidden"
-        } else {
-          sidebar.style.width = "400px"; // Open the sidebar
-          container.style.marginRight = "400px"; // Adjust the container to fit the sidebar
-          sidebar.style.visibility = "visible"
-
-        }
-      }
-    </script>
+      </div>
+    </div>
+    <script src="../static/js/main.js"></script>
       
   </body>
 </html>
