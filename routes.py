@@ -67,9 +67,4 @@ def registrate_routes(app, db):
 
     @app.route('/')
     def index():
-        post_db = Posts.query.get(13)
-        user_db = Users.query.get('admin')
-        post_db.likes.append(user_db)
-        db.session.commit()
-        print(post_db.like_count())
         return "Hello, world!"
