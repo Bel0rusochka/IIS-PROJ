@@ -11,6 +11,8 @@
   width: calc(100% - 40px); /* Ensure full width minus margin */
   margin: 20px; /* Add margin around header */
   box-sizing: border-box; /* Include padding in width */
+  z-index: 1000; /* Ensure the header stays above other content */
+  transition: margin-top 0.4s ease, background-color 0.4s ease; 
 }
 
 .projekt-text1,
@@ -25,11 +27,12 @@
   border-radius: 10px;
   padding: 10px 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
   transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
 }
 
 .projekt-text2:hover {
-  background-color: rgba(81, 99, 189, 1); /* Change background color on hover */
+  background-color: rgb(43, 90, 146);
   color: white; /* White text on hover */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
   cursor: pointer; /* Pointer cursor on hover */
@@ -52,7 +55,7 @@
 .projekt-sidebar {
   right: 0;
   background-color: rgba(205, 226, 250, 1);
-  overflow-x: hidden;
+  overflow-y: auto; 
   visibility: hidden;
   transition: 0.5s;
   padding-top: 60px;
@@ -68,6 +71,7 @@
   border-radius: 8px;
   top: 50%; /* Center the sidebar vertically */
   transform: translateY(-40%); /* Adjust it to start from the center */
+  z-index: 100;
 }
 .projekt-sidebar .avatar{
   height: 200px;
@@ -97,14 +101,20 @@
   font-size: 24px;
   font-family: Silkscreen, sans-serif; /* Fallback font */
   font-weight: 400;
-  text-align: left; /* Align text to the left */
+  text-align: center;
+
   text-decoration: none; /* Remove underline */
   padding: 10px 0; /* Add vertical padding */
+  box-sizing: border-box;
+  width: 100%; /* Ensures items take full width */
+
   transition: color 0.3s; /* Add transition for hover effect */
 }
 
 .projekt-sidebar-item:hover {
   color: rgba(15, 55, 100, 1); /* Change color on hover */
+  background-color: rgba(81, 99, 189, 0.2);
+
 }
 
 .closebtn {
@@ -248,14 +258,7 @@
   font-weight: 400;
 }
 
-.projekt-text5 {
-  top: 4px;
-  left: 22px;
-  color: rgba(0, 0, 0, 1);
-  font-size: 64px;
-  font-family: Arial;
-  font-weight: 400;
-}
+
 
 
 .projekt-mail,
@@ -264,11 +267,147 @@
   height: 40px;
 }
 
-.addPost{
+.addPost {
   bottom: 0;
   left: 0;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 80px;
   height: 80px;
-  position: fixed;
   border: 1px solid rgba(81, 99, 189, 1);
+  border-radius: 50%; /* Make it fully circular */
+  background-color: rgba(205, 226, 250, 1); /* Ellipse color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.ellipse {
+  width: 100%; /* Ellipse width */
+  height: 100%; /* Ellipse height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.projekt-text5 {
+  font-size: 64px;
+  font-family: Arial;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  user-select: none;
+}
+
+/* Popup Modal Styling */
+.popup-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1001; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+}
+
+.popup-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Allow it to be responsive */
+  max-width: 500px; /* Limit the width to 500px */
+}
+
+
+.close-popup {
+  color: #aaa;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.close-popup:hover {
+  color: #000;
+  cursor: pointer;
+}
+
+/* Form Styling */
+form input[type="file"],
+form textarea,
+form input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #2b5a92;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #1d4370;
+}
+
+.drop-zone {
+  width: 100%;
+  padding: 20px;
+  margin-top: 10px;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgba(236, 245, 255, 0.3);
+  transition: background-color 0.3s;
+  cursor: pointer; /* Change cursor to indicate it's clickable */
+  background-size: cover; /* Cover the entire drop zone */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  height: 400px; /* Set a default height for the drop zone */
+  display: flex; /* Enable flexbox */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center; /* Center items vertically */
+  align-items: center; /* Center items horizontally */
+}
+
+.drop-zone.dragover {
+  background-color: rgba(43, 90, 146, 0.1); /* Changes when dragging over */
+}
+
+.drop-zone.expanded {
+  height: 400px; /* Increase height when image is uploaded */
+}
+
+.popup-header {
+  display: flex; /* Use flexbox for header */
+  justify-content: space-between; /* Space out elements */
+  align-items: center; /* Center elements vertically */
+  padding: 10px 20px; /* Add padding */
+}
+
+.popup-title {
+  flex-grow: 1; /* Allow title to take remaining space */
+  text-align: center; /* Center the title */
+  margin: 0; /* Remove default margin */
+}
+
+.post-button {
+  background-color: #2b5a92; /* Button color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 8px 12px; /* Button padding */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.post-button:hover {
+  background-color: #1d4370; /* Darken button on hover */
 }
