@@ -44,17 +44,24 @@ class Tags(db.Model):
 
     associated_post = db.relationship('Posts',secondary=posts_tags, viewonly=True)
 
+UsersLikePosts = db.Table('users_like_posts',
+    db.Column('user_login', db.String(60), db.ForeignKey('users.login', ondelete='CASCADE'), primary_key=True),
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'), primary_key=True)
+)
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True)
     author_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     status = db.Column(db.String(60),nullable=False,)
     text = db.Column(db.String(1000),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
-    likes = db.Column(db.Integer, default=0)
+
     image_binary = db.Column(db.LargeBinary,nullable=False)
 
     associated_tags = db.relationship('Tags', secondary=posts_tags)
     comments = db.relationship('Comments', backref='post', cascade="all, delete-orphan")
+    likes = db.relationship('Users', secondary=UsersLikePosts, backref='liked_posts', lazy='dynamic')
+    def like_count(self):
+        return self.likes.count()
 
 
 class Comments(db.Model):
@@ -68,7 +75,7 @@ class Comments(db.Model):
 
 class Shares(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True, index=True)
-    posts_tags = db.Column(db.Integer,db.ForeignKey('posts.id',ondelete='CASCADE'),nullable=False)
+    posts_id = db.Column(db.Integer,db.ForeignKey('posts.id',ondelete='CASCADE'),nullable=False)
     sender_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     recipient_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
