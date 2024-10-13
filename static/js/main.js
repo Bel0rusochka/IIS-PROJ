@@ -34,43 +34,6 @@ function toggleNav() {
     }
   }
 
-//reaction to signed in
-document.addEventListener("DOMContentLoaded", function () {
-    // Simulate user sign-in status using localStorage (for testing purposes)
-    let isSignedIn = localStorage.getItem("isSignedIn");
-  
-    const signupButton = document.getElementById("signupButton");
-    const iconContainer = document.getElementById("iconContainer");
-  
-    // Toggle visibility based on sign-in status
-    if (isSignedIn === "true") {
-      signupButton.style.display = "none"; // Hide Sign-Up button
-      iconContainer.style.display = "flex"; // Show icons section
-    } else {
-      signupButton.style.display = "block"; // Show Sign-Up button
-      iconContainer.style.display = "none"; // Hide icons section
-    }
-  
-    // Toggle sign-in status (for testing purposes)
-    document.body.addEventListener("click", function () {
-      if (isSignedIn === "true") {
-        localStorage.setItem("isSignedIn", "false");
-        isSignedIn = "false";
-      } else {
-        localStorage.setItem("isSignedIn", "true");
-        isSignedIn = "true";
-      }
-  
-      // Refresh the visibility based on the new status
-      if (isSignedIn === "true") {
-        signupButton.style.display = "none";
-        iconContainer.style.display = "flex";
-      } else {
-        signupButton.style.display = "block";
-        iconContainer.style.display = "none";
-      }
-    });
-  });
   
 // Toggle the popup modal
 function togglePopup() {
