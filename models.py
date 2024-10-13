@@ -60,6 +60,7 @@ class Posts(db.Model):
     associated_tags = db.relationship('Tags', secondary=posts_tags)
     comments = db.relationship('Comments', backref='post', cascade="all, delete-orphan")
     likes = db.relationship('Users', secondary=UsersLikePosts, backref='liked_posts', lazy='dynamic')
+    shares = db.relationship('Shares', backref='post', cascade="all, delete-orphan")
     def like_count(self):
         return self.likes.count()
 
@@ -79,7 +80,7 @@ class Shares(db.Model):
     sender_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     recipient_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
-    post = db.relationship('Posts', single_parent=True)
+    # post = db.relationship('Posts', single_parent=True)
 
     shares_sender = db.relationship('Users', single_parent=True, foreign_keys=[sender_login], viewonly=True)
     shares_recipient = db.relationship('Users', single_parent=True, foreign_keys=[recipient_login], viewonly=True)
