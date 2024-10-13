@@ -93,7 +93,7 @@ img {
   width: 100%;
   padding: 20px;
   font-size: 15px;
-  font-family: Silkscreen;
+  font-family: 'Roboto', sans-serif;
   color: rgba(0, 0, 0, 0.7);
   border: none;
   background-color: rgba(240, 240, 240, 1);
@@ -101,11 +101,35 @@ img {
   outline: none;
   box-sizing: border-box;
 }
+/* Container for input and label */
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Floating label styles */
+.floating-label {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  font-size: 16px;
+  color: #aaa;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* When input is focused or has value, move the label */
+.pagesignup-input:focus + .floating-label,
+.pagesignup-input:not(:placeholder-shown) + .floating-label {
+  top: -10px;
+  left: 10px;
+  font-size: 12px;
+  color: #333;
+}
 
 /* Wrapper for input fields */
 .pagesignup-username, 
 .pagesignup-password, 
-.pagesignup-fullname, 
 .pagesignup-emailormbph {
   position: relative;
   border: 1px solid rgba(195, 193, 193, 1);
@@ -115,6 +139,18 @@ img {
   width: 100%;
   background-color: rgba(240, 240, 240, 1);
   border-radius: 10px;
+}
+/* Style for pagesignup-fullname wrapper */
+.pagesignup-fullname {
+  display: flex; /* Align inputs side by side */
+  gap: 20px; /* Space between the inputs */
+}
+
+/* Style for individual input fields */
+.pagesignup-fullname input[type="text"] {
+  border: 1px solid rgba(195, 193, 193, 1);
+  border-radius: 10px; /* Simplified border-radius */
+  background-color: rgba(240, 240, 240, 1);
 }
 
 /* Label styles for input fields */
