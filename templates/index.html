@@ -7,6 +7,8 @@
     <meta property="twitter:card" content="summary_large_image" />
 
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <!-- Font Styles -->
     <link
       rel="stylesheet"
@@ -26,7 +28,6 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../static/css/style.css" />
-    <link rel="stylesheet" href="../static/css/index.css" />
   </head>
   <body>
     <div id="mySidebar" class="projekt-sidebar">
@@ -73,44 +74,32 @@
           </div>
       
         </div>
-        <!-- Image Gallery Section -->
-        <div class="projekt-foto">
-          <img
-            alt="img1"
-            src="../static/images/img1.png"
-            class="img1"
-          />
-          <img
-            alt="img2"
-            src="../static/images/img2.png"
-            class="img2"
-          />
-          <img
-            alt="img3"
-            src="../static/images/img3.png"
-            class="img3"
-          />
-          <img
-            alt="img4"
-            src="../static/images/img4.png"
-            class="img4"
-          />
-          <img
-            alt="img5"
-            src="../static/images/img5.png"
-            class="img5"
-          />
-          <img
-            alt="img6"
-            src="../static/images/img6.png"
-            class="img6"
-          />
-          <img
-            alt="img7"
-            src="../static/images/img7.png"
-            class="img7"
-          />
+       <!-- Image Gallery Section -->
+      <div class="projekt-foto">
+        <img alt="img1" src="../static/images/img1.png" class="gallery-image img1" data-id="1" />
+        <img alt="img2" src="../static/images/img2.png" class="gallery-image img2" data-id="2" />
+        <img alt="img3" src="../static/images/img3.png" class="gallery-image img3" data-id="3" />
+        <img alt="img4" src="../static/images/img4.png" class="gallery-image img4" data-id="4" />
+        <img alt="img5" src="../static/images/img5.png" class="gallery-image img5" data-id="5" />
+        <img alt="img6" src="../static/images/img6.png" class="gallery-image img6" data-id="6" />
+        <img alt="img7" src="../static/images/img7.png" class="gallery-image img7" data-id="7" />
+      </div>
+     <!-- Image Detail Section (initially hidden) -->
+      <div id="imageDetail" style="display: none;">
+        <img id="selectedImage" src="" alt="Selected Image" />
+        <div id="imageStats">
+            <span id="likesCount">
+                <i class="fa fa-heart"></i> 0
+            </span>
+            <span id="retweetsCount">
+                <i class="fa fa-retweet"></i> 0
+            </span>
+            <span id="commentsCount">
+                <i class="fa fa-comment"></i> 0
+            </span>
         </div>
+        <button id="backButton">Back to Gallery</button>
+      </div>
 
         <!-- Add New Section -->
         <div class="addPost" onclick="togglePopup()">
@@ -128,7 +117,7 @@
           <button type="button" class="post-button" onclick="submitPost()">Post</button>
         </div>
         
-        <form>
+        <form  id="dropZoneForm">
           <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
             <p>Drag & Drop image here</p>
             <p>or</p>
