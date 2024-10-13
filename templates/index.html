@@ -8,18 +8,9 @@
 
 
     <!-- Font Styles -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"/>
 
     <!-- Animation Styles -->
     <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
@@ -29,18 +20,18 @@
     <link rel="stylesheet" href="../static/css/index.css" />
   </head>
   <body>
+  {% if is_logged %}
     <div id="mySidebar" class="projekt-sidebar">
       <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">×</a>
       <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar" />
-      <a href="#" class="projekt-sidebar-item">New Post</a>
-      <a href="#" class="projekt-sidebar-item">My Profile</a>
-      <a href="#" class="projekt-sidebar-item">Communities</a>
-      <a href="#" class="projekt-sidebar-item">Direct</a>
-      <a href="#" class="projekt-sidebar-item">Settings</a>
-      <a href="#" class="projekt-sidebar-item">Help</a>
-      <a href="#" class="projekt-sidebar-item">Log Out</a>
-  </div>
-  
+      <a href="{{url_for('profile', login=session.user[0])}}" class="projekt-sidebar-item">{{session.user[0]}}</a>
+      <a href="{{url_for('groups')}}" class="projekt-sidebar-item">Groups</a>
+      <a href="{{url_for('shares')}}" class="projekt-sidebar-item">Shares</a>
+      <a href="{{url_for('settings')}}" class="projekt-sidebar-item">Settings</a>
+      <a href="{{url_for('comrades')}}" class="projekt-sidebar-item">Comrades</a>
+      <a href="{{url_for('logout')}}" class="projekt-sidebar-item">Log Out</a>
+    </div>
+  {% endif %}
     
     <div class="projekt-container">
       <div class="projekt-projekt">
@@ -60,91 +51,68 @@
           </div>
 
         </div>
-        <a href="pagesignup.html"  id="signupButton" class="singup-button">
-          <span class="projekt-text2">Sign Up</span>
-        </a>
+
+
+
       
 
           <!-- Icons Section -->
           <div class="projekt-frame2" id="iconContainer">
-              <img alt="mail" src="../static/images/mail2498-3han.svg" class="projekt-mail" />
-              <img alt="notifications" src="../static/images/notifications2497-9iql.svg" class="projekt-notifications" />
+            {% if not is_logged %}
+              <a  href="{{url_for('login')}}"  class="pagesignup-buttlogin">
+                <span class="pagesignup-text26"><span>log in</span></span>
+              </a>
+            {% else %}
               <img alt="menu" src="../static/images/menu211-wd1k.svg" class="projekt-menu" onclick="toggleNav()" />
+            {% endif %}
           </div>
       
         </div>
         <!-- Image Gallery Section -->
         <div class="projekt-foto">
-          <img
-            alt="img1"
-            src="../static/images/img1.png"
-            class="img1"
-          />
-          <img
-            alt="img2"
-            src="../static/images/img2.png"
-            class="img2"
-          />
-          <img
-            alt="img3"
-            src="../static/images/img3.png"
-            class="img3"
-          />
-          <img
-            alt="img4"
-            src="../static/images/img4.png"
-            class="img4"
-          />
-          <img
-            alt="img5"
-            src="../static/images/img5.png"
-            class="img5"
-          />
-          <img
-            alt="img6"
-            src="../static/images/img6.png"
-            class="img6"
-          />
-          <img
-            alt="img7"
-            src="../static/images/img7.png"
-            class="img7"
-          />
-        </div>
+          {% for post in posts %}
+
+          <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="img"/>
+
+          {% endfor %}
 
         <!-- Add New Section -->
-        <div class="addPost" onclick="togglePopup()">
-          <div class="ellipse">
-            <span class="projekt-text5">+</span>
-          </div>
-        </div>
-
-    <!-- Popup Modal -->
-    <div id="popupModal" class="popup-modal">
-      <div class="popup-content">
-        <div class="popup-header">
-          <span class="close-popup" onclick="togglePopup()">×</span>
-          <h2 class="popup-title">New Post</h2>
-          <button type="button" class="post-button" onclick="submitPost()">Post</button>
-        </div>
-        
-        <form>
-          <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
-            <p>Drag & Drop image here</p>
-            <p>or</p>
-            <span class="image-upload-label">Click to Upload Image</span>
-            <input type="file" id="imageUpload" accept="image/*" style="display: none;" />
+        {% if is_logged %}
+          <div class="addPost" onclick="togglePopup()">
+            <div class="ellipse">
+              <span class="projekt-text5">+</span>
+            </div>
           </div>
 
-          <textarea id="caption" rows="4" placeholder="Write a caption..."></textarea>
 
-          <input type="text" id="tags" placeholder="Add tags separated by commas" />
-        </form>
+        <!-- Popup Modal -->
+        <div id="popupModal" class="popup-modal">
+          <div class="popup-content">
+            <div class="popup-header">
+              <span class="close-popup" onclick="togglePopup()">×</span>
+              <h2 class="popup-title">New Post</h2>
+            </div>
+
+          <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
+            <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
+              <p>Drag & Drop image here</p>
+              <p>or</p>
+              <span class="image-upload-label">Click to Upload Image</span>
+              <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image"/>
+            </div>
+
+            <textarea id="caption" rows="4" placeholder="Write a text..." name="text"></textarea>
+            <input type="text" id="tags" placeholder="Add tags separated by commas" name="tags"/>
+
+            <button type="submit" class="post-button">Post</button>
+          </form>
+        </div>
       </div>
+   {% endif %}
     </div>
-      </div>
-    </div>
-    <script src="../static/js/main.js"></script>
-      
-  </body>
+  </div>
+</div>
+<script src="../static/js/main.js"></script>
+
+</body>
 </html>
