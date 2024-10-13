@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from models import *
 import hashlib
 from sqlalchemy import or_, and_, exists
@@ -6,7 +6,6 @@ from PIL import Image as PILImage
 import io
 
 def registrate_routes(app, db):
-
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         if request.method == 'POST' and session.get('user') is None:

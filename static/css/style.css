@@ -1,4 +1,4 @@
-
+/* Global Defaults */
 html {
   line-height: 1.15;
   scroll-behavior: smooth;
@@ -9,7 +9,9 @@ body {
   font-weight: 400;
   line-height: 1.15;
   color: var(--dl-color-theme-neutral-dark);
-  background-color: var(--dl-color-theme-neutral-light);
+  background-color: var(--dl-color-theme-neutral-light); /* Neutral light background */
+  background-color: rgba(239, 245, 255, 1); /* Full-screen background color */
+
 }
 * {
   box-sizing: border-box;
@@ -32,4 +34,668 @@ a {
 }
 img {
   display: block;
+}
+
+/* ---------------------------- SIGNUP PAGE AND LOGIN PAGE STYLES ---------------------------- */
+
+
+/* General container for the signup page */
+.pagesignup-container {
+  display: flex;
+  padding: 50px; 
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header (blue fit section) */
+.pagesignup-bluefit {
+  display: flex;
+  justify-content: space-between; /* Space out logo, icons, and search */
+  align-items: center; /* Vertically center items */
+  padding: 10px 20px;
+  height: 77px; /* Fixed header height */
+  background-color: rgba(205, 226, 250, 1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 40px); /* Full width minus margin */
+  margin: 20px;
+  box-sizing: border-box;
+}
+
+/* Title text styles */
+.pagesignup-text10, .pagesignup-text22 {
+  font-size: 32px;
+  font-family: Silkscreen, sans-serif;
+  color: rgba(0, 0, 0, 1);
+}
+
+/* Signup form container */
+.pagesignup-signup {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 32px;
+  border: 1px solid rgba(195, 193, 193, 1);
+  border-radius: 20px;
+  background-color: rgba(255, 251, 251, 1);
+}
+
+/* Signup form large heading */
+.pagesignup-text12 {
+  font-size: 48px;
+  font-family: Silkscreen;
+}
+
+/* Input field styles */
+.pagesignup-input {
+  width: 100%;
+  padding: 20px;
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  color: rgba(0, 0, 0, 0.7);
+  border: none;
+  background-color: rgba(240, 240, 240, 1);
+  border-radius: 10px;
+  outline: none;
+  box-sizing: border-box;
+}
+/* Container for input and label */
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Floating label styles */
+.floating-label {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  font-size: 16px;
+  color: #aaa;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* When input is focused or has value, move the label */
+.pagesignup-input:focus + .floating-label,
+.pagesignup-input:not(:placeholder-shown) + .floating-label {
+  top: -10px;
+  left: 10px;
+  font-size: 12px;
+  color: #333;
+}
+
+/* Wrapper for input fields */
+.pagesignup-username, 
+.pagesignup-password, 
+.pagesignup-emailormbph {
+  position: relative;
+  border: 1px solid rgba(195, 193, 193, 1);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  background-color: rgba(240, 240, 240, 1);
+  border-radius: 10px;
+}
+/* Style for pagesignup-fullname wrapper */
+.pagesignup-fullname {
+  display: flex; /* Align inputs side by side */
+  gap: 20px; /* Space between the inputs */
+}
+
+/* Style for individual input fields */
+.pagesignup-fullname input[type="text"] {
+  border: 1px solid rgba(195, 193, 193, 1);
+  border-radius: 10px; /* Simplified border-radius */
+  background-color: rgba(240, 240, 240, 1);
+}
+
+/* Label styles for input fields */
+.pagesignup-text16, .pagesignup-text20, .pagesignup-text14, 
+.pagesignup-text17, .pagesignup-text18, .pagesignup-text19 {
+  position: absolute;
+  top: 5px; 
+  left: 10px;
+  font-size: 15px;
+  font-family: Silkscreen;
+  color: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+/* Signup button styles */
+.pagesignup-buttonsingupbig {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  padding: 15px;
+  border: 1px solid rgba(35, 84, 143, 1);
+  border-radius: 10px;
+  background-color: rgba(205, 225, 248, 1);
+  font-size: 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Section for account options */
+.pagesignup-haveacc {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Text for 'have an account' */
+.pagesignup-text24 {
+  font-size: 20px;
+  font-family: Silkscreen;
+}
+
+/* Button to switch to login */
+.pagesignup-buttlogin {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid rgba(35, 84, 143, 1);
+  border-radius: 5px;
+  background-color: rgba(205, 225, 248, 1);
+}
+
+/* Small text inside buttons */
+.pagesignup-text26 {
+  font-size: 16px;
+  font-family: Silkscreen;
+}
+
+/* ---------------------------- 404 PAGE STYLES ---------------------------- */
+.not-found-container1 {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.not-found-container2 {
+  display: flex;
+  position: relative;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.not-found-text2 {
+  color: rgb(38, 38, 38);
+  font-size: 252px;
+  margin-top: -20px;
+  font-weight: 900;
+  margin-bottom: -20px;
+  letter-spacing: -20px;
+}
+.not-found-container3 {
+  width: 421px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.not-found-text3 {
+  text-align: center;
+  font-weight: 400;
+}
+
+/* ---------------------------- MAIN INDEX PAGE STYLE ---------------------------- */
+.projekt-header {
+  display: flex;
+  justify-content: space-between; /* Space out logo, icons, and search */
+  align-items: center; /* Vertically center items */
+  padding: 10px 20px; /* Padding instead of fixed width */
+  height: 77px; /* Keep header height */
+  background-color: rgba(205, 226, 250, 1);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed; /* Keep header fixed at the top */
+  width: calc(100% - 40px); /* Ensure full width minus margin */
+  margin: 20px; /* Add margin around header */
+  box-sizing: border-box; /* Include padding in width */
+  z-index: 1000; /* Ensure the header stays above other content */
+  transition: margin-top 0.4s ease, background-color 0.4s ease; 
+}
+
+.projekt-text1,
+.projekt-text2 {
+  font-size: 32px;
+  font-family: Silkscreen, sans-serif;
+  color: rgba(0, 0, 0, 1);
+}
+
+.projekt-text2 {
+  background-color: rgba(236, 245, 255, 1); /* Light blue background */
+  border-radius: 10px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
+}
+
+.projekt-text2:hover {
+  background-color: rgb(43, 90, 146);
+  color: white; /* White text on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.projekt-mail,
+.projekt-notifications,
+.projekt-menu {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.projekt-menu {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+}
+
+.projekt-sidebar {
+  right: 0;
+  background-color: rgba(205, 226, 250, 1);
+  overflow-y: auto; 
+  visibility: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  gap: 30px;
+  width: 228px;
+  height: auto; /* Sidebar height grows based on its content */
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  top: 50%; /* Center the sidebar vertically */
+  transform: translateY(-40%); /* Adjust it to start from the center */
+  z-index: 100;
+}
+.projekt-sidebar .avatar{
+  height: 200px;
+}
+
+.projekt-menu {
+  cursor: pointer;
+  width: 54px;
+  height: 60px;
+}
+
+.projekt-sidebar a {
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 25px;
+  color: black;
+  display: block;
+  transition: 0.3s;
+}
+
+.projekt-sidebar a:hover {
+  color: #f1f1f1;
+}
+
+.projekt-sidebar-item {
+  color: rgba(35, 84, 143, 1);
+  font-size: 24px;
+  font-family: Silkscreen, sans-serif; /* Fallback font */
+  font-weight: 400;
+  text-align: center;
+
+  text-decoration: none; /* Remove underline */
+  padding: 10px 0; /* Add vertical padding */
+  box-sizing: border-box;
+  width: 100%; /* Ensures items take full width */
+
+  transition: color 0.3s; /* Add transition for hover effect */
+}
+
+.projekt-sidebar-item:hover {
+  color: rgba(15, 55, 100, 1); /* Change color on hover */
+  background-color: rgba(81, 99, 189, 0.2);
+
+}
+
+.closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#openSidebarBtn {
+  font-size: 30px;
+  cursor: pointer;
+  color: black;
+  padding: 10px;
+}
+
+.projekt-container {
+  width: calc(100% - 0); /* Adjust as needed */
+  display: flex;
+  min-height: 100vh;
+  align-items:  flex-start;
+  flex-direction: column;
+  transition: margin-right 0.5s; /* Add transition for smoother movement */
+}
+
+.projekt-foto {
+  display: flex; /* Use Flexbox for the gallery */
+  flex-wrap: wrap; /* Allows the items to wrap */
+  margin-top: 100px; /* Maintain the margin for spacing */
+  align-items: stretch;
+}
+
+.projekt-projekt {
+  width: 100%;
+  height: 990px;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+.projekt-rectangle1 {
+  position: absolute;
+  top:20px;
+  left: 20px;
+  width: 1874px;
+  height: 77px;
+  margin-top: 0px;
+
+}
+
+.projekt-projekt {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next line */
+  position: relative; /* Required to position the child elements correctly */
+}
+
+.projekt-rectangle1 {
+  position: fixed; /* Keeps rectangle1 in its original position */
+  top: 20px;
+  left: 20px;
+  width: 1874px;
+  height: 77px;
+}
+
+.projekt-foto img {
+  height: 470px; /* Set this to the height of the tallest rectangle */
+  object-fit: cover; /* Ensures the image covers the entire area without distortion */
+
+  border-radius: 15px;
+  margin: 20px;
+  flex-grow: 1;
+}
+.projekt-foto {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center the images in the container */
+  gap: 10px; /* Space between the images */
+}
+
+.projekt-foto img {
+  object-fit: cover; /* Ensure the image fills the width while maintaining aspect ratio */
+  transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.projekt-foto img:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Hidden by default, centered container for image detail */
+#imageDetail {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%; /* Cap width at 90% of the screen */
+  max-width: 700px; /* Maximum width */
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Drop shadow for effect */
+  text-align: center;
+  z-index: 1000;
+  display: none; /* Hidden by default */
+}
+
+/* Style for the selected image */
+#selectedImage {
+  width: 100%; /* Full width within the container */
+  height: auto; /* Maintain aspect ratio */
+  max-height: 60vh; /* Maximum height at 60% of the screen height */
+  object-fit: cover; /* Ensure image fits neatly */
+  border-radius: 10px;
+  margin-bottom: 20px; /* Space below the image */
+}
+
+/* Style for image stats with icons */
+#imageStats {
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* Space between the icons */
+  margin-top: 10px;
+  font-size: 18px; /* Font size */
+  color: #333;
+}
+
+#imageStats i {
+  margin-right: 8px; /* Space between icon and number */
+  color: #2b5a92; /* Icon color */
+}
+
+/* Back button style */
+#backButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #2b5a92;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#backButton:hover {
+  background-color: #1d4370;
+}
+
+
+.projekt-search1 {
+  gap: 10px;
+  width: 865px;
+  display: flex;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background-color: rgba(236, 245, 255, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+
+.projekt-group1 {
+  display: flex;
+  align-items: center;
+}
+
+.projekt-frame2 {
+  gap: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.projekt-text3 {
+  top: 3px;
+  left: 43px;
+  color: rgba(116, 114, 114, 1);
+  font-size: 20px;
+  font-family: Roboto;
+  font-weight: 400;
+}
+
+
+
+
+.projekt-mail,
+.projekt-notifications {
+  width: 40px;
+  height: 40px;
+}
+
+.addPost {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(81, 99, 189, 1);
+  border-radius: 50%; /* Make it fully circular */
+  background-color: rgba(205, 226, 250, 1); /* Ellipse color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.ellipse {
+  width: 100%; /* Ellipse width */
+  height: 100%; /* Ellipse height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.projekt-text5 {
+  font-size: 64px;
+  font-family: Arial;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  user-select: none;
+}
+
+/* Popup Modal Styling */
+.popup-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1001; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+}
+
+.popup-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Allow it to be responsive */
+  max-width: 500px; /* Limit the width to 500px */
+}
+
+
+.close-popup {
+  color: #aaa;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.close-popup:hover {
+  color: #000;
+  cursor: pointer;
+}
+
+/* Form Styling for DropZone Form */
+#dropZoneForm input[type="file"],
+#dropZoneForm textarea,
+#dropZoneForm input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+
+#dropZoneForm button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #2b5a92;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#dropZoneForm button:hover {
+  background-color: #1d4370;
+}
+
+.drop-zone {
+  width: 100%;
+  padding: 20px;
+  margin-top: 10px;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  text-align: center;
+  background-color: rgba(236, 245, 255, 0.3);
+  transition: background-color 0.3s;
+  cursor: pointer; /* Change cursor to indicate it's clickable */
+  background-size: cover; /* Cover the entire drop zone */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  height: 400px; /* Set a default height for the drop zone */
+  display: flex; /* Enable flexbox */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center; /* Center items vertically */
+  align-items: center; /* Center items horizontally */
+}
+
+.drop-zone.dragover {
+  background-color: rgba(43, 90, 146, 0.1); /* Changes when dragging over */
+}
+
+.drop-zone.expanded {
+  height: 400px; /* Increase height when image is uploaded */
+}
+
+.popup-header {
+  display: flex; /* Use flexbox for header */
+  justify-content: space-between; /* Space out elements */
+  align-items: center; /* Center elements vertically */
+  padding: 10px 20px; /* Add padding */
+}
+
+.popup-title {
+  flex-grow: 1; /* Allow title to take remaining space */
+  text-align: center; /* Center the title */
+  margin: 0; /* Remove default margin */
+}
+
+.post-button {
+  background-color: #2b5a92; /* Button color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 8px 12px; /* Button padding */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.post-button:hover {
+  background-color: #1d4370; /* Darken button on hover */
 }

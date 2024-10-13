@@ -14,7 +14,6 @@
   <body>
     <link rel="stylesheet" href="../static/css/style.css" />
     <div>
-      <link href="../static/css/pagelogin.css" rel="stylesheet" />
       <div class="pagesignup-bluefit">
         <span class="pagesignup-text10">FITstagram</span>
       </div>
@@ -24,11 +23,17 @@
             <span class="pagesignup-text12"><span>Log In</span></span>
 
             <div class="pagesignup-username">
-              <input type="text" id="login_email" name="login_email"  class="pagesignup-input" placeholder="login_email">
+              <div class="input-container">
+                <label for="login_email" class="floating-label">Email</label>
+                <input type="text" id="login_email" name="login_email" class="pagesignup-input" placeholder="">
+              </div>
             </div>
-
+            
             <div class="pagesignup-password">
-              <input type="password" id="password" name="password" class="pagesignup-input" placeholder="password">
+              <div class="input-container">
+                <label for="password" class="floating-label">Password</label>
+                <input type="password" id="password" name="password" class="pagesignup-input" placeholder="">
+              </div>
             </div>
             
             <button type="submit" class="pagesignup-buttonsingupbig">

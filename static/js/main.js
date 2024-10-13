@@ -74,14 +74,7 @@ function togglePopup() {
     // Close the popup after submission
     togglePopup();
   }
-  // Close the popup when clicking outside the popup content
-window.onclick = function(event) {
-    var popup = document.getElementById('popupModal');
-    var content = document.querySelector('.popup-content');
-    if (event.target == popup && !content.contains(event.target)) {
-        togglePopup();
-    }
-}
+
 const dropZone = document.getElementById('dropZone');
 const imageInput = document.getElementById('imageUpload');
 
@@ -124,3 +117,53 @@ function displayImage(file) {
     reader.readAsDataURL(file); // Read the file as a data URL
   }
   
+//-------------------------------IMAGES-----------------------------------------
+const images = document.querySelectorAll('.gallery-image');
+const imageDetail = document.getElementById('imageDetail');
+const selectedImage = document.getElementById('selectedImage');
+const likesCount = document.getElementById('likesCount');
+const retweetsCount = document.getElementById('retweetsCount');
+const commentsCount = document.getElementById('commentsCount');
+const backButton = document.getElementById('backButton');
+
+images.forEach(image => {
+    image.addEventListener('click', function() {
+        const imageId = this.dataset.id;
+
+        // Hide all images in the gallery
+        images.forEach(img => img.style.display = 'none');
+
+        // Show selected image and fetch details
+        selectedImage.src = this.src; // Set the selected image
+        fetchImageDetails(imageId); // Fetch and display details
+        imageDetail.style.display = 'block'; // Show detail area
+    });
+});
+
+// Function to fetch image details (mocking data here)
+function fetchImageDetails(imageId) {
+    // Mock data (replace with actual fetch call to your database)
+    const imageDetails = {
+        1: { likes: 10, retweets: 5, comments: 2 },
+        2: { likes: 20, retweets: 10, comments: 3 },
+        3: { likes: 30, retweets: 15, comments: 5 },
+        4: { likes: 40, retweets: 20, comments: 7 },
+        5: { likes: 50, retweets: 25, comments: 10 },
+        6: { likes: 60, retweets: 30, comments: 12 },
+        7: { likes: 70, retweets: 35, comments: 15 },
+    };
+
+    const details = imageDetails[imageId];
+    if (details) {
+      likesCount.innerHTML = `<i class="fa fa-heart"></i> ${details.likes}`;
+      retweetsCount.innerHTML = `<i class="fa fa-retweet"></i> ${details.retweets}`;
+      commentsCount.innerHTML = `<i class="fa fa-comment"></i> ${details.comments}`;
+    }
+}
+
+// Handle back button to return to the gallery
+backButton.addEventListener('click', function() {
+    // Show all images again
+    images.forEach(img => img.style.display = 'block');
+    imageDetail.style.display = 'none'; // Hide detail area
+});
