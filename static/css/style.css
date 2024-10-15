@@ -63,12 +63,27 @@ img {
 }
 
 /* Title text styles */
-.pagesignup-text10, .pagesignup-text22 {
+.pagesignup-text10, .pagesignup-text22, .projekt-text2 {
   font-size: 32px;
   font-family: Silkscreen, sans-serif;
   color: rgba(0, 0, 0, 1);
 }
+.pagesignup-text10 {
+  background-color: #83b4e9; /* A nice blue shade */
+  padding: 10px 20px; /* Padding to make it look like a button */
+  border-radius: 8px; /* Rounded corners */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
 
+.pagesignup-text10:hover {
+  background-color: #457bb4; /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight lift on hover */
+  text-decoration: none; /* Keep no underline */
+}
+.pagesignup-text10:active {
+  transform: translateY(1px); /* Press effect */
+}
 /* Signup form container */
 .pagesignup-signup {
   width: 500px;
@@ -265,29 +280,6 @@ img {
   transition: margin-top 0.4s ease, background-color 0.4s ease; 
 }
 
-.projekt-text1,
-.projekt-text2 {
-  font-size: 32px;
-  font-family: Silkscreen, sans-serif;
-  color: rgba(0, 0, 0, 1);
-}
-
-.projekt-text2 {
-  background-color: rgba(236, 245, 255, 1); /* Light blue background */
-  border-radius: 10px;
-  padding: 10px 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  white-space: nowrap;
-  transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition for hover effect */
-}
-
-.projekt-text2:hover {
-  background-color: rgb(43, 90, 146);
-  color: white; /* White text on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
-  cursor: pointer; /* Pointer cursor on hover */
-}
-
 .projekt-mail,
 .projekt-notifications,
 .projekt-menu {
@@ -311,7 +303,7 @@ img {
   padding-top: 60px;
   gap: 30px;
   width: 228px;
-  height: auto; /* Sidebar height grows based on its content */
+  height: 100%; /* Sidebar height grows based on its content */
   display: flex;
   position: fixed;
   flex-direction: column;
@@ -366,15 +358,6 @@ img {
   background-color: rgba(81, 99, 189, 0.2);
 
 }
-
-.closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
 #openSidebarBtn {
   font-size: 30px;
   cursor: pointer;

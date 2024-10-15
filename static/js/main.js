@@ -1,14 +1,14 @@
 //sidebar func
 function toggleNav() {
     const sidebar = document.getElementById("mySidebar");
-    const container = document.querySelector('.projekt-container'); // Select the container
+    //const container = document.querySelector('.projekt-container'); // Select the container
     if (sidebar.style.width === "400px") {
       sidebar.style.width = "0"; // Close the sidebar
-      container.style.marginRight = "0"; // Reset container margin
+      //container.style.marginRight = "0"; // Reset container margin
       sidebar.style.visibility = "hidden";
     } else {
       sidebar.style.width = "400px"; // Open the sidebar
-      container.style.marginRight = "400px"; // Adjust the container to fit the sidebar
+      //container.style.marginRight = "400px"; // Adjust the container to fit the sidebar
       sidebar.style.visibility = "visible";
     }
   }

@@ -24,7 +24,6 @@
   <body>
   {% if is_logged %}
     <div id="mySidebar" class="projekt-sidebar">
-      <a href="javascript:void(0)" class="closebtn" onclick="toggleNav()">×</a>
       <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar" />
       <a href="{{url_for('profile', login=session.user[0])}}" class="projekt-sidebar-item">{{session.user[0]}}</a>
       <a href="{{url_for('groups')}}" class="projekt-sidebar-item">Groups</a>
@@ -39,7 +38,8 @@
       <div class="projekt-projekt">
         <!-- Header Section -->
         <div class="projekt-header">
-          <span class="projekt-text1">FITstagram</span>
+          <a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
+
                <!-- Search Section -->
         <div class="projekt-search1">
           <div class="projekt-group1">
@@ -53,10 +53,6 @@
           </div>
 
         </div>
-
-
-
-      
 
           <!-- Icons Section -->
           <div class="projekt-frame2" id="iconContainer">
