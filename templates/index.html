@@ -69,10 +69,44 @@
         <!-- Image Gallery Section -->
         <div class="projekt-foto">
           {% for post in posts %}
-
-          <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="img"/>
-
+            <img 
+              alt="Image {{ post.id }}" 
+              src="{{ url_for('image', id=post.id) }}" 
+              class="img gallery-image" 
+              data-id="{{ post.id }}" 
+            />
           {% endfor %}
+        </div>
+
+
+        <!-- Image Detail Section (initially hidden) -->
+<div id="imageDetail" style="display: none;">
+  <img id="selectedImage" src="" alt="Selected Image" />
+  <div id="imageStats">
+      <span id="likesCount">
+          <i class="fa fa-heart"></i> 0
+      </span>
+      <span id="retweetsCount">
+          <i class="fa fa-retweet"></i> 0
+      </span>
+      <span id="commentsCount">
+          <i class="fa fa-comment"></i> 0
+      </span>
+  </div>
+  <div id="imageTags">
+      <span id="tagsList"></span>
+      <button id="backButton" class="back-button">
+          <i class="fa fa-arrow-left"></i>
+      </button>
+  </div>
+  
+  <!-- Comment Section -->
+  <div id="commentSection">
+      <textarea id="commentInput" placeholder="Write a comment..."></textarea>
+      <button id="submitComment">Submit</button>
+      <div id="commentsList"></div> <!-- To display comments -->
+  </div>
+</div>
 
         <!-- Add New Section -->
         {% if is_logged %}

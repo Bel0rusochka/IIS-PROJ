@@ -445,21 +445,23 @@ img {
   transform: translate(-50%, -50%);
   width: 90%; /* Cap width at 90% of the screen */
   max-width: 700px; /* Maximum width */
+  max-height: 80vh; /* Set maximum height to allow scrolling */
   background-color: #f9f9f9;
-  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Drop shadow for effect */
   text-align: center;
   z-index: 1000;
   display: none; /* Hidden by default */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Style for the selected image */
 #selectedImage {
   width: 100%; /* Full width within the container */
   height: auto; /* Maintain aspect ratio */
-  max-height: 60vh; /* Maximum height at 60% of the screen height */
-  object-fit: cover; /* Ensure image fits neatly */
+    max-height: 60vh; /*Maximum height at 60% of the screen height */
+  object-fit: contain; /* Ensure image fits neatly */
+  overflow-y: scroll;
   border-radius: 10px;
   margin-bottom: 20px; /* Space below the image */
 }
@@ -467,32 +469,88 @@ img {
 /* Style for image stats with icons */
 #imageStats {
   display: flex;
-  justify-content: center;
-  gap: 30px; /* Space between the icons */
-  margin-top: 10px;
-  font-size: 18px; /* Font size */
+  justify-content: flex-start;
+  gap: 20px; /* Space between the icons */
+  margin: 10px;
+  font-size: 40px; /* Font size */
   color: #333;
 }
 
 #imageStats i {
   margin-right: 8px; /* Space between icon and number */
-  color: #2b5a92; /* Icon color */
+}
+#imageTags {
+  display: flex;               /* Use flexbox for layout */
+  align-items: center;        /* Center items vertically */
+  margin: 10px;          /* Space above the tags section */
+
 }
 
-/* Back button style */
-#backButton {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #2b5a92;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+#tagsList {
+  color: #888;                /* Grey color for the tags */
+  font-size: 30px; /* Font size */
+  display: inline-flex;       /* Keep tags in a single line */
+  gap: 5px;                  /* Space between multiple tags */
 }
 
-#backButton:hover {
-  background-color: #1d4370;
+#tagsList span {
+  background-color: rgba(240, 240, 240, 0.7); /* Light grey background */
+  border-radius: 4px;        /* Slightly rounded corners */
+  padding: 3px 6px;          /* Padding inside tag */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Light shadow for depth */
+}
+
+.back-button {
+  position: absolute;                 /* Absolute positioning */
+  bottom: 20px;                      /* Distance from the bottom */
+  right: 20px;                       /* Distance from the right */
+  background-color: transparent;     /* Transparent background */
+  border: none;                      /* No border */
+  border-radius: 50%;                /* Circular shape */
+  width: 50px;                       /* Width of the button */
+  height: 50px;                      /* Height of the button */
+  cursor: pointer;                   /* Change cursor to pointer on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+  outline: none;                    /* Remove focus outline */
+}
+
+.back-button i {
+  font-size: 24px;                  /* Icon size */
+  color: grey;                      /* Icon color */
+}
+/* Style for the comment section */
+#commentSection {
+  margin-top: 60px; /* Space above the comment section */
+  text-align: left;  /* Align text to the left */
+}
+
+#commentInput {
+  width: 100%; /* Full width */
+  height: 50px; /* Height of the text area */
+  border-radius: 5px; /* Rounded corners */
+  border: 1px solid #ccc; /* Border */
+  padding: 10px; /* Inner padding */
+}
+
+#submitComment {
+  margin-top: 10px; /* Space above the button */
+  padding: 10px 15px; /* Button padding */
+  background-color: rgba(205, 226, 250, 1);
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+#submitComment:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+#commentsList {
+  margin-top: 15px; /* Space above the comments list */
+  max-height: 200px; /* Max height for the list */
+  overflow-y: auto; /* Scrollable if too long */
+  border-top: 1px solid #ccc; /* Top border */
+  padding-top: 10px; /* Space above comments */
 }
 
 
