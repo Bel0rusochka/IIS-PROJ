@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, abort
 from models import *
 import hashlib
 from sqlalchemy import or_, and_, exists
@@ -6,6 +6,30 @@ from PIL import Image as PILImage
 import io
 
 def registrate_routes(app, db):
+
+    def posts_for_user(user_login):
+        return Posts.query.filter(
+            or_(
+                Posts.status == "public",
+                and_(
+                    Posts.status == "private",
+                    Users.comrades.any(
+                        and_(
+                            Comrades.comrade_login == user_login,
+                            Comrades.user_login == Posts.author_login
+                        )
+                    )
+                ),
+                and_(
+                    Posts.status == "private",
+                    or_(
+                        Posts.author_login == user_login,
+                        session['user'][1] == 'admin',
+                        session['user'][1] == 'moderator'
+                    )
+                )
+            )
+        )
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         if request.method == 'POST' and session.get('user') is None:
@@ -108,6 +132,7 @@ def registrate_routes(app, db):
     #         return redirect(url_for('login'))
     #     return "None"
     #
+
     @app.route('/settings', methods=['GET', 'POST'])
     def settings():
         if session.get('user') is None:
@@ -122,7 +147,45 @@ def registrate_routes(app, db):
             return redirect(url_for('profile', login=session['user'][0]))
         return "None"
 
+    @app.route('/posts/<post_id>', methods=['GET', 'POST'])
+    def post(post_id):
+        if session.get('user') is None:
+            abort(404)
+        post = Posts.query.get_or_404(post_id)
+        return render_template("post.html", post=post, user=session['user'], is_logged=True, comments=post.comments.all())
 
+    @app.route('/add_comment/<int:post_id>', methods=['POST'])
+    def add_comment(post_id):
+        if session.get('user') is None or request.method == 'GET':
+            abort(404)
+        if request.method == 'POST':
+            text = request.form['text']
+            if text == '':
+                flash("Comment is empty")
+                return redirect(url_for('post', post_id=post_id))
+            if Posts.query.get(post_id) is None:
+                abort(404)
+            comment = Comments(author_login=session['user'][0], text=text, post_id=post_id)
+            db.session.add(comment)
+            db.session.commit()
+            return redirect(url_for('post', post_id=post_id))
+
+    @app.route('/like/<int:post_id>', methods=['POST'])
+    def like_post(post_id):
+        if session.get('user') is None:
+            abort(404)
+        post = Posts.query.get_or_404(post_id)
+        user_login = session.get('user')[0]
+
+        if post.likes.filter_by(login=user_login).first():
+            post.likes.remove(Users.query.filter_by(login=user_login).first())
+            db.session.commit()
+        else:
+            user = Users.query.filter_by(login=user_login).first()
+            post.likes.append(user)
+            db.session.commit()
+
+        return redirect(url_for('post', post_id=post.id))
     @app.route('/logout')
     def logout():
         session.pop('user', None)
@@ -130,38 +193,18 @@ def registrate_routes(app, db):
 
     @app.route('/image/<int:id>')
     def image(id):
-        img = Posts.query.get(id)
+        if session.get('user') is None:
+            img = Posts.query.filter_by(status="public", id=id).first()
+        else:
+            img = posts_for_user(session['user'][0]).filter_by(id=id).first()
         if img:
             return send_file(io.BytesIO(img.image_binary), mimetype='image/jpeg')
-        return render_template("image.html")
+        abort(404)
 
     @app.route('/')
     def index():
         if session.get('user') is not None:
-            user_login = session['user'][0]
-            posts = Posts.query.filter(
-                or_(
-                    Posts.status == "public",
-                    and_(
-                        Posts.status == "private",
-                        Users.comrades.any(
-                            and_(
-                                Comrades.comrade_login == user_login,
-                                Comrades.user_login == Posts.author_login
-                            )
-                        )
-                    ),
-                    and_(
-                        Posts.status == "private",
-                        or_(
-                            Posts.author_login == session['user'][0],
-                            session['user'][1] == 'admin',
-                            session['user'][1] == 'moderator'
-                        )
-                    )
-                )
-            )
-            return render_template("index.html", posts =posts, user = session['user'], is_logged = True)
+            return render_template("index.html", posts = posts_for_user( session['user'][0]), user = session['user'], is_logged = True)
         else:
             return render_template("index.html", posts = Posts.query.filter_by(status="public").all(), is_logged = False)
 
