@@ -33,26 +33,12 @@
       <a href="{{url_for('logout')}}" class="projekt-sidebar-item">Log Out</a>
     </div>
   {% endif %}
-    
+
     <div class="projekt-container">
       <div class="projekt-projekt">
         <!-- Header Section -->
         <div class="projekt-header">
           <a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
-
-               <!-- Search Section -->
-        <div class="projekt-search1">
-          <div class="projekt-group1">
-            <img
-              alt="search2497"
-              src="../static/images/search.svg"
-              class="projekt-search2"
-            />
-            <span class="projekt-text3"><span>Search...</span></span>
-
-          </div>
-
-        </div>
 
           <!-- Icons Section -->
           <div class="projekt-frame2" id="iconContainer">
@@ -64,60 +50,70 @@
               <img alt="menu" src="../static/images/menu211-wd1k.svg" class="projekt-menu" onclick="toggleNav()" />
             {% endif %}
           </div>
-      
-        </div>
-        <!-- Image Gallery Section -->
-        <div class="projekt-foto">
-          {% for post in posts %}
-            <!--          тэг  ломает фотки, надо исправить-->
-            <a href="{{ url_for('post', post_id=post.id) }}"  class="img gallery-image">
-                <img
-                  alt="Image {{ post.id }}"
-                  src="{{ url_for('image', id=post.id) }}"
-                  class="img gallery-image"
-                  data-id="{{ post.id }}"
-                />
-             </a>
-          {% endfor %}
         </div>
 
-        <!-- Add New Section -->
-        {% if is_logged %}
-          <div class="addPost" onclick="togglePopup()">
-            <div class="ellipse">
-              <span class="projekt-text5">+</span>
-            </div>
-          </div>
+          <!-- Image Detail Section (initially hidden) -->
+        <div id="imageDetail">
+            <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}"/>
 
-
-        <!-- Popup Modal -->
-        <div id="popupModal" class="popup-modal">
-          <div class="popup-content">
-            <div class="popup-header">
-              <span class="close-popup" onclick="togglePopup()">×</span>
-              <h2 class="popup-title">New Post</h2>
-            </div>
-
-          <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
-            <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
-              <p>Drag & Drop image here</p>
-              <p>or</p>
-              <span class="image-upload-label">Click to Upload Image</span>
-              <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image"/>
+            <div id="imageStats">
+              <form action="{{ url_for('like_post', post_id=post.id) }}" method="POST">
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                <button type="submit" class="like-button">
+                    <i class="fa fa-heart"></i>
+                    <span>{{ post.like_count() }}</span>
+                </button>
+              </form>
+              <span id="retweetsCount">
+                  <i class="fa fa-retweet"></i> {{ post.shares_count() }}
+              </span>
+              <span id="commentsCount">
+                  <i class="fa fa-comment"></i> {{ post.comments_count() }}
+              </span>
             </div>
 
-            <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text"></textarea>
-            <input type="text" id="tags" placeholder="Add tags separated by space" name="tags"/>
+            <div id="imageTags">
+                <span id="tagsList">Tags:</span>
 
+              </button>
+                {% for tag in post.associated_tags %}
+                <span class="tag fa-arrow-left">{{ tag.name }}</span>
+                {% endfor %}
 
-            <button type="submit" class="post-button">Post</button>
-          </form>
+            </div>
+
+        <div id="imageDescription">
+            <h3>Description:</h3>
+            <p>{{ post.text }}</p>
         </div>
-      </div>
-   {% endif %}
+
+            <!-- Comment Section -->
+<div id="commentSection">
+    <h3>Comments:</h3>
+    <!-- Форма для добавления комментария, можешь поменять на js -->
+    <form id="commentForm", action="{{ url_for('add_comment', post_id=post.id) }}" method="POST">
+        <textarea id="commentInput" placeholder="Write a comment..." rows="3" cols="50" name="text"></textarea>
+        <button id="submitComment">Submit</button>
+    </form>
+
+    <!-- Список комментариев -->
+    <div id="commentsList">
+        {% for comment in comments %}
+        <div class="comment" style="border-bottom: 1px solid #ccc; padding: 10px;">
+            <div style="font-weight: bold; color: #555;">
+                {{ comment.author_login }} - <small>{{ comment.date.strftime('%Y-%m-%d %H:%M') }}</small>
+            </div>
+            <div style="margin-top: 5px;">
+                {{ comment.text }}
+            </div>
+
+        </div>
+        {% endfor %}
     </div>
-  </div>
 </div>
+</div>
+</div>
+    </div>
 <script src="../static/js/main.js"></script>
 
 </body>
