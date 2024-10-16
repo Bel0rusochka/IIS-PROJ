@@ -58,11 +58,17 @@ class Posts(db.Model):
     image_binary = db.Column(db.LargeBinary,nullable=False)
 
     associated_tags = db.relationship('Tags', secondary=posts_tags)
-    comments = db.relationship('Comments', backref='post', cascade="all, delete-orphan")
+    comments = db.relationship('Comments', backref='post', cascade="all, delete-orphan", lazy='dynamic')
     likes = db.relationship('Users', secondary=UsersLikePosts, backref='liked_posts', lazy='dynamic')
-    shares = db.relationship('Shares', backref='post', cascade="all, delete-orphan")
+    shares = db.relationship('Shares', backref='post', cascade="all, delete-orphan", lazy='dynamic')
     def like_count(self):
         return self.likes.count()
+
+    def shares_count(self):
+        return self.shares.count()
+
+    def comments_count(self):
+        return self.comments.count()
 
 
 class Comments(db.Model):
@@ -71,8 +77,6 @@ class Comments(db.Model):
     post_id = db.Column(db.Integer,db.ForeignKey('posts.id', ondelete='CASCADE'),nullable=False)
     text = db.Column(db.String(1000),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
-    likes = db.Column(db.Integer,nullable=False, default=0)
-
 
 class Shares(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True, index=True)
