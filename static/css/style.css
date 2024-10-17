@@ -949,6 +949,7 @@ img {
   flex-direction: column;
   overflow: hidden;
   padding: 30px;
+  min-height: 100vh;
 }
 
 .my-posts {
@@ -958,7 +959,8 @@ img {
   flex-wrap: wrap;
   gap: 10px;
   font-size: 24px;
-  padding: 20px;
+  padding-top: 20px;
+  
 }
 
 .my-posts img {
@@ -1032,5 +1034,4 @@ img {
 .line {
   border-top: 1px solid #747272;
   width: 100%;
-  margin-bottom: 20px;
 }
