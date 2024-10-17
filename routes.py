@@ -75,14 +75,10 @@ def registrate_routes(app, db):
             return redirect(url_for('login'))
         if login == session['user'][0] or session['user'][1] == 'admin':
             user = Users.query.get(login)
-            return f'''
-                    <h1>Profile</h1>
-                    <p>Welcome, {user.name} {user.surname}</p>
-                    <p>Your login: {user.login}</p>
-                    <botton><a href="{url_for('logout')}">Logout</a></botton>
-                    '''
+            return render_template("profile.html", user=user,is_owner=True, posts=user.posts)
         else:
-            return redirect(url_for('profile', login=session['user'][0]))
+            active_login = session['user'][0]
+            return  render_template("profile.html", user=Users.query.get(login), is_owner=False, posts=posts_for_user(active_login).filter_by(author_login=login).all())
     @app.route('/profile')
     def profiles():
         if session.get('user') is None:

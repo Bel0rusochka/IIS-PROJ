@@ -18,20 +18,16 @@
   	<div class="profile">
     		<div class="posts-and-new">
       			<div class="my-posts">
-        				<img class="river-icon" alt="" src="../static/images/river.png">
-        				
-        				<img class="hill-with-house" alt="" src="../static/images/hill with house.png">
-        				
-        				<img class="cat-icon" alt="" src="../static/images/cat.png">
-        				
-        				<img class="metro-icon" alt="" src="../static/images/metro.png">
-        				
-        				<img class="china-icon" alt="" src="../static/images/china.png">
-        				
-        				<img class="japan-icon" alt="" src="../static/images/japan.png">
-        				
-        				<img class="panda-icon" alt="" src="../static/images/panda.png">
-        				
+					{%for post in posts%}
+						 <a href="{{ url_for('post', post_id=post.id) }}"  class="img gallery-image">
+							<img
+							  alt="Image {{ post.id }}"
+							  src="{{ url_for('image', id=post.id) }}"
+							  class="img gallery-image"
+							  data-id="{{ post.id }}"
+							/>
+						 </a>
+					{%endfor%}
       			</div>
       			<div class="dobav-publ" id="dobavPublContainer">
         				<div class="dobav-publ-child">
@@ -43,10 +39,12 @@
       			<div class="white">
       			</div>
       			<div class="usernameedit">
-        				<div class="user-name">User name</div>
+						<div class="user-name">{{user.name}}</div>
+						<div class="user-surname">{{user.surname}}</div>
+        				<div class="user-login">{{user.login}}</div>
         				<div class="edit-profile" id="editProfileText">edit profile</div>
       			</div>
-      			<img class="generic-avatar-icon" alt="" src="../static/images/Generic avatar2.png">
+      			<img class="generic-avatar-icon" alt="" src="../static/images/no_avatar.svg">
       			
       			<div class="fit-arrow">
         				<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
