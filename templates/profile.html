@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	<title>profile</title>
+
+  	<link rel="stylesheet"  href="../static/css/style.css" />
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" />
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap" />
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
+  	
+  	
+  	
+</head>
+<body>
+  	
+  	<div class="profile">
+    		<div class="posts-and-new">
+      			<div class="my-posts">
+        				<img class="river-icon" alt="" src="../static/images/river.png">
+        				
+        				<img class="hill-with-house" alt="" src="../static/images/hill with house.png">
+        				
+        				<img class="cat-icon" alt="" src="../static/images/cat.png">
+        				
+        				<img class="metro-icon" alt="" src="../static/images/metro.png">
+        				
+        				<img class="china-icon" alt="" src="../static/images/china.png">
+        				
+        				<img class="japan-icon" alt="" src="../static/images/japan.png">
+        				
+        				<img class="panda-icon" alt="" src="../static/images/panda.png">
+        				
+      			</div>
+      			<div class="dobav-publ" id="dobavPublContainer">
+        				<div class="dobav-publ-child">
+        				</div>
+        				<div class="div">+</div>
+      			</div>
+    		</div>
+    		<div class="my-profile">
+      			<div class="white">
+      			</div>
+      			<div class="usernameedit">
+        				<div class="user-name">User name</div>
+        				<div class="edit-profile" id="editProfileText">edit profile</div>
+      			</div>
+      			<img class="generic-avatar-icon" alt="" src="../static/images/Generic avatar2.png">
+      			
+      			<div class="fit-arrow">
+        				<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
+        				
+							<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
+      			</div>
+    		</div>
+    		<div class="my-posts1">my posts</div>
+    		<div class="line">
+    		</div>
+  	</div>
+  	
+  	<div id="createNewPost" class="popup-overlay" style="display:none">
+    		
+    		<div class="create-new-post">
+      			<div class="create-post">
+        				<div class="closenamenext">
+          					<b class="share">share</b>
+          					<b class="new-post">New post</b>
+          					<div class="xoutline" id="popupxOutlineContainer">
+            						<img class="vector-icon" alt="" src="../static/images/XOutline.svg">
+            						
+          					</div>
+        				</div>
+        				<div class="gallery">
+        				</div>
+        				<img class="camera-icon" alt="" src="../static/images/camera.svg">
+        				
+      			</div>
+      			<div class="visibility-toggle">
+      			</div>
+      			<div class="write-a-caption">Write a caption or add a tag...</div>
+      			<div class="create-new-post-child">
+      			</div>
+    		</div>
+    		
+    		
+  	</div>
+    </body>
+</html>
