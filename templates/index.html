@@ -48,7 +48,10 @@
               src="../static/images/search.svg"
               class="projekt-search2"
             />
-            <span class="projekt-text3"><span>Search...</span></span>
+            <form method="GET" action="{{ url_for('search_posts') }}">
+              <input type="text" name="query" placeholder="Search by tags..." required/>
+              <button type="submit">Search</button>
+            </form>
 
           </div>
 
