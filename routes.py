@@ -119,6 +119,37 @@ def registrate_routes(app, db):
         groups = Groups.query.all()
         return "Groups"
 
+    @app.route('/search', methods=['GET'])
+    def search_posts():
+        if request.method == 'GET':
+            query = request.args.get('query', '').strip()
+
+            if not query:
+                flash("Please enter a valid tag!")
+                return redirect(url_for('index'))
+
+
+            tag_list = [tag.strip() for tag in query.split() if tag]
+            if not tag_list:
+                flash("Please enter valid tags!")
+                return redirect(url_for('index'))
+
+
+
+            if session.get('user') is not None:
+                results = posts_for_user(session['user'][0])
+                for tag in tag_list:
+                    results = results.filter(Posts.associated_tags.any(Tags.name == tag))
+                results = results.all()
+                return render_template("index.html", posts=results, user=session['user'],
+                                       is_logged=True)
+            else:
+                results = Posts.query.filter_by(status="public").join(Posts.associated_tags)
+                for tag in tag_list:
+                    results = results.filter(Posts.associated_tags.any(Tags.name == tag))
+                results =  results.all()
+                return render_template("index.html", posts=results,is_logged=False)
+        abort(404)
 
     # @app.route('/delete_profile', methods=['GET', 'POST'])
     # def delete_profile():
