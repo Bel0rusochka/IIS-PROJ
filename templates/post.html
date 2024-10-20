@@ -51,9 +51,13 @@
             {% endif %}
           </div>
         </div>
-
+        <a href="{{ url_for('index') }}" class="back-button" >
+          <i class="fas fa-arrow-left"></i>
+      </a>
           <!-- Image Detail Section (initially hidden) -->
         <div id="imageDetail">
+         
+        
             <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}"/>
 
             <div id="imageStats">

@@ -1023,6 +1023,7 @@ img {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 20px;
 }
 
 .arrow-icon {
