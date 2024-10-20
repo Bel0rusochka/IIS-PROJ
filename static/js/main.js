@@ -21,18 +21,22 @@ function toggleNav() {
   
   function adjustHeaderOnScroll() {
     const header = document.querySelector('.projekt-header');
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const searchBar = document.querySelector('.projekt-search1');
+    const scrollTop = document.documentElement.scrollTop;
   
     if (scrollTop > 50) {
-      // Set margin-top to 0 and make the background transparent when scrolling
+      // Set top to 0 to keep it fixed but appear as if it's moved
       header.style.marginTop = '0';
+      searchBar.style.top = '7px';
       header.style.backgroundColor = 'rgba(205, 226, 250, 0.8)'; // Add transparency
     } else {
-      // Reset margin-top and background when at the top
+      // Reset top to initial value when at the top
       header.style.marginTop = '20px';
+      searchBar.style.top = '27px';
       header.style.backgroundColor = 'rgba(205, 226, 250, 1)';
     }
   }
+  
 
   
 // Toggle the popup modal

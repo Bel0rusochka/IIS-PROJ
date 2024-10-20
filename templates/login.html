@@ -1,57 +1,38 @@
-<!DOCTYPE html>
-<html lang="english">
-  <head>
-    <title>Log In</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta charset="utf-8" />
-    <meta property="twitter:card" content="summary_large_image" />
+{% extends "base.html" %}
 
-    <!-- Font Styles -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"/>
+{% block title %}Log In{% endblock %}
 
-  <body>
-    <link rel="stylesheet" href="../static/css/style.css" />
-    <div>
-      <div class="pagesignup-bluefit">
-        <a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
-      </div>
-      <div class="pagesignup-container">
+{% block content %}
+<div class="pagesignup-container">
+    <form class="pagesignup-signup" method="POST" action="/login">
+        <span class="pagesignup-text12"><span>Log In</span></span>
 
-          <form class="pagesignup-signup" method="POST" action="/login">
-            <span class="pagesignup-text12"><span>Log In</span></span>
-
-            <div class="pagesignup-username">
-              <div class="input-container">
+        <div class="pagesignup-username">
+            <div class="input-container">
                 <label for="login_email" class="floating-label">Email</label>
                 <input type="text" id="login_email" name="login_email" class="pagesignup-input" placeholder="">
-              </div>
             </div>
-            
-            <div class="pagesignup-password">
-              <div class="input-container">
+        </div>
+        
+        <div class="pagesignup-password">
+            <div class="input-container">
                 <label for="password" class="floating-label">Password</label>
                 <input type="password" id="password" name="password" class="pagesignup-input" placeholder="">
-              </div>
             </div>
-            
-            <button type="submit" class="pagesignup-buttonsingupbig">
-              <span class="pagesignup-text22"><span>Log in</span></span>
-            </button>
+        </div>
+        
+        <button type="submit" class="pagesignup-buttonsingupbig">
+            <span class="pagesignup-text22"><span>Log in</span></span>
+        </button>
 
-            <div class="pagesignup-haveacc">
-              <span class="pagesignup-text24">
-                <span>Dont have an account?</span>
-              </span>
-              <a  href="{{url_for('signup')}}"  class="pagesignup-buttlogin">
+        <div class="pagesignup-haveacc">
+            <span class="pagesignup-text24">
+                <span>Don't have an account?</span>
+            </span>
+            <a href="{{ url_for('signup') }}" class="pagesignup-buttlogin">
                 <span class="pagesignup-text26"><span>sign up</span></span>
-              </a>
-            </div>
-
-        </form>
-
-      </div>
-    </div>
-  </body>
-</html>
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

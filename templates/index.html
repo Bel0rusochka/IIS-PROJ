@@ -1,127 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>FITstagram</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="twitter:card" content="summary_large_image" />
+{% extends "base.html" %}
 
+{% block title %}FITstagram - Home{% endblock %}
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- Font Styles -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"/>
-
-    <!-- Animation Styles -->
-    <link rel="stylesheet" href="https://unpkg.com/animate.css@4.1.1/animate.css" />
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="../static/css/style.css" />
-    <link rel="stylesheet" href="../static/css/index.css" />
-  </head>
-  <body>
-  {% if is_logged %}
-    <div id="mySidebar" class="projekt-sidebar">
-      <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar" />
-      <a href="{{url_for('profile', login=session.user[0])}}" class="projekt-sidebar-item">{{session.user[0]}}</a>
-      <a href="{{url_for('groups')}}" class="projekt-sidebar-item">Groups</a>
-      <a href="{{url_for('shares')}}" class="projekt-sidebar-item">Shares</a>
-      <a href="{{url_for('settings')}}" class="projekt-sidebar-item">Settings</a>
-      <a href="{{url_for('comrades')}}" class="projekt-sidebar-item">Comrades</a>
-      <a href="{{url_for('logout')}}" class="projekt-sidebar-item">Log Out</a>
-    </div>
-  {% endif %}
-    
-    <div class="projekt-container">
-      <div class="projekt-projekt">
-        <!-- Header Section -->
-        <div class="projekt-header">
-          <a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
-
-               <!-- Search Section -->
-        <div class="projekt-search1">
-          <div class="projekt-group1">
-            <img
-              alt="search2497"
-              src="../static/images/search.svg"
-              class="projekt-search2"
-            />
-            <form method="GET" action="{{ url_for('search_posts') }}">
-              <input type="text" name="query" placeholder="Search by tags..." required/>
-              <button type="submit">Search</button>
-            </form>
-
-          </div>
-
-        </div>
-
-          <!-- Icons Section -->
-          <div class="projekt-frame2" id="iconContainer">
-            {% if not is_logged %}
-              <a  href="{{url_for('login')}}"  class="pagesignup-buttlogin">
-                <span class="pagesignup-text26"><span>log in</span></span>
-              </a>
-            {% else %}
-              <img alt="menu" src="../static/images/menu211-wd1k.svg" class="projekt-menu" onclick="toggleNav()" />
-            {% endif %}
-          </div>
-      
-        </div>
-        <!-- Image Gallery Section -->
-        <div class="projekt-foto">
-          {% for post in posts %}
-            <!--          тэг  ломает фотки, надо исправить-->
-            <a href="{{ url_for('post', post_id=post.id) }}"  class="img gallery-image">
-                <img
-                  alt="Image {{ post.id }}"
-                  src="{{ url_for('image', id=post.id) }}"
-                  class="img gallery-image"
-                  data-id="{{ post.id }}"
-                />
-             </a>
-          {% endfor %}
-        </div>
-
-        <!-- Add New Section -->
-        {% if is_logged %}
-          <div class="addPost" onclick="togglePopup()">
-            <div class="ellipse">
-              <span class="projekt-text5">+</span>
-            </div>
-          </div>
-
-
-        <!-- Popup Modal -->
-        <div id="popupModal" class="popup-modal">
-          <div class="popup-content">
-            <div class="popup-header">
-              <span class="close-popup" onclick="togglePopup()">×</span>
-              <h2 class="popup-title">New Post</h2>
-            </div>
-
-          <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
-            <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
-              <p>Drag & Drop image here</p>
-              <p>or</p>
-              <span class="image-upload-label">Click to Upload Image</span>
-              <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image"/>
-            </div>
-
-            <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text"></textarea>
-            <input type="text" id="tags" placeholder="Add tags separated by space" name="tags"/>
-
-
-            <button type="submit" class="post-button">Post</button>
-          </form>
-        </div>
-      </div>
-   {% endif %}
+{% block content %}
+  <div class="projekt-search1">
+    <div class="projekt-group1">
+      <img alt="search" src="../static/images/search.svg" class="projekt-search2" />
+      <form method="GET" action="{{ url_for('search_posts') }}">
+        <input type="text" name="query" placeholder="Search by tags..." required/>
+        <button type="submit">Search</button>
+      </form>
     </div>
   </div>
-</div>
-<script src="../static/js/main.js"></script>
 
-</body>
-</html>
+  <div class="projekt-foto">
+    {% for post in posts %}
+      <a href="{{ url_for('post', post_id=post.id) }}" class="img gallery-image">
+        <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="img gallery-image" data-id="{{ post.id }}"/>
+      </a>
+    {% endfor %}
+  </div>
+
+  {% if is_logged %}
+    <div class="addPost" onclick="togglePopup()">
+      <div class="ellipse">
+        <span class="projekt-text5">+</span>
+      </div>
+    </div>
+    <div id="popupModal" class="popup-modal">
+      <div class="popup-content">
+        <div class="popup-header">
+          <span class="close-popup" onclick="togglePopup()">×</span>
+          <h2 class="popup-title">New Post</h2>
+        </div>
+        <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
+          <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
+            <p>Drag & Drop image here</p>
+            <span class="image-upload-label">Click to Upload Image</span>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image"/>
+          </div>
+          <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text"></textarea>
+          <input type="text" id="tags" placeholder="Add tags separated by space" name="tags"/>
+          <button type="submit" class="post-button">Post</button>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
