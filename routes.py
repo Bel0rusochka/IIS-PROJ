@@ -13,10 +13,10 @@ def registrate_routes(app, db):
                 Posts.status == "public",
                 and_(
                     Posts.status == "private",
-                    Users.comrades.any(
+                    Users.viewers.any(
                         and_(
-                            Comrades.comrade_login == user_login,
-                            Comrades.user_login == Posts.author_login
+                            Viewers.viewer_login == user_login,
+                            Viewers.user_login == Posts.author_login
                         )
                     )
                 ),
@@ -24,8 +24,8 @@ def registrate_routes(app, db):
                     Posts.status == "private",
                     or_(
                         Posts.author_login == user_login,
-                        session['user'][1] == 'admin',
-                        session['user'][1] == 'moderator'
+                        session['user']['role'] == 'admin',
+                        session['user']['role'] == 'moderator'
                     )
                 )
             )
@@ -39,7 +39,7 @@ def registrate_routes(app, db):
             email = request.form['email']
             password = request.form['password']
             confirm_password = request.form['confirm_password']
-            if password == confirm_password and Users.query.get(login) is None:
+            if password == confirm_password and Users.query.get(login) is None and '@' in login:
                 password_db = hashlib.md5(password.encode()).hexdigest()
                 user = Users(login=login, name=name, surname=surname, mail=email, password=password_db, role="user")
                 session['user'] = [user.login, user.role, user.name, user.surname, user.mail]
@@ -50,7 +50,7 @@ def registrate_routes(app, db):
                 print("Passwords do not match")
                 flash("Passwords do not match")
         elif session.get('user') is not None:
-            return redirect(url_for('profile', login=session['user'][0]))
+            return redirect(url_for('profile', login=session['user']['login']))
         return render_template("signup.html")
 
     @app.route('/login', methods=['GET', 'POST'])
@@ -61,29 +61,29 @@ def registrate_routes(app, db):
             password_db = hashlib.md5(password.encode()).hexdigest()
             user = Users.query.filter(or_(Users.login == login_email, Users.mail == login_email)).first()
             if user is not None and user.password == password_db:
-                session['user'] = [user.login, user.role, user.name, user.surname, user.mail]
+                session['user'] = {"login": user.login, "role": user.role, "name":user.name, "surname":user.surname, "mail":user.mail}
                 return redirect(url_for('index'))
             else:
                 flash("Invalid login or password")
         elif session.get('user') is not None:
-            return redirect(url_for('profile', login=session['user'][0]))
+            return redirect(url_for('profile', login=session['user']['login']))
         return render_template("login.html")
 
     @app.route('/profile/<login>')
     def profile(login):
         if session.get('user') is None:
             return redirect(url_for('login'))
-        if login == session['user'][0] or session['user'][1] == 'admin':
+        if login == session['user']['login'] or session['user']['role'] == 'admin':
             user = Users.query.get(login)
             return render_template("profile.html", user=user,is_owner=True, posts=user.posts)
         else:
-            active_login = session['user'][0]
+            active_login = session['user']['login']
             return  render_template("profile.html", user=Users.query.get(login), is_owner=False, posts=posts_for_user(active_login).filter_by(author_login=login).all())
     @app.route('/profile')
     def profiles():
         if session.get('user') is None:
             return redirect(url_for('login'))
-        elif session['user'][1] == 'admin' or session['user'][1] == 'moderator':
+        elif session['user']['role'] == 'admin' or session['user']['role'] == 'moderator':
             users = Users.query.all()
             return '''
             <h1>Profiles</h1>
@@ -92,21 +92,28 @@ def registrate_routes(app, db):
             '''
             # return render_template("profiles.html", users=users)
         else:
-            return redirect(url_for('profile', login=session['user'][0]))
+            return redirect(url_for('profile', login=session['user']['login']))
 
     @app.route('/shares')
     def shares():
         if session.get('user') is None:
             return redirect(url_for('login'))
-        shares = Shares.query.filter_by(recipient_login=session['user'][0]).all()
+        shares = Shares.query.filter_by(recipient_login=session['user']['login']).all()
         return "Shares"
 
-    @app.route('/comrades')
-    def comrades():
+    @app.route('/users')
+    def users():
         if session.get('user') is None:
             return redirect(url_for('login'))
-        comrades = Comrades.query.filter_by(user_login=session['user'][0]).all()
-        return "Comrades"
+        viewer = Viewers.query.filter_by(user_login=session['user']['login']).all()
+        users = Users.query.all()
+        return '''
+        <h1>Users</h1>
+        <p>Viewers:</p>
+        <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.viewer_login)}">{user.viewer_login}</a></li>' for user in viewer]) + '''</ul>
+        <p>Users:</p>
+        <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.login)}">{user.login}</a></li>' for user in users]) + '''</ul>
+        '''
 
     @app.route('/groups')
     def groups():
@@ -130,21 +137,18 @@ def registrate_routes(app, db):
                 flash("Please enter valid tags!")
                 return redirect(url_for('index'))
 
-
-
             if session.get('user') is not None:
-                results = posts_for_user(session['user'][0])
+                results = posts_for_user(session['user']['login'])
                 for tag in tag_list:
                     results = results.filter(Posts.associated_tags.any(Tags.name == tag))
                 results = results.all()
-                return render_template("index.html", posts=results, user=session['user'],
-                                       is_logged=True)
+                return render_template("index.html", posts=results)
             else:
                 results = Posts.query.filter_by(status="public").join(Posts.associated_tags)
                 for tag in tag_list:
                     results = results.filter(Posts.associated_tags.any(Tags.name == tag))
                 results =  results.all()
-                return render_template("index.html", posts=results,is_logged=False)
+                return render_template("index.html", posts=results)
         abort(404)
 
     # @app.route('/delete_profile', methods=['GET', 'POST'])
@@ -152,7 +156,7 @@ def registrate_routes(app, db):
     #     if session.get('user') is None:
     #         return redirect(url_for('login'))
     #     if request.method == 'POST':
-    #         user = Users.query.get(session['user'][0])
+    #         user = Users.query.get(session['user']['login'])
     #         db.session.delete(user)
     #         db.session.commit()
     #         session.pop('user', None)
@@ -160,26 +164,29 @@ def registrate_routes(app, db):
     #     return "None"
     #
 
-    @app.route('/settings', methods=['GET', 'POST'])
-    def settings():
+    @app.route('/setting', methods=['GET', 'POST'])
+    def setting():
         if session.get('user') is None:
             return redirect(url_for('login'))
         if request.method == 'POST':
-            user = Users.query.get(session['user'][0])
+            user = Users.query.get(session['user']['login'])
             user.name = request.form['name']
             user.surname = request.form['surname']
-            user.mail = request.form['email']
+            if request.form['password'] != '' and request.form['password'] == request.form['confirm_password']:
+                user.password = hashlib.md5(request.form['password'].encode()).hexdigest()
+
             db.session.commit()
-            session['user'] = [user.login, user.role, user.name, user.surname, user.mail]
-            return redirect(url_for('profile', login=session['user'][0]))
-        return "None"
+            session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
+
+            return redirect(url_for('profile', login=session['user']['login']))
+        return render_template("edit_profile.html")
 
     @app.route('/posts/<post_id>', methods=['GET', 'POST'])
     def post(post_id):
         if session.get('user') is None:
             abort(404)
         post = Posts.query.get_or_404(post_id)
-        return render_template("post.html", post=post, user=session['user'], is_logged=True, comments=post.comments.all())
+        return render_template("post.html", post=post, comments=post.comments.all())
 
     @app.route('/add_comment/<int:post_id>', methods=['POST'])
     def add_comment(post_id):
@@ -192,7 +199,7 @@ def registrate_routes(app, db):
                 return redirect(url_for('post', post_id=post_id))
             if Posts.query.get(post_id) is None:
                 abort(404)
-            comment = Comments(author_login=session['user'][0], text=text, post_id=post_id)
+            comment = Comments(author_login=session['user']['login'], text=text, post_id=post_id)
             db.session.add(comment)
             db.session.commit()
             return redirect(url_for('post', post_id=post_id))
@@ -202,7 +209,7 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             abort(404)
         post = Posts.query.get_or_404(post_id)
-        user_login = session.get('user')[0]
+        user_login = session.get('user')['login']
 
         if post.likes.filter_by(login=user_login).first():
             post.likes.remove(Users.query.filter_by(login=user_login).first())
@@ -223,7 +230,7 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             img = Posts.query.filter_by(status="public", id=id).first()
         else:
-            img = posts_for_user(session['user'][0]).filter_by(id=id).first()
+            img = posts_for_user(session['user']['login']).filter_by(id=id).first()
         if img:
             return send_file(io.BytesIO(img.image_binary), mimetype='image/jpeg')
         abort(404)
@@ -231,11 +238,17 @@ def registrate_routes(app, db):
     @app.route('/')
     def index():
         if session.get('user') is not None:
-            return render_template("index.html", posts = posts_for_user( session['user'][0]), user = session['user'], is_logged = True)
+            return render_template("index.html", posts = posts_for_user(session['user']['login']))
         else:
-            return render_template("index.html", posts = Posts.query.filter_by(status="public").all(), is_logged = False)
+            return render_template("index.html", posts = Posts.query.filter_by(status="public").all())
 
-
+    @app.route('/admin')
+    def admin():
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+        if session['user']['role'] != 'admin':
+            return redirect(url_for('index'))
+        return "Admin page"
     @app.route('/upload', methods=['POST', 'GET'])
     def upload():
         if session.get('user') is not None:
@@ -253,7 +266,7 @@ def registrate_routes(app, db):
                     img.save(img_io, 'JPEG',quality=100)
                     img_io.seek(0)
 
-                    post = Posts(author_login=session['user'][0], status=status, text=text, image_binary=img_io.read())
+                    post = Posts(author_login=session['user']['login'], status=status, text=text, image_binary=img_io.read())
                     for tag in tags:
                         if tag == '' or tag == ' ': continue
                         tag_db = Tags.query.get(tag)

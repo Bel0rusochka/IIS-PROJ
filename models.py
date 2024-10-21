@@ -24,7 +24,7 @@ class Users(db.Model):
     send_shares = db.relationship('Shares', backref='sender', foreign_keys="Shares.sender_login",
                                 cascade="all, delete-orphan", lazy='dynamic')
 
-    comrades = db.relationship('Comrades', backref='user', foreign_keys="Comrades.user_login", lazy='dynamic',cascade="all, delete-orphan")
+    viewers = db.relationship('Viewers', backref='user', foreign_keys="Viewers.user_login", lazy='dynamic',cascade="all, delete-orphan")
 
 class Groups(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True, index=True)
@@ -89,6 +89,6 @@ class Shares(db.Model):
     shares_sender = db.relationship('Users', single_parent=True, foreign_keys=[sender_login], viewonly=True)
     shares_recipient = db.relationship('Users', single_parent=True, foreign_keys=[recipient_login], viewonly=True)
 
-class Comrades(db.Model):
+class Viewers(db.Model):
     user_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)
-    comrade_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)
+    viewer_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)
