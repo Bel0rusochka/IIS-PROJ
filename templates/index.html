@@ -21,7 +21,7 @@
     {% endfor %}
   </div>
 
-  {% if is_logged %}
+  {% if session.user %}
     <div class="addPost" onclick="togglePopup()">
       <div class="ellipse">
         <span class="projekt-text5">+</span>

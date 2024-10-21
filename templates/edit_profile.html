@@ -18,42 +18,26 @@
 				<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
 			  </div>
     		<div class="edit_information">
-      			<div class="avatar-edit">
-        				<img class="generic-avatar-icon2" alt="" src="../static/images/Generic avatar2.png">
-        				
-        				<div class="plus">
-          					<div class="plus-child">
-          					</div>
-          					<b class="b">+</b>
-        				</div>
-      			</div>
-      			<div class="user-name2">user name</div>
-      			<div class="email-examplemailcom">email: example@mail.com</div>
-      			<div class="fullname">
-        				<div class="first">
-          					<div class="login">
-          					</div>
-          					<div class="first-name"> first name</div>
-        				</div>
-        				<div class="last">
-          					<div class="login">
-          					</div>
-          					<div class="first-name"> last name</div>
-        				</div>
-      			</div>
-      			<div class="password">
-        				<div class="login">
-        				</div>
-        				<div class="first-name">password</div>
-      			</div>
-      			<div class="password">
-        				<div class="login">
-        				</div>
-        				<div class="first-name">confirm password</div>
-      			</div>
-      			<div class="button">
-        				<div class="save-changes">save changes</div>
-      			</div>
+      			<div class="user-name2">{{ session.user.login }}</div>
+      			<div class="email-examplemailcom">email: {{ session.user.mail }}</div>
+				<form method="POST" action="{{ url_for('setting') }}">
+					<div class="fullname">
+							<div class="first">
+								<input type="text" name="name" class="first-name" value="{{ session.user.name }}">
+							</div>
+							<div class="last">
+								<input type="text" name="surname" class="first-name" value="{{ session.user.surname }}">
+							</div>
+					</div>
+					<div class="password">
+						<input type="text" name="password" class="password">
+					</div>
+					<div class="password">
+						<input type="text" name="confirm_password" class="confirm_password">
+					</div>
+					<button type="submit" class="save-changes">Save changes</button>
+
+				</form>
     		</div>
     		<img class="arrow-icon2" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
     		

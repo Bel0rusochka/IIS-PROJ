@@ -28,7 +28,7 @@
     <div id="imageTags">
       <span id="tagsList">Tags:</span>
       {% for tag in post.associated_tags %}
-        <span class="tag">{{ tag.name }}</span>
+        <span class="tag">#{{ tag.name }}</span>
       {% endfor %}
     </div>
 
@@ -48,7 +48,7 @@
         {% for comment in comments %}
           <div class="comment" style="border-bottom: 1px solid #ccc; padding: 10px;">
             <div style="font-weight: bold; color: #555;">
-              {{ comment.author_login }} - <small>{{ comment.date.strftime('%Y-%m-%d %H:%M') }}</small>
+              {{ comment.author.name }} {{ comment.author.surname }} - <small>{{ comment.date.strftime('%Y-%m-%d %H:%M') }}</small>
             </div>
             <div style="margin-top: 5px;">
               {{ comment.text }}
