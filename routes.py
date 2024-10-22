@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, abort
 from models import *
 import hashlib
-from sqlalchemy import or_, and_, exists
+from sqlalchemy import or_, and_, exists, not_
 from PIL import Image as PILImage
 import io
+
 
 def registrate_routes(app, db):
 
@@ -11,25 +12,26 @@ def registrate_routes(app, db):
         return Posts.query.filter(
             or_(
                 Posts.status == "public",
+                # Posts.status == "group",
                 and_(
                     Posts.status == "private",
                     Users.viewers.any(
                         and_(
-                            Viewers.viewer_login == user_login,
-                            Viewers.user_login == Posts.author_login
+                            Viewers.viewer_login == session['user']['login'],
+                            # Viewers.user_login == Posts.author_login
                         )
                     )
                 ),
                 and_(
                     Posts.status == "private",
                     or_(
-                        Posts.author_login == user_login,
+                        Posts.author_login == session['user']['login'],
                         session['user']['role'] == 'admin',
                         session['user']['role'] == 'moderator'
                     )
                 )
             )
-        )
+        ).order_by(Posts.date.desc())
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         if request.method == 'POST' and session.get('user') is None:
@@ -42,7 +44,7 @@ def registrate_routes(app, db):
             if password == confirm_password and Users.query.get(login) is None and '@' in login:
                 password_db = hashlib.md5(password.encode()).hexdigest()
                 user = Users(login=login, name=name, surname=surname, mail=email, password=password_db, role="user")
-                session['user'] = [user.login, user.role, user.name, user.surname, user.mail]
+                session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
                 db.session.add(user)
                 db.session.commit()
                 return redirect(url_for('index'))
@@ -73,12 +75,42 @@ def registrate_routes(app, db):
     def profile(login):
         if session.get('user') is None:
             return redirect(url_for('login'))
-        if login == session['user']['login'] or session['user']['role'] == 'admin':
+        if login == session['user']['login']:
             user = Users.query.get(login)
-            return render_template("profile.html", user=user,is_owner=True, posts=user.posts)
+            return render_template("profile.html", user=user,is_owner=True,posts = Posts.query.filter(Posts.author_login == login,  Posts.status != 'group').all())
         else:
             active_login = session['user']['login']
             return  render_template("profile.html", user=Users.query.get(login), is_owner=False, posts=posts_for_user(active_login).filter_by(author_login=login).all())
+    @app.route('/edit_group/<int:id>', methods=['GET', 'POST'])
+    def edit_group(id):
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+
+        group = Groups.query.get_or_404(id)
+        users_with_roles = group.users_with_role()
+
+        if  dict(users_with_roles).get(session['user']['login'])  != 'admin':
+            return redirect(url_for('group', id=id))
+
+        if request.method == 'POST':
+            group.name = request.form['name']
+            group.description = request.form['description']
+            db.session.commit()
+            return redirect(url_for('group', id=id))
+        return render_template("edit_group.html", group=group, users=users_with_roles)
+
+    @app.route('/delete_group', methods=['GET', 'POST'])
+    def delete_group():
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+        if request.method == 'POST':
+            group_id = request.form['group_id']
+            group = Groups.query.get(group_id)
+            db.session.delete(group)
+            db.session.commit()
+            return redirect(url_for('groups'))
+        return redirect(url_for('index'))
+
     @app.route('/profile')
     def profiles():
         if session.get('user') is None:
@@ -120,8 +152,47 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             return redirect(url_for('login'))
         groups = Groups.query.all()
-        return "Groups"
+        return '''
+        <h1>Groups</h1>
+        <p>Groups:</p>
+        <ul>''' + ''.join([f'<li><a href="{url_for("group", id=group.id)}">{group.name}</a></li>' for group in groups]) + '''</ul>
+        '''
 
+    @app.route('/groups/<int:id>')
+    def group(id):
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+        group = Groups.query.get_or_404(id)
+
+        subscribers_dict = group.users_with_role()
+        is_admin =  subscribers_dict.get(session['user']['login']) == 'admin'
+        return render_template("group.html", group=group, posts = group.posts, is_admin=is_admin, members=subscribers_dict.keys())
+
+    @app.route('/leave_group', methods=['GET', 'POST'])
+    def leave_group():
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+        if request.method == 'POST':
+            group_id = request.form['group_id']
+            group = Groups.query.get(group_id)
+            user = Users.query.get_or_404((session['user']['login']))
+            group.users.remove(user)
+            db.session.commit()
+            return redirect(url_for('group', id=group_id))
+        return redirect(url_for('index'))
+
+    @app.route('/join_group', methods=['GET', 'POST'])
+    def join_group():
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+        if request.method == 'POST':
+            group_id = request.form['group_id']
+            group = Groups.query.get(group_id)
+            user = Users.query.get(session['user']['login'])
+            group.users.append(user)
+            db.session.commit()
+            return redirect(url_for('group', id=group_id))
+        return redirect(url_for('index'))
     @app.route('/search', methods=['GET'])
     def search_posts():
         if request.method == 'GET':
@@ -164,22 +235,28 @@ def registrate_routes(app, db):
     #     return "None"
     #
 
-    @app.route('/setting', methods=['GET', 'POST'])
-    def setting():
+    @app.route('/setting/<login>', methods=['GET', 'POST'])
+    def setting(login):
+
         if session.get('user') is None:
             return redirect(url_for('login'))
+        if login != session['user']['login']:
+            return redirect(url_for('setting', login=session['user']['login']))
         if request.method == 'POST':
-            user = Users.query.get(session['user']['login'])
+
+            user = Users.query.get(login)
             user.name = request.form['name']
             user.surname = request.form['surname']
             if request.form['password'] != '' and request.form['password'] == request.form['confirm_password']:
                 user.password = hashlib.md5(request.form['password'].encode()).hexdigest()
 
             db.session.commit()
-            session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
+            if session['user']['login'] == login:
+                session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
 
-            return redirect(url_for('profile', login=session['user']['login']))
-        return render_template("edit_profile.html")
+            return redirect(url_for('profile', login=login))
+        user = Users.query.get(login)
+        return render_template("edit_profile.html", user=user)
 
     @app.route('/posts/<post_id>', methods=['GET', 'POST'])
     def post(post_id):
@@ -230,7 +307,7 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             img = Posts.query.filter_by(status="public", id=id).first()
         else:
-            img = posts_for_user(session['user']['login']).filter_by(id=id).first()
+            img = Posts.query.get(id)
         if img:
             return send_file(io.BytesIO(img.image_binary), mimetype='image/jpeg')
         abort(404)
@@ -238,6 +315,7 @@ def registrate_routes(app, db):
     @app.route('/')
     def index():
         if session.get('user') is not None:
+            print(session['user']['login'])
             return render_template("index.html", posts = posts_for_user(session['user']['login']))
         else:
             return render_template("index.html", posts = Posts.query.filter_by(status="public").all())
@@ -249,6 +327,15 @@ def registrate_routes(app, db):
         if session['user']['role'] != 'admin':
             return redirect(url_for('index'))
         return "Admin page"
+    def transform_images(image):
+        img = PILImage.open(image)
+        img = img.convert('RGB')
+        img.thumbnail((600, 600), PILImage.LANCZOS)
+
+        img_io = io.BytesIO()
+        img.save(img_io, 'JPEG', quality=100)
+        img_io.seek(0)
+        return img_io.read()
     @app.route('/upload', methods=['POST', 'GET'])
     def upload():
         if session.get('user') is not None:
@@ -258,15 +345,8 @@ def registrate_routes(app, db):
                 image = request.files['image']
                 tags = request.form['tags'].split(' ')
                 if image:
-                    img = PILImage.open(image)
-                    img = img.convert('RGB')
-                    img.thumbnail((600, 600), PILImage.LANCZOS)
 
-                    img_io = io.BytesIO()
-                    img.save(img_io, 'JPEG',quality=100)
-                    img_io.seek(0)
-
-                    post = Posts(author_login=session['user']['login'], status=status, text=text, image_binary=img_io.read())
+                    post = Posts(author_login=session['user']['login'], status=status, text=text, image_binary=transform_images(image))
                     for tag in tags:
                         if tag == '' or tag == ' ': continue
                         tag_db = Tags.query.get(tag)
