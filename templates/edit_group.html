@@ -41,6 +41,20 @@
 					{% for login,role in users.items() %}
 						<div class="user">
 							<a href="{{ url_for('profile', login=login ) }}" class="user-name">{{ login }} {{role}}</a>
+
+							{% if role == 'member' %}
+								<form method="POST" action="{{ url_for('make_admin_group') }}">
+									<input type="hidden" name="user_login" value="{{ login }}">
+									<input type="hidden" name="group_id" value="{{ group.id }}">
+									<button type="submit">Make admin</button>
+								</form>
+								<form method="POST" action="{{ url_for('delete_member_group') }}">
+									<input type="hidden" name="user_login" value="{{ login }}">
+									<input type="hidden" name="group_id" value="{{ group.id }}">
+									<button type="submit">Delete user</button>
+								</form>
+
+							{% endif %}
 						</div>
 					{% endfor %}
     		</div>

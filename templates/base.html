@@ -44,7 +44,9 @@
             {% endif %}
           </div>
         </div>
-
+        {% for message in get_flashed_messages() %}
+          <div class="flash-message" class = "flash">{{ message }}</div>
+        {% endfor %}
         <!-- Main Content (Will be replaced in child templates) -->
         <div class="projekt-content">
           {% block content %}{% endblock %}

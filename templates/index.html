@@ -7,7 +7,15 @@
     <div class="projekt-group1">
       <img alt="search" src="../static/images/search.svg" class="projekt-search2" />
       <form method="GET" action="{{ url_for('search_posts') }}">
-        <input type="text" name="query" placeholder="Search by tags..." required/>
+        <input type="text" name="query" placeholder="Search by tags..."/>
+
+        <select name="sort_by">
+          <option value="date">Date</option>
+          <option value="comments">Comments</option>
+          <option value="likes">Likes</option>
+          <option value="popularity">Popularity</option>
+        </select>
+
         <button type="submit">Search</button>
       </form>
     </div>

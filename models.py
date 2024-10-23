@@ -51,7 +51,7 @@ class Groups(db.Model):
     name = db.Column(db.String(60),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
     description = db.Column(db.String(20),nullable=False)
-    posts = db.relationship('Posts', secondary=PostsGroups, viewonly=True)
+    posts = db.relationship('Posts', secondary=PostsGroups)
     users = db.relationship('Users', secondary=GroupsUsers)
 
     def post_count(self):

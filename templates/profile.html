@@ -31,7 +31,11 @@
 					<div class="user-login">{{user.login}}</div>
 				</div>
 				{% if session.user.login == user.login %}
-				  <a class="edit-profile" id="editProfileButton" href="{{url_for('setting', login = user.login)}}">edit profile</a>
+					<a class="edit-profile" id="editProfileButton" href="{{url_for('setting', login = user.login)}}">edit profile</a>
+					<form method="POST" action="{{ url_for('delete_user') }}">
+						<input type="hidden" name="user_login" value="{{ user.login }}">
+						<button type="submit" class="delete-profile">delete profile</button>
+					</form>
 				{% endif %}
 			</div>
 			</div>
