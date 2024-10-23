@@ -22,7 +22,7 @@
         <a href="{{url_for('users')}}" class="projekt-sidebar-item">Users</a>
         <a href="{{url_for('groups')}}" class="projekt-sidebar-item">Groups</a>
         <a href="{{url_for('shares')}}" class="projekt-sidebar-item">Shares</a>
-        <a href="{{url_for('setting')}}" class="projekt-sidebar-item">Settings</a>
+        <a href="{{url_for('setting', login = session.user.login)}}" class="projekt-sidebar-item">Settings</a>
         {% if session.user.role == 'admin' %}
           <a href="{{url_for('admin')}}" class="projekt-sidebar-item" style="color : red;">Admin</a>
         {% endif %}
@@ -44,7 +44,9 @@
             {% endif %}
           </div>
         </div>
-
+        {% for message in get_flashed_messages() %}
+          <div class="flash-message" class = "flash">{{ message }}</div>
+        {% endfor %}
         <!-- Main Content (Will be replaced in child templates) -->
         <div class="projekt-content">
           {% block content %}{% endblock %}

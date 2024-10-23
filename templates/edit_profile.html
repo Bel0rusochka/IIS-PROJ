@@ -18,15 +18,15 @@
 				<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
 			  </div>
     		<div class="edit_information">
-      			<div class="user-name2">{{ session.user.login }}</div>
-      			<div class="email-examplemailcom">email: {{ session.user.mail }}</div>
-				<form method="POST" action="{{ url_for('setting') }}">
+      			<div class="user-name2">{{ user.login }}</div>
+      			<div class="email-examplemailcom">email: {{ user.mail }}</div>
+				<form method="POST" action="{{ url_for('setting',login=user.login) }}">
 					<div class="fullname">
 							<div class="first">
-								<input type="text" name="name" class="first-name" value="{{ session.user.name }}">
+								<input type="text" name="name" class="first-name" value="{{ user.name }}">
 							</div>
 							<div class="last">
-								<input type="text" name="surname" class="first-name" value="{{ session.user.surname }}">
+								<input type="text" name="surname" class="first-name" value="{{ user.surname }}">
 							</div>
 					</div>
 					<div class="password">

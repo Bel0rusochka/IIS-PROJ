@@ -8,9 +8,24 @@
   </a>
 
   <div id="imageDetail">
+    <a href="{{ url_for('profile', login=post.author.login) }}" class="author">
+      <span>{{ post.author.name }} {{ post.author.surname }}</span>
+    </a>
+    {% if session.user and session.user.login == post.author_login %}
+      <form action="{{ url_for('delete_post') }}" method="POST">
+        <input type="hidden" name="post_id" value="{{ post.id }}">
+        <button type="submit" class="delete-button">
+          <i class="fas fa-trash"></i>
+        </button>
+      </form>
+
+      <a href="{{ url_for('edit_post', post_id=post.id) }}" class="edit-button">
+        <i class="fas fa-edit"></i>
+      </a>
+    {% endif %}
     <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}"/>
     <div id="imageStats">
-      <form action="{{ url_for('like_post', post_id=post.id) }}" method="POST">
+      <form action="{{ url_for('like_post') }}" method="POST">
         <input type="hidden" name="post_id" value="{{ post.id }}">
         <button type="submit" class="like-button">
           <i class="fa fa-heart"></i>
@@ -18,7 +33,13 @@
         </button>
       </form>
       <span id="retweetsCount">
-        <i class="fa fa-retweet"></i> {{ post.shares_count() }}
+        <form action="{{ url_for('share_post', post_id=post.id) }}" method="POST">
+          <input type="hidden" name="post_id" value="{{ post.id }}">
+          <button type="submit" class="retweet-button">
+            <i class="fa fa-retweet"></i>
+            <span>{{ post.shares_count() }}</span>
+          </button>
+        </form>
       </span>
       <span id="commentsCount">
         <i class="fa fa-comment"></i> {{ post.comments_count() }}
