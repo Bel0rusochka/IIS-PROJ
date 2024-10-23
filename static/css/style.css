@@ -430,7 +430,6 @@ img {
 .projekt-foto {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center the images in the container */
   gap: 10px; /* Space between the images */
 }
 
@@ -470,7 +469,104 @@ img {
   border-radius: 10px;
   margin-bottom: 20px; /* Space below the image */
 }
+/* Author Styling - Improved */
+.post-header .author {
+  font-size: 22px; /* Slightly larger font for better visibility */
+  font-weight: bold; /* Make it stand out */
+  text-decoration: none; /* Remove default underline */
+  border-bottom: 2px solid transparent; /* Subtle bottom border effect */
+  padding-bottom: 4px;
+  margin-right: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  transition: color 0.3s ease, border-bottom 0.3s ease; /* Smooth transition */
+}
 
+.post-header .author:hover {
+  color: white; /* More distinct hover effect */
+  background-color: #2980b9;
+}
+
+/* Additional hover effect for better clarity */
+.post-header .author:active {
+  color: #2980b9; /* Darker shade on click */
+}
+
+/* Delete and Edit Button Styling */
+.post-header .delete-button, .post-header .edit-button,.post-header .author {
+  background-color: #ecf0f1; /* Light background for better visibility */
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 20px; /* Larger font for better readability */
+  padding: 10px;
+  margin-left: 10px;
+  transition: all 0.3s ease; /* Smooth hover effect */
+  display: inline-flex; /* Align icon and text better */
+  align-items: center;
+  justify-content: center;
+}
+
+.post-header .delete-button i, .post-header .edit-button i {
+  margin-right: 5px; /* Spacing between icon and text */
+}
+
+.post-header .delete-button:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.post-header .delete-button:hover i {
+  color: white; /* Change icon color to white on hover */
+}
+
+.post-header .edit-button:hover {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.post-header .edit-button:hover i {
+  color: white; /* Change icon color to white on hover */
+}
+
+/* Styling the form inside post-header */
+.post-header .post-actions {
+  display: inline-block;
+  margin-left: 15px;
+}
+
+/* Layout for the post header */
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ecf0f1; /* Bottom border for separation */
+}
+
+.post-header .left-section {
+  display: flex;
+  align-items: center;
+}
+
+.post-header .right-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Add a subtle shadow to make the buttons stand out more */
+.post-header .delete-button, .post-header .edit-button {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.post-header .delete-button i, .post-header .edit-button i {
+  font-size: 18px; /* Slightly larger icons */
+}
+
+.post-header{
+  display: flex;
+  padding: 20px;
+}
 /* Style for image stats with icons */
 #imageStats {
   display: flex;
@@ -525,22 +621,17 @@ img {
 
 .back-button {
   position: absolute;                 /* Absolute positioning */
-  bottom: 20px;                      /* Distance from the bottom */
-  right: 20px;                       /* Distance from the right */
-  background-color: transparent;     /* Transparent background */
+  top: 120px;                      /* Distance from the bottom */
+  left: 20px;                       /* Distance from the right */
   border: none;                      /* No border */
   border-radius: 50%;                /* Circular shape */
   width: 50px;                       /* Width of the button */
   height: 50px;                      /* Height of the button */
   cursor: pointer;                   /* Change cursor to pointer on hover */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow for depth */
-  outline: none;                    /* Remove focus outline */
+  background-color: black;
 }
 
-.back-button i {
-  font-size: 24px;                  /* Icon size */
-  color: grey;                      /* Icon color */
-}
 /* Style for the comment section */
 #commentSection {
   margin-top: 60px; /* Space above the comment section */
