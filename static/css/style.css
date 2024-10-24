@@ -5,7 +5,7 @@ html {
 }
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 400;
   line-height: 1.15;
   color: var(--dl-color-theme-neutral-dark);
@@ -13,6 +13,7 @@ body {
   background-color: rgba(239, 245, 255, 1); /* Full-screen background color */
 
 }
+
 * {
   box-sizing: border-box;
   border-width: 0;
@@ -71,7 +72,8 @@ img {
 /* Title text styles */
 .pagesignup-text10, .pagesignup-text22, .projekt-text2 {
   font-size: 32px;
-  font-family: Silkscreen, sans-serif;
+  font-family: 'JetBrains Mono', monospace;
+
   color: rgba(0, 0, 0, 1);
 }
 .pagesignup-text10 {
@@ -106,7 +108,7 @@ img {
 /* Signup form large heading */
 .pagesignup-text12 {
   font-size: 48px;
-  font-family: Silkscreen;
+  
 }
 
 /* Input field styles */
@@ -114,7 +116,6 @@ img {
   width: 100%;
   padding: 20px;
   font-size: 15px;
-  font-family: 'Roboto', sans-serif;
   color: rgba(0, 0, 0, 0.7);
   border: none;
   background-color: rgba(240, 240, 240, 1);
@@ -181,7 +182,6 @@ img {
   top: 5px; 
   left: 10px;
   font-size: 15px;
-  font-family: Silkscreen;
   color: rgba(0, 0, 0, 0.7);
   pointer-events: none;
 }
@@ -211,7 +211,6 @@ img {
 /* Text for 'have an account' */
 .pagesignup-text24 {
   font-size: 20px;
-  font-family: Silkscreen;
 }
 
 /* Button to switch to login */
@@ -228,7 +227,6 @@ img {
 /* Small text inside buttons */
 .pagesignup-text26 {
   font-size: 16px;
-  font-family: Silkscreen;
 }
 
 /* ---------------------------- 404 PAGE STYLES ---------------------------- */
@@ -347,7 +345,6 @@ img {
 .projekt-sidebar-item {
   color: rgba(35, 84, 143, 1);
   font-size: 24px;
-  font-family: Silkscreen, sans-serif; /* Fallback font */
   font-weight: 400;
   text-align: center;
 
@@ -667,28 +664,27 @@ img {
   padding-top: 10px; /* Space above comments */
 }
 
-/* Ensure only the search bar is fixed */
+/* Style the search bar container */
 .projekt-search1 {
   position: fixed;               /* Fixes the position of the search bar */
   top: 27px;                     /* Adjust the top position according to the header height */
   left: 50%;                     /* Center it horizontally */
   transform: translateX(-50%);   /* Centers the search bar properly */
-  z-index: 1000;                 /* Make sure it's above other elements but below the header animation */
-  width: 50%;                    /* Adjust width to fit in the layout */
+  z-index: 1000;                 /* Ensure it's above other elements */
+  width: 50%;                    /* Adjust width to fit the layout */
   max-width: 600px;              /* Ensure it doesn't stretch too much on large screens */
   background-color: white;       /* Match the background with the rest of the page */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
   padding: 10px;
   border-radius: 5px;
   transition: top 0.4s ease, background-color 0.4s ease; 
-
 }
 
-/* Specific styling for the search bar group */
+/* Styling for the search input and sort_by dropdown */
 .projekt-group1 {
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* Ensure search icon and input are well spaced */
+  justify-content: space-between;  /* Space between elements */
   padding: 0;
 }
 
@@ -696,7 +692,7 @@ img {
   margin-right: 10px;
   height: 20px;
 }
- 
+
 .projekt-search1 form {
   display: flex;
   align-items: center;
@@ -705,11 +701,30 @@ img {
 
 .projekt-search1 input[type="text"] {
   border: none;
-  width: 100%;              /* Allow the input field to grow to fill available space */
+  width: 100%;                /* Allow the input field to grow to fill available space */
   padding: 10px;
   font-size: 16px;
+  border-radius: 5px;          /* Add rounded corners for consistency */
+  margin-right: 10px;          /* Space between input and button */
 }
 
+/* Style for the sort_by dropdown */
+.projekt-search1 select {
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;          /* Rounded corners to match the input */
+  margin-right: 10px;          /* Space between dropdown and button */
+  background-color: #f0f0f0;   /* Light gray background */
+  cursor: pointer;
+}
+
+.projekt-search1 select:focus {
+  outline: none;               /* Remove focus outline */
+  background-color: #e0e0e0;   /* Change background on focus */
+}
+
+/* Button styling */
 .projekt-search1 button {
   background-color: #83b4e9;
   color: black;
@@ -722,23 +737,6 @@ img {
 .projekt-search1 button:hover {
   background-color: #457bb4;
 }
-
-.projekt-frame2 {
-  gap: 16px;
-  display: flex;
-  align-items: center;
-}
-
-.projekt-text3 {
-  top: 3px;
-  left: 43px;
-  color: rgba(116, 114, 114, 1);
-  font-size: 20px;
-  font-family: Roboto;
-  font-weight: 400;
-}
-
-
 
 
 .projekt-mail,
@@ -773,7 +771,6 @@ img {
 
 .projekt-text5 {
   font-size: 64px;
-  font-family: Arial;
   font-weight: 400;
   color: rgba(0, 0, 0, 1);
   user-select: none;
@@ -892,6 +889,52 @@ img {
 .post-button:hover {
   background-color: #1d4370; /* Darken button on hover */
 }
+.post-privacy {
+  margin-top: 20px;
+}
+
+.post-privacy label {
+  font-size: 14px;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.post-privacy select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+}
+
+.post-privacy select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.popup-content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+textarea {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
 
 /* ---------------------------- EDIT PROFILE PAGE STYLE ---------------------------- */
 .fitstagram {
@@ -957,7 +1000,6 @@ img {
   height: 145px;
   font-size: 24px;
   color: #24558f;
-  font-family: Arial;
 }
 
 .user-name2 {
@@ -1068,7 +1110,6 @@ img {
   text-align: left;
   font-size: 32px;
   color: #000;
-  font-family: Silkscreen;
 }
 
 
@@ -1079,7 +1120,6 @@ img {
   text-align: left;
   font-size: 64px;
   color: #000;
-  font-family: Silkscreen;
   display: flex;
   flex-direction: column;
   overflow: hidden;

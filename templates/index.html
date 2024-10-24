@@ -40,6 +40,7 @@
         <div class="popup-header">
           <span class="close-popup" onclick="togglePopup()">×</span>
           <h2 class="popup-title">New Post</h2>
+          <button type="submit" class="post-button">Post</button>
         </div>
         <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
           <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
@@ -49,7 +50,16 @@
           </div>
           <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text"></textarea>
           <input type="text" id="tags" placeholder="Add tags separated by space" name="tags"/>
-          <button type="submit" class="post-button">Post</button>
+
+            <!-- Post Privacy Section -->
+          <div class="post-privacy">
+            <label for="privacyOptions">Post Privacy:</label>
+            <select id="privacyOptions" name="privacy">
+              <option value="public">Public - Visible to everyone</option>
+              <option value="viewers">Viewers - Visible to followers</option>
+              <option value="groups">Groups - Visible only in groups</option>
+            </select>
+          </div>
         </form>
       </div>
     </div>
