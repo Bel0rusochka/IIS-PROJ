@@ -785,18 +785,22 @@ img {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+  overflow-y: auto; /* Allow scrolling for mobile devices */
 }
 
 .popup-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 5% auto; /* Centered and closer to the top */
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%; /* Allow it to be responsive */
   max-width: 500px; /* Limit the width to 500px */
+  
+  /* Height and Overflow */
+  max-height: 80vh; /* Maximum height to fit within viewport */
+  overflow-y: auto; /* Scrollable if content exceeds max-height */
 }
-
 
 .close-popup {
   color: #aaa;
@@ -963,19 +967,6 @@ textarea {
   
 }
 
-.my-posts img {
-  width: 100%;
-  max-width: 180px;
-  border-radius: 15px;
-  object-fit: cover;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.my-posts img:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
-}
-
 .my-profile {
   background-color: #a6bdd8;
   border-radius: 15px;
@@ -994,12 +985,22 @@ textarea {
   height: 102px;
 }
 
+/* Container for user details and buttons */
 .usernameedit {
   font-size: 24px;
   display: flex;
+  align-items: center;
+  gap: 20px; /* Gap between avatar and info/buttons */
   width: 100%;
-  justify-content: space-between;
   padding: 10px;
+}
+
+/* Flex container for user-info and button-group with space in-between */
+.user-info-gap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Ensures it takes the full width of .usernameedit */
 }
 
 .generic-avatar-icon {
@@ -1018,6 +1019,30 @@ textarea {
   cursor: pointer;
   margin-left: auto; /* Push "edit profile" to the right */
 }
+
+/* Styling the edit and delete buttons */
+.edit-profile,
+.delete-profile {
+  display: block;
+  padding: 8px 16px;
+  margin-bottom: 8px; /* Space between the buttons */
+  font-size: 16px;
+  background-color: #e0e0e0; /* Light gray for a neutral look */
+  color: #444444;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+/* Button hover effect */
+.edit-profile:hover,
+.delete-profile:hover {
+  background-color: #cccccc; /* Slightly darker on hover */
+}
+
 .fit-arrow {
   display: flex;
   justify-content: space-between;

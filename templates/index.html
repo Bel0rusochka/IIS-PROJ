@@ -23,8 +23,13 @@
 
   <div class="projekt-foto">
     {% for post in posts %}
-      <a href="{{ url_for('post', post_id=post.id) }}" class="img gallery-image">
-        <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="img gallery-image" data-id="{{ post.id }}"/>
+      <a href="{{ url_for('post', post_id=post.id) }}"  class="gallery-image">
+        <img
+          alt="Image {{ post.id }}"
+          src="{{ url_for('image', id=post.id) }}"
+          class="gallery-image"
+          data-id="{{ post.id }}"
+        />
       </a>
     {% endfor %}
   </div>
@@ -49,7 +54,7 @@
             <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image"/>
           </div>
           <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text"></textarea>
-          <input type="text" id="tags" placeholder="Add tags separated by space" name="tags"/>
+          <textarea type="text" id="tags" placeholder="Add tags separated by space" name="tags"></textarea>
 
             <!-- Post Privacy Section -->
           <div class="post-privacy">
