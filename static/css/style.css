@@ -583,6 +583,27 @@ img {
   margin: 10px;          /* Space above the tags section */
 
 }
+.send-button {
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  padding: 10px 20px; /* Spacing around the text */
+  font-size: 16px; /* Text size */
+  font-weight: bold; /* Bold text */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
+}
+
+.send-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+  transform: scale(1.05); /* Slightly larger on hover */
+}
+
+.send-button:active {
+  background-color: #388E3C; /* Even darker green when clicked */
+  transform: scale(1); /* Return to normal size */
+}
 
 .like-button:hover {
     color: #f00;

@@ -60,6 +60,10 @@ function togglePopup() {
     }
 }
 
+function toggleSharePopup() {
+  const sharePopup = document.getElementById("sharePopupModal");
+  sharePopup.style.display = (sharePopup.style.display === "none" || sharePopup.style.display === "") ? "block" : "none";
+}
   
   // Placeholder function for the Post button (you can customize this as needed)
   function submitPost() {
