@@ -26,8 +26,8 @@ def registrate_routes(app, db):
                     Posts.status == "private",
                     or_(
                         Posts.author_login == session['user']['login'],
-                        session['user']['role'] == 'admin',
-                        session['user']['role'] == 'moderator'
+                        # session['user']['role'] == 'admin',
+                        # session['user']['role'] == 'moderator'
                     )
                 )
             )
@@ -50,10 +50,9 @@ def registrate_routes(app, db):
                 db.session.commit()
                 return redirect(url_for('index'))
             else:
-                print("Passwords do not match")
                 flash("Passwords do not match")
         elif session.get('user') is not None:
-            return redirect(url_for('profile', login=session['user']['login']))
+            return redirect(url_for('profile', login=session['user']['login'], previos_values={}))
         return render_template("signup.html")
 
     @app.route('/login', methods=['GET', 'POST'])
@@ -143,8 +142,12 @@ def registrate_routes(app, db):
     def shares():
         if session.get('user') is None:
             return redirect(url_for('login'))
-        shares = Shares.query.filter_by(recipient_login=session['user']['login']).all()
-        return "Shares"
+        shares_received = Shares.query.filter_by(recipient_login=session['user']['login']).all()
+        shares_sent = Shares.query.filter_by(sender_login=session['user']['login']).all()
+        return '''
+        Shares received: <ul>''' + ''.join([f'<li><a href="{url_for("post", post_id=share.posts_id)}">{share.posts_id}</a></li>' for share in shares_received]) + '''</ul>
+        Shares sent: <ul>''' + ''.join([f'<li><a href="{url_for("post", post_id=share.posts_id)}">{share.posts_id}</a></li>' for share in shares_sent]) + '''</ul>
+        '''
 
     @app.route('/users')
     def users():
@@ -313,7 +316,6 @@ def registrate_routes(app, db):
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
         if login != session['user']['login']:
-            print(1)
             flash("You are not allowed to edit this profile", "error")
             return redirect(url_for('setting', login=session['user']['login']))
         if request.method == 'POST':
@@ -338,7 +340,6 @@ def registrate_routes(app, db):
 
     @app.route('/posts/<int:post_id>')
     def post(post_id):
-        print(session.get('user'))
         post = Posts.query.get_or_404(post_id)
         return render_template("post.html", post=post, comments=post.comments.all())
 
@@ -404,7 +405,31 @@ def registrate_routes(app, db):
 
     @app.route('/share_post', methods=['POST'])
     def share_post():
-        return "Share comment"
+        if request.method == 'POST':
+            post_id = request.form['post_id']
+            recipient_login = request.form['recipient_login'].strip()
+
+            if session.get('user') is None:
+                flash("You are not logged in", "error")
+                return redirect(url_for('login'))
+            post = Posts.query.get_or_404(post_id)
+            if post.status == 'private':
+                flash("You can't share a private post", "error")
+                return redirect(url_for('post', post_id=post.id))
+            sender_login = session.get('user')['login']
+            if recipient_login == sender_login:
+                flash("You can't share the post with yourself", "error")
+                return redirect(url_for('post', post_id=post.id))
+            elif not Users.query.get(recipient_login):
+                flash("User not found", "error")
+                return redirect(url_for('post', post_id=post.id))
+
+            share = Shares(posts_id=post_id, sender_login=sender_login, recipient_login=recipient_login)
+            db.session.add(share)
+            db.session.commit()
+
+            return redirect(url_for('post', post_id=post.id))
+        abort(404)
 
     @app.route('/edit_comment/<int:comment_id>', methods=['GET', 'POST'])
     def edit_comment(comment_id):
@@ -459,9 +484,10 @@ def registrate_routes(app, db):
         if session.get('user') is not None:
             if request.method == 'POST':
                 text = request.form['text']
-                status = 'public'
+                status = request.form['privacy']
                 image = request.files['image']
                 tags = request.form['tags'].split(' ')
+
                 if image:
                     post = Posts(author_login=session['user']['login'], status=status, text=text, image_binary=transform_images(image))
                     for tag in tags:
