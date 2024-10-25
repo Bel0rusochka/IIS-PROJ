@@ -316,7 +316,7 @@ img {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   top: 50%; /* Center the sidebar vertically */
-  transform: translateY(-40%); /* Adjust it to start from the center */
+  transform: translateY(-35%); /* Adjust it to start from the center */
   z-index: 100;
 }
 .projekt-sidebar .avatar{
@@ -745,8 +745,8 @@ img {
 }
 
 .addPost {
-  bottom: 0;
-  left: 0;
+  bottom: 10px;
+  left: 10px;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -938,8 +938,6 @@ textarea {
   border-radius: 4px;
   border: 1px solid #ccc;
 }
-
-/* ---------------------------- EDIT PROFILE PAGE STYLE ---------------------------- */
 
 
 /* ---------------------------- PROFILE PAGE STYLE ---------------------------- */

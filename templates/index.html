@@ -3,60 +3,60 @@
 {% block title %}FITstagram - Home{% endblock %}
 
 {% block content %}
+  <!-- Search Bar -->
   <div class="projekt-search1">
     <div class="projekt-group1">
-      <img alt="search" src="../static/images/search.svg" class="projekt-search2" />
+      <img alt="search" src="../static/images/search.svg" class="projekt-search2">
       <form method="GET" action="{{ url_for('search_posts') }}">
-        <input type="text" name="query" placeholder="Search by tags..."/>
-
+        <input type="text" name="query" placeholder="Search by tags...">
         <select name="sort_by">
           <option value="date">Date</option>
           <option value="comments">Comments</option>
           <option value="likes">Likes</option>
           <option value="popularity">Popularity</option>
         </select>
-
         <button type="submit">Search</button>
       </form>
     </div>
   </div>
 
+  <!-- Gallery of Posts -->
   <div class="projekt-foto">
     {% for post in posts %}
-      <a href="{{ url_for('post', post_id=post.id) }}"  class="gallery-image">
-        <img
-          alt="Image {{ post.id }}"
-          src="{{ url_for('image', id=post.id) }}"
-          class="gallery-image"
-          data-id="{{ post.id }}"
-        />
+      <a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
+        <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="gallery-image" data-id="{{ post.id }}">
       </a>
     {% endfor %}
   </div>
 
   {% if session.user %}
+    <!-- New Post Modal Trigger -->
     <div class="addPost" onclick="togglePopup()">
       <div class="ellipse">
         <span class="projekt-text5">+</span>
       </div>
     </div>
+
+    <!-- New Post Popup Modal -->
     <div id="popupModal" class="popup-modal">
       <div class="popup-content">
         <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
-        <div class="popup-header">
-          <span class="close-popup" onclick="togglePopup()">×</span>
-          <h2 class="popup-title">New Post</h2>
-          <button type="submit" class="post-button">Post</button>
-        </div>
+          <div class="popup-header">
+            <span class="close-popup" onclick="togglePopup()">×</span>
+            <h2 class="popup-title">New Post</h2>
+            <button type="submit" class="post-button">Post</button>
+          </div>
+
+          <!-- Image Upload & Details -->
           <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
             <p>Drag & Drop image here</p>
             <span class="image-upload-label">Click to Upload Image</span>
-            <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image"/>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image">
           </div>
           <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text"></textarea>
-          <textarea type="text" id="tags" placeholder="Add tags separated by space" name="tags"></textarea>
+          <textarea id="tags" placeholder="Add tags separated by space" name="tags"></textarea>
 
-            <!-- Post Privacy Section -->
+          <!-- Post Privacy Settings -->
           <div class="post-privacy">
             <label for="privacyOptions">Post Privacy:</label>
             <select id="privacyOptions" name="privacy">
