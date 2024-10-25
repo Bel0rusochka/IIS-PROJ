@@ -3,36 +3,38 @@
 {% block title %}Log In{% endblock %}
 
 {% block content %}
-<div class="pagesignup-container">
-    <form class="pagesignup-signup" method="POST" action="/login">
-        <span class="pagesignup-text12"><span>Log In</span></span>
+<div class="projekt-content">
+    <div class="pagesignup-container">
+        <form class="pagesignup-signup" method="POST" action="/login">
+            <span class="pagesignup-text12"><span>Log In</span></span>
 
-        <div class="pagesignup-username">
-            <div class="input-container">
-                <label for="login_email" class="floating-label">Email</label>
-                <input type="text" id="login_email" name="login_email" class="pagesignup-input" placeholder="">
+            <div class="pagesignup-username">
+                <div class="input-container">
+                    <label for="login_email" class="floating-label">Email</label>
+                    <input type="text" id="login_email" name="login_email" class="pagesignup-input" placeholder="">
+                </div>
             </div>
-        </div>
-        
-        <div class="pagesignup-password">
-            <div class="input-container">
-                <label for="password" class="floating-label">Password</label>
-                <input type="password" id="password" name="password" class="pagesignup-input" placeholder="">
+            
+            <div class="pagesignup-password">
+                <div class="input-container">
+                    <label for="password" class="floating-label">Password</label>
+                    <input type="password" id="password" name="password" class="pagesignup-input" placeholder="">
+                </div>
             </div>
-        </div>
-        
-        <button type="submit" class="pagesignup-buttonsingupbig">
-            <span class="pagesignup-text22"><span>Log in</span></span>
-        </button>
+            
+            <button type="submit" class="pagesignup-buttonsingupbig">
+                <span class="pagesignup-text22"><span>Log in</span></span>
+            </button>
 
-        <div class="pagesignup-haveacc">
-            <span class="pagesignup-text24">
-                <span>Don't have an account?</span>
-            </span>
-            <a href="{{ url_for('signup') }}" class="pagesignup-buttlogin">
-                <span class="pagesignup-text26"><span>sign up</span></span>
-            </a>
-        </div>
-    </form>
+            <div class="pagesignup-haveacc">
+                <span class="pagesignup-text24">
+                    <span>Don't have an account?</span>
+                </span>
+                <a href="{{ url_for('signup') }}" class="pagesignup-buttlogin">
+                    <span class="pagesignup-text26"><span>sign up</span></span>
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

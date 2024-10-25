@@ -5,7 +5,7 @@ html {
 }
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 400;
   line-height: 1.15;
   color: var(--dl-color-theme-neutral-dark);
@@ -13,6 +13,7 @@ body {
   background-color: rgba(239, 245, 255, 1); /* Full-screen background color */
 
 }
+
 * {
   box-sizing: border-box;
   border-width: 0;
@@ -71,7 +72,8 @@ img {
 /* Title text styles */
 .pagesignup-text10, .pagesignup-text22, .projekt-text2 {
   font-size: 32px;
-  font-family: Silkscreen, sans-serif;
+  font-family: 'JetBrains Mono', monospace;
+
   color: rgba(0, 0, 0, 1);
 }
 .pagesignup-text10 {
@@ -106,7 +108,7 @@ img {
 /* Signup form large heading */
 .pagesignup-text12 {
   font-size: 48px;
-  font-family: Silkscreen;
+  
 }
 
 /* Input field styles */
@@ -114,7 +116,6 @@ img {
   width: 100%;
   padding: 20px;
   font-size: 15px;
-  font-family: 'Roboto', sans-serif;
   color: rgba(0, 0, 0, 0.7);
   border: none;
   background-color: rgba(240, 240, 240, 1);
@@ -181,7 +182,6 @@ img {
   top: 5px; 
   left: 10px;
   font-size: 15px;
-  font-family: Silkscreen;
   color: rgba(0, 0, 0, 0.7);
   pointer-events: none;
 }
@@ -211,7 +211,6 @@ img {
 /* Text for 'have an account' */
 .pagesignup-text24 {
   font-size: 20px;
-  font-family: Silkscreen;
 }
 
 /* Button to switch to login */
@@ -228,7 +227,6 @@ img {
 /* Small text inside buttons */
 .pagesignup-text26 {
   font-size: 16px;
-  font-family: Silkscreen;
 }
 
 /* ---------------------------- 404 PAGE STYLES ---------------------------- */
@@ -318,7 +316,7 @@ img {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   top: 50%; /* Center the sidebar vertically */
-  transform: translateY(-40%); /* Adjust it to start from the center */
+  transform: translateY(-35%); /* Adjust it to start from the center */
   z-index: 100;
 }
 .projekt-sidebar .avatar{
@@ -347,7 +345,6 @@ img {
 .projekt-sidebar-item {
   color: rgba(35, 84, 143, 1);
   font-size: 24px;
-  font-family: Silkscreen, sans-serif; /* Fallback font */
   font-weight: 400;
   text-align: center;
 
@@ -430,7 +427,6 @@ img {
 .projekt-foto {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* Center the images in the container */
   gap: 10px; /* Space between the images */
 }
 
@@ -470,7 +466,104 @@ img {
   border-radius: 10px;
   margin-bottom: 20px; /* Space below the image */
 }
+/* Author Styling - Improved */
+.post-header .author {
+  font-size: 22px; /* Slightly larger font for better visibility */
+  font-weight: bold; /* Make it stand out */
+  text-decoration: none; /* Remove default underline */
+  border-bottom: 2px solid transparent; /* Subtle bottom border effect */
+  padding-bottom: 4px;
+  margin-right: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  transition: color 0.3s ease, border-bottom 0.3s ease; /* Smooth transition */
+}
 
+.post-header .author:hover {
+  color: white; /* More distinct hover effect */
+  background-color: #2980b9;
+}
+
+/* Additional hover effect for better clarity */
+.post-header .author:active {
+  color: #2980b9; /* Darker shade on click */
+}
+
+/* Delete and Edit Button Styling */
+.post-header .delete-button, .post-header .edit-button,.post-header .author {
+  background-color: #ecf0f1; /* Light background for better visibility */
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 20px; /* Larger font for better readability */
+  padding: 10px;
+  margin-left: 10px;
+  transition: all 0.3s ease; /* Smooth hover effect */
+  display: inline-flex; /* Align icon and text better */
+  align-items: center;
+  justify-content: center;
+}
+
+.post-header .delete-button i, .post-header .edit-button i {
+  margin-right: 5px; /* Spacing between icon and text */
+}
+
+.post-header .delete-button:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.post-header .delete-button:hover i {
+  color: white; /* Change icon color to white on hover */
+}
+
+.post-header .edit-button:hover {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.post-header .edit-button:hover i {
+  color: white; /* Change icon color to white on hover */
+}
+
+/* Styling the form inside post-header */
+.post-header .post-actions {
+  display: inline-block;
+  margin-left: 15px;
+}
+
+/* Layout for the post header */
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ecf0f1; /* Bottom border for separation */
+}
+
+.post-header .left-section {
+  display: flex;
+  align-items: center;
+}
+
+.post-header .right-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Add a subtle shadow to make the buttons stand out more */
+.post-header .delete-button, .post-header .edit-button {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.post-header .delete-button i, .post-header .edit-button i {
+  font-size: 18px; /* Slightly larger icons */
+}
+
+.post-header{
+  display: flex;
+  padding: 20px;
+}
 /* Style for image stats with icons */
 #imageStats {
   display: flex;
@@ -524,23 +617,17 @@ img {
 }
 
 .back-button {
-  position: absolute;                 /* Absolute positioning */
-  bottom: 20px;                      /* Distance from the bottom */
-  right: 20px;                       /* Distance from the right */
-  background-color: transparent;     /* Transparent background */
+  position: fixed;                 /* Absolute positioning */
+  top: 120px;                      /* Distance from the bottom */
+  left: 20px;                       /* Distance from the right */
   border: none;                      /* No border */
   border-radius: 50%;                /* Circular shape */
   width: 50px;                       /* Width of the button */
   height: 50px;                      /* Height of the button */
   cursor: pointer;                   /* Change cursor to pointer on hover */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow for depth */
-  outline: none;                    /* Remove focus outline */
 }
 
-.back-button i {
-  font-size: 24px;                  /* Icon size */
-  color: grey;                      /* Icon color */
-}
 /* Style for the comment section */
 #commentSection {
   margin-top: 60px; /* Space above the comment section */
@@ -576,28 +663,27 @@ img {
   padding-top: 10px; /* Space above comments */
 }
 
-/* Ensure only the search bar is fixed */
+/* Style the search bar container */
 .projekt-search1 {
   position: fixed;               /* Fixes the position of the search bar */
   top: 27px;                     /* Adjust the top position according to the header height */
   left: 50%;                     /* Center it horizontally */
   transform: translateX(-50%);   /* Centers the search bar properly */
-  z-index: 1000;                 /* Make sure it's above other elements but below the header animation */
-  width: 50%;                    /* Adjust width to fit in the layout */
+  z-index: 1000;                 /* Ensure it's above other elements */
+  width: 50%;                    /* Adjust width to fit the layout */
   max-width: 600px;              /* Ensure it doesn't stretch too much on large screens */
   background-color: white;       /* Match the background with the rest of the page */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
   padding: 10px;
   border-radius: 5px;
   transition: top 0.4s ease, background-color 0.4s ease; 
-
 }
 
-/* Specific styling for the search bar group */
+/* Styling for the search input and sort_by dropdown */
 .projekt-group1 {
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* Ensure search icon and input are well spaced */
+  justify-content: space-between;  /* Space between elements */
   padding: 0;
 }
 
@@ -605,7 +691,7 @@ img {
   margin-right: 10px;
   height: 20px;
 }
- 
+
 .projekt-search1 form {
   display: flex;
   align-items: center;
@@ -614,11 +700,30 @@ img {
 
 .projekt-search1 input[type="text"] {
   border: none;
-  width: 100%;              /* Allow the input field to grow to fill available space */
+  width: 100%;                /* Allow the input field to grow to fill available space */
   padding: 10px;
   font-size: 16px;
+  border-radius: 5px;          /* Add rounded corners for consistency */
+  margin-right: 10px;          /* Space between input and button */
 }
 
+/* Style for the sort_by dropdown */
+.projekt-search1 select {
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;          /* Rounded corners to match the input */
+  margin-right: 10px;          /* Space between dropdown and button */
+  background-color: #f0f0f0;   /* Light gray background */
+  cursor: pointer;
+}
+
+.projekt-search1 select:focus {
+  outline: none;               /* Remove focus outline */
+  background-color: #e0e0e0;   /* Change background on focus */
+}
+
+/* Button styling */
 .projekt-search1 button {
   background-color: #83b4e9;
   color: black;
@@ -632,23 +737,6 @@ img {
   background-color: #457bb4;
 }
 
-.projekt-frame2 {
-  gap: 16px;
-  display: flex;
-  align-items: center;
-}
-
-.projekt-text3 {
-  top: 3px;
-  left: 43px;
-  color: rgba(116, 114, 114, 1);
-  font-size: 20px;
-  font-family: Roboto;
-  font-weight: 400;
-}
-
-
-
 
 .projekt-mail,
 .projekt-notifications {
@@ -657,8 +745,8 @@ img {
 }
 
 .addPost {
-  bottom: 0;
-  left: 0;
+  bottom: 10px;
+  left: 10px;
   position: fixed;
   display: flex;
   justify-content: center;
@@ -682,7 +770,6 @@ img {
 
 .projekt-text5 {
   font-size: 64px;
-  font-family: Arial;
   font-weight: 400;
   color: rgba(0, 0, 0, 1);
   user-select: none;
@@ -698,18 +785,22 @@ img {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+  overflow-y: auto; /* Allow scrolling for mobile devices */
 }
 
 .popup-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 5% auto; /* Centered and closer to the top */
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%; /* Allow it to be responsive */
   max-width: 500px; /* Limit the width to 500px */
+  
+  /* Height and Overflow */
+  max-height: 80vh; /* Maximum height to fit within viewport */
+  overflow-y: auto; /* Scrollable if content exceeds max-height */
 }
-
 
 .close-popup {
   color: #aaa;
@@ -801,183 +892,51 @@ img {
 .post-button:hover {
   background-color: #1d4370; /* Darken button on hover */
 }
+.post-privacy {
+  margin-top: 20px;
+}
 
-/* ---------------------------- EDIT PROFILE PAGE STYLE ---------------------------- */
-.fitstagram {
-  position: relative;
-  cursor: pointer;
+.post-privacy label {
+  font-size: 14px;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
 }
-.blue-fit {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.17);
-  border-radius: 15px;
-  background-color: #cde1f9;
-  width: 1874px;
-  height: 77px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 18px 36px 18px 25px;
-  box-sizing: border-box;
-}
-.generic-avatar-icon2 {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  border-radius: 100px;
-  width: 150px;
-  height: 145px;
-  overflow: hidden;
-  object-fit: cover;
-}
-.plus-child {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 50%;
+
+.post-privacy select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
   background-color: #fff;
-  border: 1px solid #24558f;
-  box-sizing: border-box;
-  width: 35px;
-  height: 35px;
-}
-.b {
-  position: absolute;
-  top: 4px;
-  left: 11px;
-  display: inline-block;
-  width: 14px;
-  height: 1px;
-}
-.plus {
-  position: absolute;
-  top: 103px;
-  left: 103px;
-  width: 35px;
-  height: 35px;
-}
-.avatar-edit {
-  width: 150px;
-  position: relative;
-  height: 145px;
-  font-size: 24px;
-  color: #24558f;
-  font-family: Arial;
+  color: #333;
 }
 
-.user-name2 {
-  position: relative;
-  font-size: 48px;
+.post-privacy select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
 
+.popup-content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
 }
-.email-examplemailcom {
-  position: relative;
-  font-size: 24px;
-}
-.login {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0%;
-  right: 0%;
-  bottom: 0%;
-  left: 0%;
-  border-radius: 10px;
-  background-color: #eeecec;
-  border: 1px solid #9d9a9a;
-  box-sizing: border-box;
-}
-.first-name {
-  position: absolute;
-  top: 7.46%;
-  left: 1.7%;
-}
-.first {
-  width: 277px;
-  position: relative;
-  height: 67px;
-}
-.last {
-  width: 290px;
-  position: relative;
-  height: 67px;
-}
-.fullname {
-  width: 586px;
+
+.popup-header {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 19px;
-}
-.password {
-  width: 587px;
-  position: relative;
-  height: 67px;
-}
-
-.save-changes {
-  position: absolute;
-  font-size: 30px;
-  color: #000;
-  text-align: center;
-}
-
-
-.button {
-  width: 381px;
-  border-radius: 10px;
-  background-color: #cde1f9;
-  border: 1px solid #24558f;
-  box-sizing: border-box;
-  height: 73px;
-  display: flex;
-  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  padding: 12px 113px;
-  font-size: 32px;
 }
-.edit_information {
-  position: absolute;
-  top: 131px;
-  left: 610px;
-  border-radius: 20px;
-  background-color: #fffcfc;
-  border: 1px solid #c3c1c1;
-  box-sizing: border-box;
-  width: 692px;
-  height: 821px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 34px 52px 0px;
-  gap: 41px;
-  font-size: 15px;
-}
-.arrow-icon2 {
-  position: absolute;
-  top: 131px;
-  left: 45px;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-}
-.edit-profile2 {
+
+textarea {
   width: 100%;
-  position: relative;
-  background-color: #e5f1ff;
-  height: 100vh;
-  overflow: hidden;
-  text-align: left;
-  font-size: 32px;
-  color: #000;
-  font-family: Silkscreen;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
 
@@ -988,7 +947,6 @@ img {
   text-align: left;
   font-size: 64px;
   color: #000;
-  font-family: Silkscreen;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1005,19 +963,6 @@ img {
   font-size: 24px;
   padding-top: 20px;
   
-}
-
-.my-posts img {
-  width: 100%;
-  max-width: 180px;
-  border-radius: 15px;
-  object-fit: cover;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.my-posts img:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .my-profile {
@@ -1038,12 +983,22 @@ img {
   height: 102px;
 }
 
+/* Container for user details and buttons */
 .usernameedit {
   font-size: 24px;
   display: flex;
+  align-items: center;
+  gap: 20px; /* Gap between avatar and info/buttons */
   width: 100%;
-  justify-content: space-between;
   padding: 10px;
+}
+
+/* Flex container for user-info and button-group with space in-between */
+.user-info-gap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Ensures it takes the full width of .usernameedit */
 }
 
 .generic-avatar-icon {
@@ -1062,6 +1017,30 @@ img {
   cursor: pointer;
   margin-left: auto; /* Push "edit profile" to the right */
 }
+
+/* Styling the edit and delete buttons */
+.edit-profile,
+.delete-profile {
+  display: block;
+  padding: 8px 16px;
+  margin-bottom: 8px; /* Space between the buttons */
+  font-size: 16px;
+  background-color: #e0e0e0; /* Light gray for a neutral look */
+  color: #444444;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+/* Button hover effect */
+.edit-profile:hover,
+.delete-profile:hover {
+  background-color: #cccccc; /* Slightly darker on hover */
+}
+
 .fit-arrow {
   display: flex;
   justify-content: space-between;

@@ -2,59 +2,55 @@
 <html lang="en">
   <head>
     <title>{% block title %}FITstagram{% endblock %}</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="twitter:card" content="summary_large_image" />
+    <meta charset="utf-8"> <!-- Sets character encoding -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- For responsive design -->
+    <meta property="twitter:card" content="summary_large_image"> <!-- Twitter card metadata -->
 
-    <!-- Shared Styles and Scripts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"/>
-    <link rel="stylesheet" href="../static/css/style.css" />
-    <link rel="stylesheet" href="../static/css/index.css" />
+    <!-- Stylesheets for fonts and layout -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;200;300;400;500;600;700&display=swap"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700&display=swap"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"> 
+    <link rel="stylesheet" href="../static/css/style.css"> 
   </head>
   <body>
     {% if session.user %}
       <div id="mySidebar" class="projekt-sidebar">
-        <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar" />
-        <a href="{{url_for('profile', login=session.user.login)}}" class="projekt-sidebar-item">{{session.user.login}}</a>
-        <a href="{{url_for('users')}}" class="projekt-sidebar-item">Users</a>
-        <a href="{{url_for('groups')}}" class="projekt-sidebar-item">Groups</a>
-        <a href="{{url_for('shares')}}" class="projekt-sidebar-item">Shares</a>
-        <a href="{{url_for('setting', login = session.user.login)}}" class="projekt-sidebar-item">Settings</a>
+        <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar"> <!-- User avatar -->
+        <a href="{{ url_for('profile', login=session.user.login) }}" class="projekt-sidebar-item">{{ session.user.login }}</a> 
+        <a href="{{ url_for('users') }}" class="projekt-sidebar-item">Users</a> 
+        <a href="{{ url_for('groups') }}" class="projekt-sidebar-item">Groups</a> 
+        <a href="{{ url_for('shares') }}" class="projekt-sidebar-item">Shares</a> 
+        <a href="{{ url_for('setting', login=session.user.login) }}" class="projekt-sidebar-item">Settings</a> 
         {% if session.user.role == 'admin' %}
-          <a href="{{url_for('admin')}}" class="projekt-sidebar-item" style="color : red;">Admin</a>
+          <a href="{{ url_for('admin') }}" class="projekt-sidebar-item" style="color: red;">Admin</a> <!-- Admin link -->
         {% endif %}
-        <a href="{{url_for('logout')}}" class="projekt-sidebar-item">Log Out</a>
+        <a href="{{ url_for('logout') }}" class="projekt-sidebar-item">Log Out</a> 
       </div>
     {% endif %}
     
     <div class="projekt-container">
       <div class="projekt-projekt">
         <div class="projekt-header">
-          <a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
+          <a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a> 
           <div class="projekt-frame2" id="iconContainer">
             {% if not session.user %}
-              <a href="{{url_for('login')}}" class="pagesignup-buttlogin">
+              <a href="{{ url_for('login') }}" class="pagesignup-buttlogin"> 
                 <span class="pagesignup-text26">log in</span>
               </a>
             {% else %}
-              <img alt="menu" src="../static/images/menu211-wd1k.svg" class="projekt-menu" onclick="toggleNav()" />
+              <img alt="menu" src="../static/images/menu211-wd1k.svg" class="projekt-menu" onclick="toggleNav()"> <!-- Menu toggle -->
             {% endif %}
           </div>
         </div>
         {% for message in get_flashed_messages() %}
-          <div class="flash-message" class = "flash">{{ message }}</div>
+          <div class="flash-message" class="flash">{{ message }}</div> <!-- Flash message display -->
         {% endfor %}
-        <!-- Main Content (Will be replaced in child templates) -->
-        <div class="projekt-content">
-          {% block content %}{% endblock %}
-        </div>
-
+        {% block content %}{% endblock %} <!-- Placeholder for child templates -->
       </div>
     </div>
     
-    <script src="../static/js/main.js"></script>
+    <script src="../static/js/main.js"></script> <!-- Main JavaScript file -->
   </body>
 </html>

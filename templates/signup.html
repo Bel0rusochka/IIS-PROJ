@@ -3,63 +3,65 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<div class="pagesignup-container">
-    <div class="pagesignup-pagesignup">
-        <form class="pagesignup-signup" method="POST" action="/signup">
-            <span class="pagesignup-text12"><a>Sign up</a></span>
-            
-            <div class="pagesignup-emailormbph">
-                <div class="input-container">
-                    <label for="email" class="floating-label">Email</label>
-                    <input type="email" id="email" name="email" class="pagesignup-input" placeholder="">
+<div class="projekt-content">
+    <div class="pagesignup-container">
+        <div class="pagesignup-pagesignup">
+            <form class="pagesignup-signup" method="POST" action="/signup">
+                <span class="pagesignup-text12"><a>Sign up</a></span>
+                
+                <div class="pagesignup-emailormbph">
+                    <div class="input-container">
+                        <label for="email" class="floating-label">Email</label>
+                        <input type="email" id="email" name="email" class="pagesignup-input" placeholder="">
+                    </div>
                 </div>
-            </div>
-            
-            <div class="pagesignup-username">
-                <div class="input-container">
-                    <label for="login" class="floating-label">Login</label>
-                    <input type="text" id="login" name="login" class="pagesignup-input" placeholder="">
+                
+                <div class="pagesignup-username">
+                    <div class="input-container">
+                        <label for="login" class="floating-label">Login</label>
+                        <input type="text" id="login" name="login" class="pagesignup-input" placeholder="">
+                    </div>
                 </div>
-            </div>
-            
-            <div class="pagesignup-fullname">
-                <div class="input-container">
-                    <label for="name" class="floating-label">Name</label>
-                    <input type="text" id="name" name="name" class="pagesignup-input" placeholder="">
+                
+                <div class="pagesignup-fullname">
+                    <div class="input-container">
+                        <label for="name" class="floating-label">Name</label>
+                        <input type="text" id="name" name="name" class="pagesignup-input" placeholder="">
+                    </div>
+                    <div class="input-container">
+                        <label for="surname" class="floating-label">Surname</label>
+                        <input type="text" id="surname" name="surname" class="pagesignup-input" placeholder="">
+                    </div>
                 </div>
-                <div class="input-container">
-                    <label for="surname" class="floating-label">Surname</label>
-                    <input type="text" id="surname" name="surname" class="pagesignup-input" placeholder="">
+                
+                <div class="pagesignup-password">
+                    <div class="input-container">
+                        <label for="password" class="floating-label">Password</label>
+                        <input type="password" id="password" name="password" class="pagesignup-input" placeholder="">
+                    </div>
                 </div>
-            </div>
-            
-            <div class="pagesignup-password">
-                <div class="input-container">
-                    <label for="password" class="floating-label">Password</label>
-                    <input type="password" id="password" name="password" class="pagesignup-input" placeholder="">
+                
+                <div class="pagesignup-password">
+                    <div class="input-container">
+                        <label for="confirm_password" class="floating-label">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="pagesignup-input" placeholder="">
+                    </div>
                 </div>
-            </div>
-            
-            <div class="pagesignup-password">
-                <div class="input-container">
-                    <label for="confirm_password" class="floating-label">Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" class="pagesignup-input" placeholder="">
-                </div>
-            </div>
 
-            <button type="submit" class="pagesignup-buttonsingupbig">
-                <span class="pagesignup-text22"><span>Sign up</span></span>
-            </button>
+                <button type="submit" class="pagesignup-buttonsingupbig">
+                    <span class="pagesignup-text22"><span>Sign up</span></span>
+                </button>
 
-            <div class="pagesignup-haveacc">
-                <span class="pagesignup-text24">
-                    <span>Have an account?</span>
-                </span>
-                <a href="{{url_for('login')}}" class="pagesignup-buttlogin">
-                    <span class="pagesignup-text26"><span>log in</span></span>
-                </a>
-            </div>
-        </form>
+                <div class="pagesignup-haveacc">
+                    <span class="pagesignup-text24">
+                        <span>Have an account?</span>
+                    </span>
+                    <a href="{{url_for('login')}}" class="pagesignup-buttlogin">
+                        <span class="pagesignup-text26"><span>log in</span></span>
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

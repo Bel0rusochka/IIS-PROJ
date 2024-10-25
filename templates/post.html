@@ -3,80 +3,90 @@
 {% block title %}Post Details{% endblock %}
 
 {% block content %}
-  <a href="{{ url_for('index') }}" class="back-button">
-    <i class="fas fa-arrow-left"></i>
-  </a>
-
-  <div id="imageDetail">
-    <a href="{{ url_for('profile', login=post.author.login) }}" class="author">
-      <span>{{ post.author.name }} {{ post.author.surname }}</span>
+    <a href="{{ url_for('index') }}">
+        <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
     </a>
-    {% if session.user and session.user.login == post.author_login %}
-      <form action="{{ url_for('delete_post') }}" method="POST">
-        <input type="hidden" name="post_id" value="{{ post.id }}">
-        <button type="submit" class="delete-button">
-          <i class="fas fa-trash"></i>
-        </button>
-      </form>
-
-      <a href="{{ url_for('edit_post', post_id=post.id) }}" class="edit-button">
-        <i class="fas fa-edit"></i>
-      </a>
-    {% endif %}
-    <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}"/>
-    <div id="imageStats">
-      <form action="{{ url_for('like_post') }}" method="POST">
-        <input type="hidden" name="post_id" value="{{ post.id }}">
-        <button type="submit" class="like-button">
-          <i class="fa fa-heart"></i>
-          <span>{{ post.like_count() }}</span>
-        </button>
-      </form>
-      <span id="retweetsCount">
-        <form action="{{ url_for('share_post', post_id=post.id) }}" method="POST">
-          <input type="hidden" name="post_id" value="{{ post.id }}">
-          <button type="submit" class="retweet-button">
-            <i class="fa fa-retweet"></i>
-            <span>{{ post.shares_count() }}</span>
-          </button>
-        </form>
-      </span>
-      <span id="commentsCount">
-        <i class="fa fa-comment"></i> {{ post.comments_count() }}
-      </span>
-    </div>
-
-    <div id="imageTags">
-      <span id="tagsList">Tags:</span>
-      {% for tag in post.associated_tags %}
-        <span class="tag">#{{ tag.name }}</span>
-      {% endfor %}
-    </div>
-
-    <div id="imageDescription">
-      <h3>Description:</h3>
-      <p>{{ post.text }}</p>
-    </div>
-
-    <!-- Comment Section -->
-    <div id="commentSection">
-      <h3>Comments:</h3>
-      <form id="commentForm" action="{{ url_for('add_comment', post_id=post.id) }}" method="POST">
-        <textarea id="commentInput" placeholder="Write a comment..." rows="3" cols="50" name="text"></textarea>
-        <button id="submitComment">Submit</button>
-      </form>
-      <div id="commentsList">
-        {% for comment in comments %}
-          <div class="comment" style="border-bottom: 1px solid #ccc; padding: 10px;">
-            <div style="font-weight: bold; color: #555;">
-              {{ comment.author.name }} {{ comment.author.surname }} - <small>{{ comment.date.strftime('%Y-%m-%d %H:%M') }}</small>
+    <div id="imageDetail">
+        <div class="post-header">
+            <div class="left-section">
+                <a href="{{ url_for('profile', login=post.author.login) }}" class="author">
+                    <span>{{ post.author.name }} {{ post.author.surname }}</span>
+                </a>
             </div>
-            <div style="margin-top: 5px;">
-              {{ comment.text }}
+    
+            <div class="right-section">
+                {% if session.user and session.user.login == post.author_login %}
+                    <form action="{{ url_for('delete_post') }}" method="POST" class="post-actions">
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <button type="submit" class="delete-button">
+                            <i class="fas fa-trash"></i> delete post
+                        </button>
+                    </form>
+    
+                    <a href="{{ url_for('edit_post', post_id=post.id) }}" class="edit-button">
+                        <i class="fas fa-edit"></i> edit post
+                    </a>
+                {% endif %}
             </div>
-          </div>
-        {% endfor %}
-      </div>
+        </div>
+    
+        <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}">
+        
+        <div id="imageStats">
+            <form action="{{ url_for('like_post') }}" method="POST">
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                <button type="submit" class="like-button">
+                    <i class="fa fa-heart"></i>
+                    <span>{{ post.like_count() }}</span>
+                </button>
+            </form>
+            
+            <span id="retweetsCount">
+                <form action="{{ url_for('share_post', post_id=post.id) }}" method="POST">
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <button type="submit" class="retweet-button">
+                        <i class="fa fa-retweet"></i>
+                        <span>{{ post.shares_count() }}</span>
+                    </button>
+                </form>
+            </span>
+            
+            <span id="commentsCount">
+                <i class="fa fa-comment"></i> {{ post.comments_count() }}
+            </span>
+        </div>
+
+        <div id="imageTags">
+            <span id="tagsList">Tags:</span>
+            {% for tag in post.associated_tags %}
+                <span class="tag">#{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+
+        <div id="imageDescription">
+            <h3>Description:</h3>
+            <p>{{ post.text }}</p>
+        </div>
+
+        <!-- Comment Section -->
+        <div id="commentSection">
+            <h3>Comments:</h3>
+            <form id="commentForm" action="{{ url_for('add_comment', post_id=post.id) }}" method="POST">
+                <textarea id="commentInput" placeholder="Write a comment..." rows="3" cols="50" name="text"></textarea>
+                <button id="submitComment">Submit</button>
+            </form>
+            <div id="commentsList">
+                {% for comment in comments %}
+                    <div class="comment" style="border-bottom: 1px solid #ccc; padding: 10px;">
+                        <div style="font-weight: bold; color: #555;">
+                            {{ comment.author.name }} {{ comment.author.surname }} - <small>{{ comment.date.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            {{ comment.text }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-  </div>
 {% endblock %}
