@@ -617,7 +617,7 @@ img {
 }
 
 .back-button {
-  position: absolute;                 /* Absolute positioning */
+  position: fixed;                 /* Absolute positioning */
   top: 120px;                      /* Distance from the bottom */
   left: 20px;                       /* Distance from the right */
   border: none;                      /* No border */
@@ -626,7 +626,6 @@ img {
   height: 50px;                      /* Height of the button */
   cursor: pointer;                   /* Change cursor to pointer on hover */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow for depth */
-  background-color: black;
 }
 
 /* Style for the comment section */
@@ -937,180 +936,6 @@ textarea {
 }
 
 /* ---------------------------- EDIT PROFILE PAGE STYLE ---------------------------- */
-.fitstagram {
-  position: relative;
-  cursor: pointer;
-}
-.blue-fit {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.17);
-  border-radius: 15px;
-  background-color: #cde1f9;
-  width: 1874px;
-  height: 77px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 18px 36px 18px 25px;
-  box-sizing: border-box;
-}
-.generic-avatar-icon2 {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  border-radius: 100px;
-  width: 150px;
-  height: 145px;
-  overflow: hidden;
-  object-fit: cover;
-}
-.plus-child {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 50%;
-  background-color: #fff;
-  border: 1px solid #24558f;
-  box-sizing: border-box;
-  width: 35px;
-  height: 35px;
-}
-.b {
-  position: absolute;
-  top: 4px;
-  left: 11px;
-  display: inline-block;
-  width: 14px;
-  height: 1px;
-}
-.plus {
-  position: absolute;
-  top: 103px;
-  left: 103px;
-  width: 35px;
-  height: 35px;
-}
-.avatar-edit {
-  width: 150px;
-  position: relative;
-  height: 145px;
-  font-size: 24px;
-  color: #24558f;
-}
-
-.user-name2 {
-  position: relative;
-  font-size: 48px;
-
-}
-.email-examplemailcom {
-  position: relative;
-  font-size: 24px;
-}
-.login {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0%;
-  right: 0%;
-  bottom: 0%;
-  left: 0%;
-  border-radius: 10px;
-  background-color: #eeecec;
-  border: 1px solid #9d9a9a;
-  box-sizing: border-box;
-}
-.first-name {
-  position: absolute;
-  top: 7.46%;
-  left: 1.7%;
-}
-.first {
-  width: 277px;
-  position: relative;
-  height: 67px;
-}
-.last {
-  width: 290px;
-  position: relative;
-  height: 67px;
-}
-.fullname {
-  width: 586px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 19px;
-}
-.password {
-  width: 587px;
-  position: relative;
-  height: 67px;
-}
-
-.save-changes {
-  position: absolute;
-  font-size: 30px;
-  color: #000;
-  text-align: center;
-}
-
-
-.button {
-  width: 381px;
-  border-radius: 10px;
-  background-color: #cde1f9;
-  border: 1px solid #24558f;
-  box-sizing: border-box;
-  height: 73px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 113px;
-  font-size: 32px;
-}
-.edit_information {
-  position: absolute;
-  top: 131px;
-  left: 610px;
-  border-radius: 20px;
-  background-color: #fffcfc;
-  border: 1px solid #c3c1c1;
-  box-sizing: border-box;
-  width: 692px;
-  height: 821px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 34px 52px 0px;
-  gap: 41px;
-  font-size: 15px;
-}
-.arrow-icon2 {
-  position: absolute;
-  top: 131px;
-  left: 45px;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-}
-.edit-profile2 {
-  width: 100%;
-  position: relative;
-  background-color: #e5f1ff;
-  height: 100vh;
-  overflow: hidden;
-  text-align: left;
-  font-size: 32px;
-  color: #000;
-}
 
 
 /* ---------------------------- PROFILE PAGE STYLE ---------------------------- */
