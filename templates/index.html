@@ -42,12 +42,12 @@
     </div>
     <div id="popupModal" class="popup-modal">
       <div class="popup-content">
+        <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
         <div class="popup-header">
           <span class="close-popup" onclick="togglePopup()">×</span>
           <h2 class="popup-title">New Post</h2>
           <button type="submit" class="post-button">Post</button>
         </div>
-        <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
           <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
             <p>Drag & Drop image here</p>
             <span class="image-upload-label">Click to Upload Image</span>
