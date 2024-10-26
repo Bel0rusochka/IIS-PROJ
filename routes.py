@@ -42,15 +42,33 @@ def registrate_routes(app, db):
             email = request.form['email']
             password = request.form['password']
             confirm_password = request.form['confirm_password']
-            if password == confirm_password and Users.query.get(login) is None and '@' not in login:
+            request_data = {'login': login, 'name': name, 'surname': surname, 'email': email, 'password': password, 'confirm_password': confirm_password}
+            if password != confirm_password:
+                flash("Passwords do not match", "error")
+                request_data.pop('password')
+                request_data.pop('confirm_password')
+            elif Users.query.get(login) is not None:
+                flash("User already exists with this login", "error")
+                request_data.pop('login')
+            elif '@' in login:
+                flash("Login cannot contain '@'", "error")
+                request_data.pop('login')
+            elif Users.query.filter_by(mail=email).first() is not None:
+                flash("User already exists with this email", "error")
+                request_data.pop('email')
+            elif len(password) <= 8:
+                flash("Password is too short. It should be at least 8 characters", "error")
+                request_data.pop('password')
+                request_data.pop('confirm_password')
+            else:
                 password_db = hashlib.md5(password.encode()).hexdigest()
                 user = Users(login=login, name=name, surname=surname, mail=email, password=password_db, role="user")
                 session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
                 db.session.add(user)
                 db.session.commit()
                 return redirect(url_for('index'))
-            else:
-                flash("Passwords do not match")
+            return render_template("signup.html", previos_values=request_data)
+
         elif session.get('user') is not None:
             return redirect(url_for('profile', login=session['user']['login'], previos_values={}))
         return render_template("signup.html")
@@ -60,16 +78,19 @@ def registrate_routes(app, db):
         if request.method == 'POST' and session.get('user') is None:
             login_email = request.form['login_email']
             password = request.form['password']
+            request_data = {'login_email': login_email}
             password_db = hashlib.md5(password.encode()).hexdigest()
             user = Users.query.filter(or_(Users.login == login_email, Users.mail == login_email)).first()
             if user is None:
                 flash("Invalid login", "error")
+                request_data.pop('login_email')
             elif user.password != password_db:
                 flash("Invalid password", "error")
             else:
                 flash("You are logged in", "success")
                 session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
                 return redirect(url_for('index'))
+            return render_template("login.html", previos_values=request_data)
         elif session.get('user') is not None:
             flash("You are already logged in", "error")
             return redirect(url_for('profile', login=session['user']['login']))
@@ -81,12 +102,30 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
+        if request.method == 'GET' and login != session['user']['login']:
+            flash("You are not allowed to view this profile", "error")
+        elif request.method == 'GET' and login == session['user']['login']:
+            post_type = request.args.get('posts_type', 'all')
+            if post_type == 'all':
+                posts = Posts.query.filter(Posts.author_login == login,  Posts.status != 'group').all()
+                user = Users.query.get(login)
+                return render_template("profile.html", user=user,posts = posts)
+            elif post_type == 'group':
+                posts = Posts.query.filter(Posts.author_login == login, Posts.status == 'group').all()
+                user = Users.query.get(login)
+                return render_template("profile.html", user=user,posts = posts)
+            else: abort(404)
+
+
         if login == session['user']['login']:
             user = Users.query.get(login)
-            return render_template("profile.html", user=user,is_owner=True,posts = Posts.query.filter(Posts.author_login == login,  Posts.status != 'group').all())
+            posts = Posts.query.filter(Posts.author_login == login,  Posts.status != 'group').all()
+            return render_template("profile.html", user=user, posts = posts)
         else:
             active_login = session['user']['login']
-            return  render_template("profile.html", user=Users.query.get(login), is_owner=False, posts=posts_for_user(active_login).filter_by(author_login=login).all())
+            user = Users.query.get(login)
+            posts = posts_for_user(active_login).filter_by(author_login=login).all()
+            return  render_template("profile.html", user=user, posts=posts)
 
     @app.route('/edit_group/<int:id>', methods=['GET', 'POST'])
     def edit_group(id):
@@ -361,6 +400,21 @@ def registrate_routes(app, db):
             flash("Comment added", "success")
             return redirect(url_for('post', post_id=post_id))
 
+    @app.route('/delete_comment', methods=['GET', 'POST'])
+    def delete_comment():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+        if request.method == 'POST':
+            comment_id = request.form['comment_id']
+            comment = Comments.query.get(comment_id)
+            if comment.author_login == session['user']['login']:
+                db.session.delete(comment)
+                db.session.commit()
+                flash("Comment deleted", "success")
+            return redirect(url_for('post', post_id=comment.post_id))
+        return "Edit comment"
+
     @app.route('/like', methods=['POST'])
     def like_post():
         if request.method == 'POST':
@@ -401,7 +455,34 @@ def registrate_routes(app, db):
 
     @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
     def edit_post(post_id):
-        return "Edit post"
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+        if request.method == 'POST':
+            post = Posts.query.get_or_404(post_id)
+            post.text = request.form['text']
+            post.status = request.form['privacy']
+            post.associated_tags = []
+
+            tags_input = request.form['tags'].strip()
+            tags = list(filter(None, tags_input.split('#')))
+
+            hash_count = tags_input.count('#')
+            if hash_count != (len(tags)) and not request.form['tags'].startswith('#'):
+                flash("Tags should start with # and be separated by #", "error")
+            elif hash_count != (len(tags)):
+                flash("Tags should be separated by #", "error")
+            else:
+                for tag in tags:
+                    if tag == '' or tag == ' ': continue
+                    tag_db = Tags.query.get(tag)
+                    if tag_db is None:
+                        tag_db = Tags(name=tag)
+                    post.associated_tags.append(tag_db)
+                db.session.commit()
+                flash("Post updated", "success")
+                return redirect(url_for('post', post_id=post.id))
+        return render_template("edit_post.html", post = Posts.query.get_or_404(post_id))
 
     @app.route('/share_post', methods=['POST'])
     def share_post():
@@ -410,13 +491,12 @@ def registrate_routes(app, db):
             recipient_login = request.form['recipient_login'].strip()
 
             if session.get('user') is None:
+
                 flash("You are not logged in", "error")
                 return redirect(url_for('login'))
             post = Posts.query.get_or_404(post_id)
-            if post.status == 'private':
-                flash("You can't share a private post", "error")
-                return redirect(url_for('post', post_id=post.id))
             sender_login = session.get('user')['login']
+
             if recipient_login == sender_login:
                 flash("You can't share the post with yourself", "error")
                 return redirect(url_for('post', post_id=post.id))
@@ -424,16 +504,27 @@ def registrate_routes(app, db):
                 flash("User not found", "error")
                 return redirect(url_for('post', post_id=post.id))
 
-            share = Shares(posts_id=post_id, sender_login=sender_login, recipient_login=recipient_login)
-            db.session.add(share)
-            db.session.commit()
+            if post.status == 'private':
+                author = post.author
+                viewers_logins = [viewer.viewer_login for viewer in author.viewers.all()]
+                if recipient_login in viewers_logins:
+                    share = Shares(posts_id=post_id, sender_login=sender_login, recipient_login=recipient_login)
+                    db.session.add(share)
+                    db.session.commit()
+                    flash("Post shared", "success")
+                    return redirect(url_for('post', post_id=post.id))
+                else:
+                    flash("You can't share this post with this user", "error")
+                return redirect(url_for('post', post_id=post.id))
+            else:
+
+                flash("Post shared", "success")
+                share = Shares(posts_id=post_id, sender_login=sender_login, recipient_login=recipient_login)
+                db.session.add(share)
+                db.session.commit()
 
             return redirect(url_for('post', post_id=post.id))
         abort(404)
-
-    @app.route('/edit_comment/<int:comment_id>', methods=['GET', 'POST'])
-    def edit_comment(comment_id):
-        return "Edit comment"
 
     @app.route('/logout')
     def logout():
@@ -486,10 +577,17 @@ def registrate_routes(app, db):
                 text = request.form['text']
                 status = request.form['privacy']
                 image = request.files['image']
-                tags = request.form['tags'].split(' ')
 
-                if image:
-                    post = Posts(author_login=session['user']['login'], status=status, text=text, image_binary=transform_images(image))
+                tags = request.form['tags'].strip()
+                tags = list(filter(None, tags.split('#')))
+                hash_count = request.form['tags'].count('#')
+                if hash_count != (len(tags)) and not request.form['tags'].startswith('#'):
+                    flash("Tags should start with # and be separated by #", "error")
+                elif hash_count != (len(tags)):
+                    flash("Tags should be separated by #", "error")
+                else:
+                    post = Posts(author_login=session['user']['login'], status=status, text=text,
+                                 image_binary=transform_images(image))
                     for tag in tags:
                         if tag == '' or tag == ' ': continue
                         tag_db = Tags.query.get(tag)
@@ -499,7 +597,6 @@ def registrate_routes(app, db):
                     db.session.add(post)
                     db.session.commit()
                     return redirect(url_for('index'))
-                else:
-                    flash("Image is required")
+
         flash("You are not logged in", "error")
         return redirect(url_for('index'))
