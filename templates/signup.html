@@ -12,39 +12,40 @@
                 <div class="pagesignup-emailormbph">
                     <div class="input-container">
                         <label for="email" class="floating-label">Email</label>
-                        <input type="email" id="email" name="email" class="pagesignup-input" placeholder="">
+                        <input type="email" id="email" name="email" class="pagesignup-input" placeholder="" value= "{{ previos_values.email if previos_values else '' }}" required>
                     </div>
                 </div>
                 
                 <div class="pagesignup-username">
                     <div class="input-container">
                         <label for="login" class="floating-label">Login</label>
-                        <input type="text" id="login" name="login" class="pagesignup-input" placeholder="">
+                        <input type="text" id="login" name="login" class="pagesignup-input" placeholder="" value= "{{ previos_values.login if previos_values else '' }}" required>
                     </div>
                 </div>
                 
                 <div class="pagesignup-fullname">
                     <div class="input-container">
                         <label for="name" class="floating-label">Name</label>
-                        <input type="text" id="name" name="name" class="pagesignup-input" placeholder="">
+                        <input type="text" id="name" name="name" class="pagesignup-input" placeholder="" value= "{{ previos_values.name if previos_values else '' }}" >
                     </div>
+
                     <div class="input-container">
                         <label for="surname" class="floating-label">Surname</label>
-                        <input type="text" id="surname" name="surname" class="pagesignup-input" placeholder="">
+                        <input type="text" id="surname" name="surname" class="pagesignup-input" placeholder="" value= "{{ previos_values.surname if previos_values else '' }}" >
                     </div>
                 </div>
                 
                 <div class="pagesignup-password">
                     <div class="input-container">
                         <label for="password" class="floating-label">Password</label>
-                        <input type="password" id="password" name="password" class="pagesignup-input" placeholder="">
+                        <input type="password" id="password" name="password" class="pagesignup-input" placeholder="" value="{{ previos_values.password if previos_values else '' }}" required>
                     </div>
                 </div>
                 
                 <div class="pagesignup-password">
                     <div class="input-container">
                         <label for="confirm_password" class="floating-label">Confirm Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" class="pagesignup-input" placeholder="">
+                        <input type="password" id="confirm_password" name="confirm_password" class="pagesignup-input" placeholder="" value="{{ previos_values.confirm_password if previos_values else '' }}" required>
                     </div>
                 </div>
 

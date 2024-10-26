@@ -11,14 +11,14 @@
             <div class="pagesignup-username">
                 <div class="input-container">
                     <label for="login_email" class="floating-label">Email</label>
-                    <input type="text" id="login_email" name="login_email" class="pagesignup-input" placeholder="">
+                    <input type="text" id="login_email" name="login_email" class="pagesignup-input" placeholder="" value="{{ previos_values.login_email if previos_values else '' }}" required>
                 </div>
             </div>
             
             <div class="pagesignup-password">
                 <div class="input-container">
                     <label for="password" class="floating-label">Password</label>
-                    <input type="password" id="password" name="password" class="pagesignup-input" placeholder="">
+                    <input type="password" id="password" name="password" class="pagesignup-input" placeholder="" required>
                 </div>
             </div>
             
