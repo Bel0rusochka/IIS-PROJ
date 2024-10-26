@@ -81,6 +81,7 @@ class Posts(db.Model):
     comments = db.relationship('Comments', backref='post', cascade="all, delete-orphan", lazy='dynamic')
     likes = db.relationship('Users', secondary=UsersLikePosts, backref='liked_posts', lazy='dynamic')
     shares = db.relationship('Shares', backref='post', cascade="all, delete-orphan", lazy='dynamic')
+
     def like_count(self):
         return self.likes.count()
 

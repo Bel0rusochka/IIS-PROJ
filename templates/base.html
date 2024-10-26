@@ -18,7 +18,7 @@
     {% if session.user %}
       <div id="mySidebar" class="projekt-sidebar">
         <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar"> <!-- User avatar -->
-        <a href="{{ url_for('profile', login=session.user.login) }}" class="projekt-sidebar-item">{{ session.user.login }}</a> 
+        <a href="{{ url_for('profile', login=session.user.login) }}" class="projekt-sidebar-item">@{{ session.user.login }}</a>
         <a href="{{ url_for('users') }}" class="projekt-sidebar-item">Users</a> 
         <a href="{{ url_for('groups') }}" class="projekt-sidebar-item">Groups</a> 
         <a href="{{ url_for('shares') }}" class="projekt-sidebar-item">Shares</a> 
