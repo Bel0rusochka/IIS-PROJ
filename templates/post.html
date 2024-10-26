@@ -10,7 +10,7 @@
         <div class="post-header">
             <div class="left-section">
                 <a href="{{ url_for('profile', login=post.author.login) }}" class="author">
-                    <span>{{ post.author.name }} {{ post.author.surname }}</span>
+                    <span>@{{ post.author.login }}</span>
                 </a>
             </div>
     
@@ -91,7 +91,16 @@
                 {% for comment in comments %}
                     <div class="comment" style="border-bottom: 1px solid #ccc; padding: 10px;">
                         <div style="font-weight: bold; color: #555;">
-                            {{ comment.author.name }} {{ comment.author.surname }} - <small>{{ comment.date.strftime('%Y-%m-%d %H:%M') }}</small>
+                            <a href="{{ url_for('profile', login=comment.author.login) }}">
+                                @{{ comment.author.login }} - <small>{{ comment.date.strftime('%Y-%m-%d %H:%M') }}</small>
+                            </a>
+
+                            {% if session.user and session.user.login == comment.author.login %}
+                                <form action="{{ url_for('delete_comment') }}" method="POST" style="display: inline;">
+                                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                    <button type="submit" style="background: none; border: none; color: red; font-size: 12px;">delete</button>
+                                </form>
+                            {% endif %}
                         </div>
                         <div style="margin-top: 5px;">
                             {{ comment.text }}
