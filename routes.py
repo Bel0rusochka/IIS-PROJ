@@ -200,7 +200,6 @@ def registrate_routes(app, db):
 
         show_my_viewers = False
         show_all_users = True
-        show_add_viewer_popup = False
 
         if request.method == 'POST':
             if 'show_my_viewers' in request.form:
@@ -210,22 +209,37 @@ def registrate_routes(app, db):
                 show_my_viewers = False
                 show_all_users = True
             elif 'add_viewer' in request.form:
-                show_add_viewer_popup = True
+                flash("Add Viewer functionality is not implemented", "info")
 
-        return render_template('users.html',
-                               friend=friend,
-                               users=users,
-                               show_my_viewers=show_my_viewers,
-                               show_all_users=show_all_users,
-                               show_add_viewer_popup=show_add_viewer_popup)
+        return render_template('users.html', friend=friend, users=users, show_my_viewers=show_my_viewers,
+                               show_all_users=show_all_users)
 
-    @app.route('/groups')
+    @app.route('/groups', methods=['GET', 'POST'])
     def groups():
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-        groups = Groups.query.all()
-        return render_template('groups.html', groups=groups)
+
+        show_my_groups = False
+        show_all_groups = True
+
+        if request.method == 'POST':
+            if 'my_groups' in request.form:
+                show_my_groups = True
+                show_all_groups = False
+            elif 'all_groups' in request.form:
+                show_my_groups = False
+                show_all_groups = True
+
+        if show_my_groups:
+            groups = Groups.query.filter_by(user_id=session['user']['login']).all()  # Example query for user's groups
+        else:
+            groups = Groups.query.all()
+
+        return render_template('groups.html',
+                               groups=groups,
+                               show_my_groups=show_my_groups,
+                               show_all_groups=show_all_groups)
 
     @app.route('/make_admin_group', methods=['GET', 'POST'])
     def make_admin_group():

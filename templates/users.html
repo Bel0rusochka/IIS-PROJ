@@ -10,16 +10,16 @@
         <div class="window-users"></div>
         <div class="all-users">
             <form method="POST" action="{{ url_for('users') }}">
-                    <!-- My Viewers Button -->
-                    <input type="submit" name="show_my_viewers" value="My Viewers"  id="myViewersButton" class="{{ 'butt-my-viewers active' if show_my_viewers else 'butt-my-viewers passive' }}">
-                    
-                    <!-- All Users Button -->
-                    <input type="submit" name="show_all_users" value="All Users" id="allUsersButton"class="{{ 'button2 active' if show_all_users else 'button2 passive' }}">
-                    
-                    <!-- Add Viewer Button -->
-                    <input type="submit" name="add_viewer" value="Add Viewer"id="addViewerButton" class="add-viewer-button">
+                <!-- My Viewers Button -->
+                <input type="submit" name="show_my_viewers" value="My Viewers" id="myViewersButton" class="{{ 'butt-my-viewers active' if show_my_viewers else 'butt-my-viewers passive' }}">
+                
+                <!-- All Users Button -->
+                <input type="submit" name="show_all_users" value="All Users" id="allUsersButton" class="{{ 'button2 active' if show_all_users else 'button2 passive' }}">
+                
+                <!-- Add Viewer Button -->
+                <input type="button" name="add_viewer" value="Add Viewer" id="addViewerButton" class="add-viewer-button" onclick="showAddViewerPopup()">
             </form>
-            
+
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
                 {% for user in users %}
@@ -36,7 +36,7 @@
     </div>
     
     <!-- Popup for adding viewer -->
-    <div id="addViewerPopup" class="popup-overlay" style="{% if show_add_viewer_popup %}display: block{% else %}display: none{% endif %}">
+    <div id="addViewerPopup" class="popup-overlay" style="display:none">
         <div class="add-viewer">
             <div class="add-viewer-text">Add viewer</div>
             <div class="button-add">
@@ -61,4 +61,20 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        // Function to show the Add Viewer popup
+        function showAddViewerPopup() {
+            var popup = document.getElementById("addViewerPopup");
+            popup.style.display = "block";
+        }
+
+        // Close the popup when clicking outside the popup area
+        window.onclick = function(event) {
+            var popup = document.getElementById("addViewerPopup");
+            if (event.target == popup) {
+                popup.style.display = "none";
+            }
+        }
+    </script>
 {% endblock %}
