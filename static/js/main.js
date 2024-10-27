@@ -138,105 +138,88 @@ function displayImage(file) {
         .catch(error => console.error('Error:', error));
     }
   
+//ЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЮЗЕРЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫ
+document.addEventListener("DOMContentLoaded", function () {
+  // Show/hide the "add viewer" popup
+  const addViewerButton = document.getElementById("addViewerButton");
+  const addViewerPopup = document.getElementById("addViewerPopup");
 
- // Show/hide the "add viewer" popup
- var addViewerButton = document.getElementById("addViewerButton");
- var addViewerPopup = document.getElementById("addViewerPopup");
+  if (addViewerButton && addViewerPopup) {
+      addViewerButton.addEventListener("click", function () {
+          addViewerPopup.style.display = "flex";
+          addViewerPopup.style.zIndex = 100;
+          addViewerPopup.style.backgroundColor = "rgba(113, 113, 113, 0.3)";
+          addViewerPopup.style.alignItems = "center";
+          addViewerPopup.style.justifyContent = "center";
+      });
 
- if (addViewerButton) {
-     addViewerButton.addEventListener("click", function () {
-         addViewerPopup.style.display = "flex";
-         addViewerPopup.style.zIndex = 100;
-         addViewerPopup.style.backgroundColor = "rgba(113, 113, 113, 0.3)";
-         addViewerPopup.style.alignItems = "center";
-         addViewerPopup.style.justifyContent = "center";
-     });
- }
+      // Close popup when clicking outside the content area
+      addViewerPopup.addEventListener("click", function (e) {
+          if (e.target === addViewerPopup) {
+              addViewerPopup.style.display = "none";
+          }
+      });
+  }
 
- // Close popup when clicked outside
- addViewerPopup.addEventListener("click", function (e) {
-     if (e.target === addViewerPopup) {
-         addViewerPopup.style.display = "none";
-     }
- });
+  // Toggle hidden users in search when the chevron is clicked
+  const chevronIcon = document.getElementById("chevronIcon");
+  const hiddenUsers = document.getElementById("hiddenUsers");
+  let isUsersVisible = false;
 
- // Toggle hidden users in search when the arrow (chevron) is clicked
- var chevronIcon = document.getElementById("chevronIcon");
- var hiddenUsers = document.getElementById("hiddenUsers");
- var isUsersVisible = false; // Track visibility state
+  if (chevronIcon && hiddenUsers) {
+      chevronIcon.addEventListener("click", function () {
+          isUsersVisible = !isUsersVisible;
+          hiddenUsers.style.display = isUsersVisible ? "block" : "none";
+      });
+  }
 
- chevronIcon.addEventListener("click", function () {
-     console.log("Chevron clicked!"); // Debugging log to check click
-     isUsersVisible = !isUsersVisible; // Toggle the state
-     if (isUsersVisible) {
-         hiddenUsers.style.display = "block";
-     } else {
-         hiddenUsers.style.display = "none";
-     }
- });
+  // Button handling for "My viewers" and "All users"
+  const myViewersButton = document.getElementById("myViewersButton");
+  const allUsersButton = document.getElementById("allUsersButton");
+  const hiddenUsersList = document.querySelectorAll('.hidden-user');
 
- // Получение элементов кнопок
- var myViewersButton = document.getElementById("myViewersButton");
- var allUsersButton = document.getElementById("allUsersButton");
- var hiddenUsersList = document.querySelectorAll('.hidden-user');
+  if (myViewersButton && allUsersButton) {
+      myViewersButton.addEventListener("click", function () {
+          toggleUserVisibility(hiddenUsersList, "none");
+          toggleButtonState(myViewersButton, allUsersButton);
+      });
 
- // Событие при клике на "My viewers"
- myViewersButton.addEventListener("click", function () {
-     hiddenUsersList.forEach(function(user) {
-         user.style.display = "none";
-     });
-     myViewersButton.classList.add("active");
-     myViewersButton.classList.remove("passive");
-     allUsersButton.classList.add("passive");
-     allUsersButton.classList.remove("active");
- });
+      allUsersButton.addEventListener("click", function () {
+          toggleUserVisibility(hiddenUsersList, "flex");
+          toggleButtonState(allUsersButton, myViewersButton);
+      });
+  }
 
- // Событие при клике на "All users"
- allUsersButton.addEventListener("click", function () {
-     hiddenUsersList.forEach(function(user) {
-         user.style.display = "flex";
-     });
-     allUsersButton.classList.add("active");
-     allUsersButton.classList.remove("passive");
-     myViewersButton.classList.add("passive");
-     myViewersButton.classList.remove("active");
- });
+  // Function to toggle user visibility
+  function toggleUserVisibility(users, displayStyle) {
+      users.forEach(function (user) {
+          user.style.display = displayStyle;
+      });
+      updateUserLines();
+  }
 
+  // Function to toggle active/passive states for buttons
+  function toggleButtonState(activeButton, passiveButton) {
+      activeButton.classList.add("active");
+      activeButton.classList.remove("passive");
+      passiveButton.classList.add("passive");
+      passiveButton.classList.remove("active");
+  }
 
- // Функция для обновления линий у пользователей
- function updateUserLines() {
-     // Убираем у всех пользователей класс "last-visible"
-     document.querySelectorAll('.user').forEach(user => {
-         user.classList.remove('last-visible');
-     });
+  // Update lines for users
+  function updateUserLines() {
+      const allUsers = document.querySelectorAll('.user');
+      allUsers.forEach(user => user.classList.remove('last-visible'));
 
-     // Выбираем последний видимый элемент с классом "user"
-     const visibleUsers = Array.from(document.querySelectorAll('.user'))
-         .filter(user => user.style.display !== 'none');
-     
-     if (visibleUsers.length > 0) {
-         // Добавляем класс "last-visible" последнему видимому пользователю
-         visibleUsers[visibleUsers.length - 1].classList.add('last-visible');
-     }
- }
+      const visibleUsers = Array.from(allUsers).filter(user => user.style.display !== 'none');
+      if (visibleUsers.length > 0) {
+          visibleUsers[visibleUsers.length - 1].classList.add('last-visible');
+      }
+  }
 
- // Вызываем updateUserLines при загрузке страницы
- updateUserLines();
+  updateUserLines();
+});
 
- // Обновляем линии при клике на кнопки
- myViewersButton.addEventListener("click", function () {
-     hiddenUsersList.forEach(function(user) {
-         user.style.display = "none";
-     });
-     updateUserLines();
- });
-
- allUsersButton.addEventListener("click", function () {
-     hiddenUsersList.forEach(function(user) {
-         user.style.display = "flex";
-     });
-     updateUserLines();
- });
 
  //ГРУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУПППТЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫ
 

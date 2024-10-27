@@ -9,13 +9,16 @@
         </a>
         <div class="window-users"></div>
         <div class="all-users">
-            <div class="butt-my-viewers active" id="myViewersButton">
-                <div class="button">My viewers</div>
-            </div>
-            <div class="button2 passive" id="allUsersButton">All users</div>
-            <div class="add-viewer-button" id="addViewerButton">
-                <div class="button">Add viewer</div>
-            </div>
+            <form method="POST" action="{{ url_for('users') }}">
+                    <!-- My Viewers Button -->
+                    <input type="submit" name="show_my_viewers" value="My Viewers"  id="myViewersButton" class="{{ 'butt-my-viewers active' if show_my_viewers else 'butt-my-viewers passive' }}">
+                    
+                    <!-- All Users Button -->
+                    <input type="submit" name="show_all_users" value="All Users" id="allUsersButton"class="{{ 'button2 active' if show_all_users else 'button2 passive' }}">
+                    
+                    <!-- Add Viewer Button -->
+                    <input type="submit" name="add_viewer" value="Add Viewer"id="addViewerButton" class="add-viewer-button">
+            </form>
             
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
@@ -33,7 +36,7 @@
     </div>
     
     <!-- Popup for adding viewer -->
-    <div id="addViewerPopup" class="popup-overlay" style="display:none">
+    <div id="addViewerPopup" class="popup-overlay" style="{% if show_add_viewer_popup %}display: block{% else %}display: none{% endif %}">
         <div class="add-viewer">
             <div class="add-viewer-text">Add viewer</div>
             <div class="button-add">

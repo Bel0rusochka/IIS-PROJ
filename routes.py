@@ -190,13 +190,34 @@ def registrate_routes(app, db):
         Shares sent: <ul>''' + ''.join([f'<li><a href="{url_for("post", post_id=share.posts_id)}">{share.posts_id}</a></li>' for share in shares_sent]) + '''</ul>
         '''
 
-    @app.route('/users')
+    @app.route('/users', methods=['GET', 'POST'])
     def users():
         if session.get('user') is None:
             return redirect(url_for('login'))
+
         friend = Friends.query.filter_by(user_login=session['user']['login']).all()
         users = Users.query.all()
-        return render_template('users.html', friend=friend, users=users)
+
+        show_my_viewers = False
+        show_all_users = True
+        show_add_viewer_popup = False
+
+        if request.method == 'POST':
+            if 'show_my_viewers' in request.form:
+                show_my_viewers = True
+                show_all_users = False
+            elif 'show_all_users' in request.form:
+                show_my_viewers = False
+                show_all_users = True
+            elif 'add_viewer' in request.form:
+                show_add_viewer_popup = True
+
+        return render_template('users.html',
+                               friend=friend,
+                               users=users,
+                               show_my_viewers=show_my_viewers,
+                               show_all_users=show_all_users,
+                               show_add_viewer_popup=show_add_viewer_popup)
 
     @app.route('/groups')
     def groups():
