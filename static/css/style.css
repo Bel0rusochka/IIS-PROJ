@@ -108,7 +108,9 @@ img {
 /* Signup form large heading */
 .pagesignup-text12 {
   font-size: 48px;
-  
+  word-break: break-word;     /* Break words if they're too long */
+  overflow-wrap: break-word;  /* Ensures long words wrap properly */
+  white-space: normal;
 }
 
 /* Input field styles */
@@ -377,12 +379,6 @@ img {
   transition: margin-right 0.5s; /* Add transition for smoother movement */
 }
 
-.projekt-foto {
-  display: flex; /* Use Flexbox for the gallery */
-  flex-wrap: wrap; /* Allows the items to wrap */
-  margin-top: 100px; /* Maintain the margin for spacing */
-  align-items: stretch;
-}
 
 .projekt-projekt {
   width: 100%;
@@ -415,19 +411,19 @@ img {
   width: 1874px;
   height: 77px;
 }
+.projekt-foto {
+  display: flex; /* Use Flexbox for the gallery */
+  flex-wrap: wrap; /* Allows the items to wrap */
+  align-items: stretch;
+}
 
 .projekt-foto img {
   height: 470px; /* Set this to the height of the tallest rectangle */
   object-fit: cover; /* Ensures the image covers the entire area without distortion */
-
+  max-width: 95%;
   border-radius: 15px;
   margin: 20px;
   flex-grow: 1;
-}
-.projekt-foto {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* Space between the images */
 }
 
 .projekt-foto img {
@@ -976,7 +972,6 @@ textarea {
 }
 
 .my-posts {
-  flex-grow: 1;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   display: flex;
   flex-wrap: wrap;
