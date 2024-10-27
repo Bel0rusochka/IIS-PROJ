@@ -4,36 +4,40 @@
 
 {% block content %}
   	<div class="groups">
-    		<div class="window-groups">
-    		</div>
-    		<div class="all-groups">
-        		<div class="butt-my-groups active" id="myGroupsButton">
-          			<div class="button">My groups</div>
-        		</div>
-        		<div class="search">
-          			<div class="search-text">Search...</div>
-          			<img class="search-icon" alt="" src="../static/images/search.svg">
-        		</div>
-        		<div class="butt-all-groups passive" id="allGroupsButton">All groups</div>
-        		<div class="butt-create-group" id="createGroupButton">
-          			<div class="button">Create a group</div>
-        		</div>
-        		
-        		<!-- Loop through groups from the database -->
-				<div class="group-item">
-
-        		{% for group in groups %}
-          				<img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/default_group.png' }}">
+		<a href="{{ url_for('index') }}">
+            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+        </a>
+		<div class="window-groups">
+		</div>
+		<div class="all-groups">
+			<div class="butt-my-groups active" id="myGroupsButton">
+				<div class="button">My groups</div>
+			</div>
+			<div class="search">
+				<div class="search-text">Search...</div>
+				<img class="search-icon" alt="" src="../static/images/search.svg">
+			</div>
+			<div class="butt-all-groups passive" id="allGroupsButton">All groups</div>
+			<div class="butt-create-group" id="createGroupButton">
+				<div class="button">Create a group</div>
+			</div>
+			
+			<!-- Loop through groups from the database -->
+            <div class="groupsList" >
+			{% for group in groups %}
+        			<div class="group-item">
+          				<img class="avatar" alt="" src="{{ group.avatar_url or 'img/default_group.png' }}">
           				<div class="name-of-group">
             				<div class="group">{{ group.name }}</div>
             				<div class="subscribers">{{ group.subscribers_count }} subscribers</div>
           				</div>
           				<div class="line"></div>
+        			</div>
         		{% endfor %}
 			</div>
 
-    		</div>
-    		<img class="arrow-icon" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
+		</div>
+		
   	</div>
   	
   	<div id="createGroupContainer" class="popup-overlay" style="display:none">
@@ -49,6 +53,16 @@
       		<div class="group-privacy">Group privacy</div>
       		<img class="icon" alt="" src="../static/images/ChevronDownOutline.svg">
       		<div class="enter-a-name">Enter a name</div>
+			  <div class="privacy-options" id="privacyOptions" style="display: none;">
+				<div class="privacy-option" data-privacy="public">
+					Public <br>
+					<span class="privacy-description">All users can view content in the group and leave comments on the wall.</span>
+				</div>
+				<div class="privacy-option" data-privacy="private">
+					Private <br>
+					<span class="privacy-description">Content is seen only by subscribers of the group. To subscribe, you need to submit an application or receive an invitation.</span>
+				</div>
+			</div>
     	</div>	
   	</div>
     	

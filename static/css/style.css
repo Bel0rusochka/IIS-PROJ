@@ -1076,29 +1076,6 @@ textarea {
   width: 100%;
 }
 /* ---------------------------- GROUP PAGE STYLE ---------------------------- */
-.fitstagram {
-  width: 220px;
-  position: relative;
-  display: inline-block;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.header {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.17);
-  border-radius: 15px;
-  background-color: #cde1f9;
-  width: 1875px;
-  height: 77px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 8px 0px 8px 25px;
-  box-sizing: border-box;
-}
 .window-groups {
   position: absolute;
   top: 117px;
@@ -1148,7 +1125,7 @@ textarea {
   font-family: Roboto;
 }
 
-.avatar{
+.groupsList .avatar{
   position: absolute;
   height: 83.77%;
   width: 11.85%;
@@ -1192,34 +1169,6 @@ textarea {
   left: 0.14%;
   border-top: 1px solid #747272;
   box-sizing: border-box;
-}
-.gaming {
-  position: absolute;
-  top: 392px;
-  left: 59px;
-  width: 1080px;
-  height: 154px;
-}
-.lmao {
-  position: absolute;
-  top: 595px;
-  left: 59px;
-  width: 1080px;
-  height: 154px;
-}
-.we-love-cats {
-  position: absolute;
-  top: 189px;
-  left: 59px;
-  width: 1080px;
-  height: 154px;
-}
-.fortnite {
-  position: absolute;
-  top: 798px;
-  left: 59px;
-  width: 1080px;
-  height: 154px;
 }
 
 .all-groups {
@@ -1288,6 +1237,7 @@ textarea {
   background-color: #eeecec;
   border: 1px solid #9d9a9a;
   box-sizing: border-box;
+  cursor: pointer;
 }
 .public {
   position: absolute;
@@ -1339,11 +1289,6 @@ textarea {
   font-family: Silkscreen;
 }
 
-body {
-  margin: 0;
-  line-height: normal;
-}
-
 .popup-overlay {
   display: flex;
   flex-direction: column;
@@ -1385,22 +1330,6 @@ body {
   cursor: pointer;
 }
 
-.dota2, .harry-potter {
-  position: absolute;
-  width: 1080px;
-  height: 154px;
-}
-
-.dota2 {
-  top: 1000px;
-  left: 59px;
-}
-
-.harry-potter {
-  top: 1200px;
-  left: 59px;
-}
-
 .group {
   width: 453px;
   position: relative;
@@ -1438,31 +1367,39 @@ body {
   border: 1px solid transparent;
   color: #747272;
 }
-/* ---------------------------- USERS PAGE STYLE ---------------------------- */
-.fitstagram {
-  width: 220px;
-  position: relative;
-  display: inline-block;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-
-.header {
+.privacy-options {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.17);
-  border-radius: 15px;
-  background-color: #cde1f9;
-  width: 1875px;
-  height: 77px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 8px 0px 8px 25px;
+  padding: 0px;
+  height: 40%;
+  width: 77.95%;
+  top: 50.09%;
+  right: 11.02%;
+  left: 11.02%;
+  border-radius: 10px;
+  background-color: #eeecec;
+  border: 1px solid #9d9a9a;
   box-sizing: border-box;
 }
+
+.privacy-option {
+  padding: 8px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.privacy-option:hover {
+  background-color: #d3d1d1;
+  border-radius: 10px;
+}
+
+.privacy-description {
+  font-size: 14px;
+  color: #747272;
+}
+
+
+/* ---------------------------- USERS PAGE STYLE ---------------------------- */
+
 
 .window-users {
   position: absolute;
@@ -1514,7 +1451,7 @@ body {
   cursor: pointer;
 }
 
-.avatar {
+.users .avatar {
   position: absolute;
   height: 83.77%;
   width: 11.85%;

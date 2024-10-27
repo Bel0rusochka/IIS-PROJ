@@ -349,3 +349,31 @@ function displayImage(file) {
      myGroupsButton.classList.add("passive");
      myGroupsButton.classList.remove("active");
    });
+			///////////////////
+			// Получаем иконку и блок опций приватности
+			var privacyIcon = document.querySelector(".window-create-group .window-privacy", ".window-create-group .icon");
+			var privacyOptions = document.getElementById("privacyOptions");
+			var groupPrivacyText = document.querySelector(".default");
+
+			// Функция для переключения видимости окна с опциями приватности
+			privacyIcon.addEventListener("click", function() {
+				privacyOptions.style.display = (privacyOptions.style.display === "none" || privacyOptions.style.display === "") ? "block" : "none";
+			});
+
+			// Обработка клика по опциям приватности
+			privacyOptions.addEventListener("click", function(event) {
+				if (event.target.classList.contains("privacy-option")) {
+					var privacySetting = event.target.getAttribute("data-privacy");
+					groupPrivacyText.textContent = privacySetting.charAt(0).toUpperCase() + privacySetting.slice(1);
+
+					// Скрываем опции после выбора
+					privacyOptions.style.display = "none";
+				}
+			});
+
+			// Закрытие окна опций при клике вне области
+			document.addEventListener("click", function(event) {
+				if (!privacyOptions.contains(event.target) && event.target !== privacyIcon) {
+					privacyOptions.style.display = "none";
+				}
+			});

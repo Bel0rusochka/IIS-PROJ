@@ -4,7 +4,9 @@
 
 {% block content %}
     <div class="viewers">
-
+        <a href="{{ url_for('index') }}">
+            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+        </a>
         <div class="window-users"></div>
         <div class="all-users">
             <div class="butt-my-viewers active" id="myViewersButton">
@@ -28,7 +30,6 @@
                 {% endfor %}
             </div>
         </div>
-        <img class="arrow-icon" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
     </div>
     
     <!-- Popup for adding viewer -->
