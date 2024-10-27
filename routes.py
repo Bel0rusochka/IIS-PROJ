@@ -1,33 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, abort
 from models import *
 import hashlib
-from sqlalchemy import or_, and_, exists, not_
 from PIL import Image as PILImage
 import io
 
 
 def registrate_routes(app, db):
-
-    def posts_for_user(user_login):
-        return Posts.query.filter(
-            or_(
-                Posts.status == "public",
-                # Posts.status == "group",
-                and_(
-                    Posts.status == "private",
-                    Users.friends.any(
-                        and_(
-                            Friends.friend_login == session['user']['login'],
-                            Friends.user_login == Posts.author_login
-                        )
-                    )
-                ),
-                and_(
-                    Posts.status == "private",
-                    Posts.author_login == session['user']['login']
-                )
-            )
-        ).order_by(Posts.date.desc())
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
@@ -38,30 +16,30 @@ def registrate_routes(app, db):
             email = request.form['email']
             password = request.form['password']
             confirm_password = request.form['confirm_password']
+            role = 'user'
             request_data = {'login': login, 'name': name, 'surname': surname, 'email': email, 'password': password, 'confirm_password': confirm_password}
             if password != confirm_password:
                 flash("Passwords do not match", "error")
                 request_data.pop('password')
                 request_data.pop('confirm_password')
-            elif Users.query.get(login) is not None:
+            elif Users.get_user(login) is not None:
                 flash("User already exists with this login", "error")
                 request_data.pop('login')
             elif '@' in login:
                 flash("Login cannot contain '@'", "error")
                 request_data.pop('login')
-            elif Users.query.filter_by(mail=email).first() is not None:
+            elif Users.get_user(email) is not None:
                 flash("User already exists with this email", "error")
                 request_data.pop('email')
-            elif len(password) <= 8:
+            elif len(password) < 8:
                 flash("Password is too short. It should be at least 8 characters", "error")
                 request_data.pop('password')
                 request_data.pop('confirm_password')
             else:
+                session['user'] = {"login":login, "role": role, "name": email, "surname": surname, "mail": name}
+
                 password_db = hashlib.md5(password.encode()).hexdigest()
-                user = Users(login=login, name=name, surname=surname, mail=email, password=password_db, role="user")
-                session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
-                db.session.add(user)
-                db.session.commit()
+                Users.add_user(login, email, password_db, name, surname,role)
                 return redirect(url_for('index'))
             return render_template("signup.html", previos_values=request_data)
 
@@ -76,7 +54,8 @@ def registrate_routes(app, db):
             password = request.form['password']
             request_data = {'login_email': login_email}
             password_db = hashlib.md5(password.encode()).hexdigest()
-            user = Users.query.filter(or_(Users.login == login_email, Users.mail == login_email)).first()
+            user = Users.get_user(login_email)
+
             if user is None:
                 flash("Invalid login", "error")
                 request_data.pop('login_email')
@@ -94,32 +73,17 @@ def registrate_routes(app, db):
 
     @app.route('/profile/<login>')
     def profile(login):
-        Users.query.get_or_404(login)
+        user = Users.get_user_or_404(login)
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-
         elif request.method == 'GET' and login == session['user']['login']:
-            post_type = request.args.get('posts_type', 'all')
-            if post_type == 'all':
-                posts = Posts.query.filter(Posts.author_login == login,  Posts.status != 'group').all()
-                user = Users.query.get(login)
-                return render_template("profile.html", user=user,posts = posts)
-            elif post_type == 'group':
-                posts = Posts.query.filter(Posts.author_login == login, Posts.status == 'group').all()
-                user = Users.query.get(login)
-                return render_template("profile.html", user=user,posts = posts)
-            else: abort(404)
-
-
-        if login == session['user']['login']:
-            user = Users.query.get(login)
-            posts = Posts.query.filter(Posts.author_login == login,  Posts.status != 'group').all()
-            return render_template("profile.html", user=user, posts = posts)
+            post_type = request.args.get('posts_type', 'not_group')
+            posts = user.get_user_posts_by_privacy(post_type)
+            return render_template("profile.html", user=user, posts=posts)
         else:
-            active_login = session['user']['login']
-            user = Users.query.get(login)
-            posts = posts_for_user(active_login).filter_by(author_login=login).all()
+            active_user = Users.get_user_or_404(session['user']['login'])
+            posts = active_user.get_profile_posts(login)
             return  render_template("profile.html", user=user, posts=posts)
 
     @app.route('/subscribe', methods=['GET', 'POST'])
@@ -127,9 +91,10 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
+
         if request.method == 'POST':
             user_login = request.form['user_login']
-            user = Users.query.get(user_login)
+            user = Users.get_user_or_404(user_login)
             friend_login = session['user']['login']
 
             if user is None:
@@ -139,9 +104,7 @@ def registrate_routes(app, db):
             elif friend_login in user.get_friends_login_list():
                 flash("You are already friends", "error")
             else:
-                friend = Friends(user_login=user_login, friend_login=friend_login)
-                db.session.add(friend)
-                db.session.commit()
+                user.add_friend(friend_login)
                 flash("You are now friends", "success")
             return redirect(url_for('profile', login=user_login))
         return redirect(url_for('index'))
@@ -151,9 +114,10 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
+
         if request.method == 'POST':
             user_login = request.form['user_login']
-            user = Users.query.get(user_login)
+            user = Users.get_user_or_404(user_login)
             friend_login = session['user']['login']
 
             if user is None:
@@ -163,9 +127,7 @@ def registrate_routes(app, db):
             elif friend_login not in user.get_friends_login_list():
                 flash("You are not friends", "error")
             else:
-                friend = Friends.query.filter_by(user_login=user_login, friend_login=friend_login).first()
-                db.session.delete(friend)
-                db.session.commit()
+                user.delete_friend(friend_login)
                 flash("You are not friends anymore", "success")
             return redirect(url_for('profile', login=user_login))
         return redirect(url_for('index'))
@@ -176,18 +138,16 @@ def registrate_routes(app, db):
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
 
-        group = Groups.query.get_or_404(id)
-        users_with_roles = group.users_with_role()
+        group = Groups.get_group_or_404(id)
+        users_with_roles = group.get_users_with_role()
 
-        if  dict(users_with_roles).get(session['user']['login'])  != 'admin':
+        if  users_with_roles.get(session['user']['login'])  != 'admin':
             flash("You are not an admin of this group", "error")
             return redirect(url_for('group', id=id))
 
         if request.method == 'POST':
             flash("Group updated", "success")
-            group.name = request.form['name']
-            group.description = request.form['description']
-            db.session.commit()
+            group.edit_group( request.form['name'], request.form['description'])
             return redirect(url_for('group', id=id))
         return render_template("edit_group.html", group=group, users=users_with_roles)
 
@@ -200,8 +160,7 @@ def registrate_routes(app, db):
             flash("Group deleted", "success")
             group_id = request.form['group_id']
             group = Groups.query.get(group_id)
-            db.session.delete(group)
-            db.session.commit()
+            group.delete_group()
             return redirect(url_for('groups'))
         return redirect(url_for('index'))
 
@@ -262,19 +221,14 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
+
         if request.method == 'POST':
             group_id = request.form['group_id']
             user_login = request.form['user_login']
+
             flash(f"User {user_login} is an admin now", "success")
-            group = Groups.query.get(group_id)
-            user = Users.query.get(user_login)
-            group.users.append(user)
-            db.session.execute(
-                GroupsUsers.update().values(
-                    role='admin'
-                ).where(and_(GroupsUsers.c.user_login == user_login, GroupsUsers.c.group_id == group_id))
-            )
-            db.session.commit()
+            group = Groups.get_group_or_404(group_id)
+            group.make_admin(user_login)
             return redirect(url_for('edit_group', id=group_id))
         flash("You are not an admin of this group", "error")
         return redirect(url_for('index'))
@@ -288,13 +242,10 @@ def registrate_routes(app, db):
             group_id = request.form['group_id']
             user_login = request.form['user_login']
             flash(f"User {user_login} is removed from the group", "success")
-            group = Groups.query.get(group_id)
-            user = Users.query.get(user_login)
-            user_posts = [post for post in group.posts if post.author_login == user_login]
-            for post in user_posts:
-               group.posts.remove(post)
-            group.users.remove(user)
-            db.session.commit()
+
+            user = Users.query.get_or_404(user_login)
+            group = Groups.query.get_or_404(group_id)
+            group.delete_member_group(user)
             return redirect(url_for('edit_group', id=group_id))
         flash("You are not an admin of this group", "error")
         return redirect(url_for('index'))
@@ -304,9 +255,9 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-        group = Groups.query.get_or_404(id)
+        group = Groups.get_group_or_404(id)
+        subscribers_dict = group.get_users_with_role()
 
-        subscribers_dict = group.users_with_role()
         is_admin =  subscribers_dict.get(session['user']['login']) == 'admin'
         return render_template("group.html", group=group, posts = group.posts, is_admin=is_admin, members=subscribers_dict.keys())
 
@@ -315,14 +266,13 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
+
         if request.method == 'POST':
             group_id = request.form['group_id']
-            group = Groups.query.get(group_id)
-            user_posts = [post for post in group.posts if post.author_login == session['user']['login']]
-            for post in user_posts:
-                group.posts.remove(post)
-            user = Users.query.get_or_404((session['user']['login']))
-            group.users.remove(user)
+            group = Groups.get_group_or_404(group_id)
+            user = Users.get_user_or_404(session['user']['login'])
+            group.delete_member_group(user)
+
             flash("You left the group", "success")
             db.session.commit()
             return redirect(url_for('group', id=group_id))
@@ -335,10 +285,10 @@ def registrate_routes(app, db):
             return redirect(url_for('login'))
         if request.method == 'POST':
             group_id = request.form['group_id']
-            group = Groups.query.get(group_id)
-            user = Users.query.get(session['user']['login'])
-            group.users.append(user)
-            db.session.commit()
+            group = Groups.get_group_or_404(group_id)
+            user = Users.get_user_or_404(session['user']['login'])
+            group.add_member_group(user)
+
             flash(f"You joined the group {group.name}", "success")
             return redirect(url_for('group', id=group_id))
         return redirect(url_for('index'))
@@ -346,20 +296,18 @@ def registrate_routes(app, db):
     @app.route('/search', methods=['GET'])
     def search_posts():
         if request.method == 'GET':
-            query = request.args.get('query', '').strip()
+            query = request.args.get('query', '').strip().replace(' ', '#')
             sort_by = request.args.get('sort_by', 'relevance')
-            tag_list = [tag.strip() for tag in query.split() if tag]
-            # if not tag_list:
-            #     flash("Please enter valid tags!")
-            #     return redirect(url_for('index'))
+            tag_list = [tag.strip() for tag in query.split("#") if tag]
 
             if session.get('user') is not None:
-                results = posts_for_user(session['user']['login'])
+                user = Users.get_user_or_404(session['user']['login'])
+                results = user.get_posts_for_user_feed()
                 for tag in tag_list:
                     results = results.filter(Posts.associated_tags.any(Tags.name == tag))
                 results = results.all()
             else:
-                results = Posts.query.filter_by(status="public").join(Posts.associated_tags)
+                results = Posts.get_all_posts_by_privacy('public')
                 for tag in tag_list:
                     results = results.filter(Posts.associated_tags.any(Tags.name == tag))
                 results =  results.all()
@@ -377,45 +325,47 @@ def registrate_routes(app, db):
 
     @app.route('/delete_user', methods=['GET', 'POST'])
     def delete_user():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+
         if request.method == 'POST':
             user_login = request.form['user_login']
-            if session.get('user') is None:
-                flash("You are not logged in", "error")
-                return redirect(url_for('login'))
-            if request.method == 'POST':
-                flash("User deleted", "success")
-                user = Users.query.get_or_404(user_login)
-                db.session.delete(user)
-                db.session.commit()
-                session.pop('user', None)
-                return redirect(url_for('index'))
-            abort(404)
-
+            Users.delete_user(user_login)
+            session.pop('user', None)
+            flash("User deleted", "success")
+            return redirect(url_for('index'))
+        abort(404)
 
     @app.route('/setting/<login>', methods=['GET', 'POST'])
     def setting(login):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
+
         if login != session['user']['login']:
             flash("You are not allowed to edit this profile", "error")
             return redirect(url_for('setting', login=session['user']['login']))
+
         if request.method == 'POST':
 
             user = Users.query.get(login)
-            user.name = request.form['name']
-            user.surname = request.form['surname']
+            user.change_user_data(name=request.form['name'], surname=request.form['surname'])
+            session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname,
+                               "mail": user.mail}
+
             if request.form['password'] != '':
                 if ( request.form['password'] == request.form['confirm_password']):
-                    if len(request.form['password']) <= 8:
-                        user.password = hashlib.md5(request.form['password'].encode()).hexdigest()
+                    if len(request.form['password']) >= 8:
+                        user.change_user_data(password=hashlib.md5(request.form['password'].encode()).hexdigest())
                     else:
                         flash("Password is too short. It should be at least 8 characters", "error")
+                        return redirect(url_for('setting', login=login))
                 else:
                     flash("Passwords do not match", "error")
-            db.session.commit()
+                    return redirect(url_for('setting', login=login))
+
             flash("Profile updated", "success")
-            session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
             return redirect(url_for('profile', login=login))
         user = Users.query.get(login)
         return render_template("edit_profile.html", user=user)
@@ -425,10 +375,10 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             post = Posts.query.filter_by(status="public", id=post_id).first()
         else:
-            posts = posts_for_user(session['user']['login'])
-            post = posts.filter_by(id=post_id).first()
-            if post is None:
-                abort(404)
+            user = Users.query.get(session['user']['login'])
+            post = user.get_posts_for_user().filter_by(id=post_id).first()
+        if post is None:
+            abort(404)
         return render_template("post.html", post=post, comments=post.comments.all())
 
     @app.route('/add_comment/<int:post_id>', methods=['POST'])
@@ -436,16 +386,12 @@ def registrate_routes(app, db):
         if session.get('user') is None or request.method == 'GET':
             flash("You are not logged in", "error")
             return redirect(url_for('post', post_id=post_id))
+
         if request.method == 'POST':
             text = request.form['text']
-            if text == '':
-                flash("Text is required")
-                return redirect(url_for('post', post_id=post_id))
-            if Posts.query.get(post_id) is None:
-                abort(404)
-            comment = Comments(author_login=session['user']['login'], text=text, post_id=post_id)
-            db.session.add(comment)
-            db.session.commit()
+
+            post = Posts.get_post_or_404(post_id)
+            post.add_comment(text, session['user']['login'])
             flash("Comment added", "success")
             return redirect(url_for('post', post_id=post_id))
 
@@ -454,13 +400,12 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-        if request.method == 'POST':
-            comment_id = request.form['comment_id']
-            comment = Comments.query.get(comment_id)
-            if comment.author_login == session['user']['login']:
-                db.session.delete(comment)
-                db.session.commit()
-                flash("Comment deleted", "success")
+
+        comment = Comments.get_comment_or_404(request.form['comment_id'])
+
+        if request.method == 'POST' and  comment.author_login == session['user']['login']:
+            comment.delete_comment()
+            flash("Comment deleted", "success")
             return redirect(url_for('post', post_id=comment.post_id))
         return "Edit comment"
 
@@ -472,16 +417,10 @@ def registrate_routes(app, db):
             if session.get('user') is None:
                 flash("You are not logged in", "error")
                 return redirect(url_for('post', post_id=post_id))
-            post = Posts.query.get_or_404(post_id)
-            user_login = session.get('user')['login']
 
-            if post.likes.filter_by(login=user_login).first():
-                post.likes.remove(Users.query.filter_by(login=user_login).first())
-                db.session.commit()
-            else:
-                user = Users.query.filter_by(login=user_login).first()
-                post.likes.append(user)
-                db.session.commit()
+            post = Posts.get_post_or_404(post_id)
+            user_login = session.get('user')['login']
+            post.like_post(user_login)
 
             return redirect(url_for('post', post_id=post.id))
         flash("Invalid request", "error")
@@ -492,12 +431,12 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
+
         if request.method == 'POST':
             post_id = request.form['post_id']
-            post = Posts.query.get(post_id)
+            post = Posts.get_post_or_404(post_id)
             if post.author_login == session['user']['login']:
-                db.session.delete(post)
-                db.session.commit()
+                post.delete_post()
                 flash("Post deleted", "success")
             return redirect(url_for('index'))
         return "Delete post"
@@ -507,12 +446,8 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-        if request.method == 'POST':
-            post = Posts.query.get_or_404(post_id)
-            post.text = request.form['text']
-            post.status = request.form['privacy']
-            post.associated_tags = []
 
+        if request.method == 'POST':
             tags_input = request.form['tags'].strip()
             tags = list(filter(None, tags_input.split('#')))
 
@@ -522,16 +457,21 @@ def registrate_routes(app, db):
             elif hash_count != (len(tags)):
                 flash("Tags should be separated by #", "error")
             else:
+                post = Posts.get_post_or_404(post_id)
+                text = request.form['text']
+                status = request.form['privacy']
+                associated_tags = []
+
                 for tag in tags:
                     if tag == '' or tag == ' ': continue
                     tag_db = Tags.query.get(tag)
                     if tag_db is None:
                         tag_db = Tags(name=tag)
-                    post.associated_tags.append(tag_db)
-                db.session.commit()
+                    associated_tags.append(tag_db)
+                post.edit_post(text, status, associated_tags)
                 flash("Post updated", "success")
                 return redirect(url_for('post', post_id=post.id))
-        return render_template("edit_post.html", post = Posts.query.get_or_404(post_id))
+        return render_template("edit_post.html", post = Posts.get_post_or_404(post_id))
 
     @app.route('/share_post', methods=['POST'])
     def share_post():
@@ -540,10 +480,10 @@ def registrate_routes(app, db):
             recipient_login = request.form['recipient_login'].strip()
 
             if session.get('user') is None:
-
                 flash("You are not logged in", "error")
                 return redirect(url_for('login'))
-            post = Posts.query.get_or_404(post_id)
+
+            post = Posts.get_post_or_404(post_id)
             sender_login = session.get('user')['login']
 
             if recipient_login == sender_login:
@@ -557,9 +497,7 @@ def registrate_routes(app, db):
                 author = post.author
 
                 if recipient_login in author.get_friends_login_list() or recipient_login == author.login:
-                    share = Shares(posts_id=post_id, sender_login=sender_login, recipient_login=recipient_login)
-                    db.session.add(share)
-                    db.session.commit()
+                    post.share_post(sender_login, recipient_login)
                     flash("Post shared", "success")
                     return redirect(url_for('post', post_id=post.id))
                 else:
@@ -585,9 +523,9 @@ def registrate_routes(app, db):
     @app.route('/image/<int:id>')
     def image(id):
         if session.get('user') is None:
-            img = Posts.query.filter_by(status="public", id=id).first()
+            img = Posts.get_all_posts_by_privacy('public').filter_by(id=id).first()
         else:
-            img = Posts.query.get(id)
+            img = Posts.get_post_or_404(id)
         if img:
             return send_file(io.BytesIO(img.image_binary), mimetype='image/jpeg')
         abort(404)
@@ -595,9 +533,10 @@ def registrate_routes(app, db):
     @app.route('/')
     def index():
         if session.get('user') is not None:
-            return render_template("index.html", posts = posts_for_user(session['user']['login']))
+            user = Users.get_user_or_404(session['user']['login'])
+            return render_template("index.html", posts = user.get_posts_for_user_feed())
         else:
-            return render_template("index.html", posts = Posts.query.filter_by(status="public").all())
+            return render_template("index.html", posts = Posts.get_all_posts_by_privacy('public'))
 
     @app.route('/admin')
     def admin():
@@ -635,16 +574,7 @@ def registrate_routes(app, db):
                 elif hash_count != (len(tags)):
                     flash("Tags should be separated by #", "error")
                 else:
-                    post = Posts(author_login=session['user']['login'], status=status, text=text,
-                                 image_binary=transform_images(image))
-                    for tag in tags:
-                        if tag == '' or tag == ' ': continue
-                        tag_db = Tags.query.get(tag)
-                        if tag_db is None:
-                            tag_db = Tags(name=tag)
-                        post.associated_tags.append(tag_db)
-                    db.session.add(post)
-                    db.session.commit()
+                    Posts.create_post(session['user']['login'], status, text, transform_images(image),tags)
                     return redirect(url_for('index'))
 
         flash("You are not logged in", "error")

@@ -56,7 +56,7 @@
 		<div class="my-posts">
 			{% if session.user.login == user.login %}
 				<form method="GET" action="{{ url_for('profile', login=user.login) }}">
-					<input type="hidden" name="posts_type" value="all">
+					<input type="hidden" name="posts_type" value="not_group">
 					<button type="submit" class="add-post">My Posts</button>
 				</form>
 				|
