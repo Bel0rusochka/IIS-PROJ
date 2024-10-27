@@ -225,7 +225,7 @@ class Posts(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def add_comment(self, author_login, text):
+    def add_comment(self, text, author_login):
         comment = Comments(author_login=author_login, post_id=self.id, text=text)
         db.session.add(comment)
         db.session.commit()
