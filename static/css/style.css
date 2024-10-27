@@ -1075,3 +1075,731 @@ textarea {
   border-top: 1px solid #747272;
   width: 100%;
 }
+/* ---------------------------- GROUP PAGE STYLE ---------------------------- */
+.fitstagram {
+  width: 220px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.17);
+  border-radius: 15px;
+  background-color: #cde1f9;
+  width: 1875px;
+  height: 77px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 0px 8px 25px;
+  box-sizing: border-box;
+}
+.window-groups {
+  position: absolute;
+  top: 117px;
+  left: 359px;
+  border-radius: 20px;
+  background-color: #fff;
+  border: 1px solid #888;
+  box-sizing: border-box;
+  width: 1198px;
+  height: 820px;
+}
+.groups {
+  width: 100%;
+  position: relative;
+  background-color: #e5f1ff;
+  height: 950px;
+  overflow: hidden;
+  text-align: left;
+  font-size: 32px;
+  color: #000;
+  font-family: Silkscreen;
+}
+.search-text {
+  position: absolute;
+  top: 7px;
+  left: 43px;
+}
+.search-icon {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  width: 28px;
+  height: 28px;
+}
+.search {
+  height: 40px;
+  position: absolute;
+  top: 113px;
+  left: 39px;
+  border-radius: 10px;
+  background-color: #eeecec;
+  border: 1px solid #747272;
+  box-sizing: border-box;
+  width: 570px;
+  font-size: 20px;
+  color: #747272;
+  font-family: Roboto;
+}
+
+.avatar{
+  position: absolute;
+  height: 83.77%;
+  width: 11.85%;
+  top: 0%;
+  right: 88.15%;
+  bottom: 16.23%;
+  left: 0%;
+  border-radius: 100px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.subscribers {
+  align-self: stretch;
+  position: relative;
+  font-size: 16px;
+  color: #424040;
+}
+.name-of-group {
+  position: absolute;
+  height: 41.56%;
+  width: 86.57%;
+  top: 23.38%;
+  right: 0%;
+  bottom: 35.06%;
+  left: 13.43%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+}
+.line {
+  position: absolute;
+  height: 0.65%;
+  width: 99.91%;
+  top: 99.68%;
+  right: -0.05%;
+  bottom: -0.32%;
+  left: 0.14%;
+  border-top: 1px solid #747272;
+  box-sizing: border-box;
+}
+.gaming {
+  position: absolute;
+  top: 392px;
+  left: 59px;
+  width: 1080px;
+  height: 154px;
+}
+.lmao {
+  position: absolute;
+  top: 595px;
+  left: 59px;
+  width: 1080px;
+  height: 154px;
+}
+.we-love-cats {
+  position: absolute;
+  top: 189px;
+  left: 59px;
+  width: 1080px;
+  height: 154px;
+}
+.fortnite {
+  position: absolute;
+  top: 798px;
+  left: 59px;
+  width: 1080px;
+  height: 154px;
+}
+
+.all-groups {
+  position: absolute;
+  top: 118px;
+  left: 359px;
+  width: 1198px;
+  height: 810px;
+  overflow-y: auto;
+}
+.arrow-icon {
+  position: absolute;
+  top: 153px;
+  left: 45px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.create-group-text {
+  position: absolute;
+  top: 31px;
+  left: 223px;
+}
+.create {
+  position: relative;
+}
+.create-butt {
+  position: absolute;
+  top: 408px;
+  left: 259px;
+  border-radius: 10px;
+  background-color: #cde1f9;
+  border: 1px solid #24558f;
+  box-sizing: border-box;
+  width: 235px;
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 59px;
+}
+.window-name {
+  position: absolute;
+  height: 12.43%;
+  width: 77.95%;
+  top: 24.49%;
+  right: 11.02%;
+  bottom: 63.08%;
+  left: 11.02%;
+  border-radius: 10px;
+  background-color: #eeecec;
+  border: 1px solid #9d9a9a;
+  box-sizing: border-box;
+}
+.window-privacy {
+  position: absolute;
+  height: 12.43%;
+  width: 77.95%;
+  top: 50.09%;
+  right: 11.02%;
+  bottom: 37.48%;
+  left: 11.02%;
+  border-radius: 10px;
+  background-color: #eeecec;
+  border: 1px solid #9d9a9a;
+  box-sizing: border-box;
+}
+.public {
+  position: absolute;
+  top: 287px;
+  left: 103px;
+  font-size: 20px;
+}
+.group-name {
+  position: absolute;
+  top: 103px;
+  left: 83px;
+  font-size: 15px;
+}
+.group-privacy {
+  position: absolute;
+  top: 241px;
+  left: 83px;
+  font-size: 15px;
+}
+.icon {
+  position: absolute;
+  top: 288px;
+  left: 631px;
+  width: 27px;
+  height: 27px;
+  overflow: hidden;
+}
+.enter-a-name {
+  position: absolute;
+  top: 153px;
+  left: 103px;
+  font-size: 20px;
+  color: #747272;
+}
+.window-create-group {
+  width: 753px;
+  position: relative;
+  border-radius: 30px;
+  background-color: #fff;
+  border: 1px solid #747272;
+  box-sizing: border-box;
+  height: 539px;
+  overflow: hidden;
+  max-width: 90%;
+  max-height: 90%;
+  text-align: left;
+  font-size: 32px;
+  color: #000;
+  font-family: Silkscreen;
+}
+
+body {
+  margin: 0;
+  line-height: normal;
+}
+
+.popup-overlay {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0;
+}
+
+.butt-my-groups {
+  background-color: #ededed; 
+  border: 1px solid #747272; 
+  box-sizing: border-box;
+  display: flex;
+  padding: 0; 
+  cursor: pointer;
+  position: absolute;
+  top: 29px;
+  left: 39px;
+  border-radius: 10px;
+  width: 229px;
+  height: 57px;
+  align-items: center;
+  justify-content: center;
+}
+
+.butt-create-group {
+  background-color: #cde1f9;
+  border: 1px solid #24558f; 
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  padding: 0; 
+  position: absolute;
+  top: 29px;
+  left: 822px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: 338px;
+  height: 57px;
+  cursor: pointer;
+}
+
+.dota2, .harry-potter {
+  position: absolute;
+  width: 1080px;
+  height: 154px;
+}
+
+.dota2 {
+  top: 1000px;
+  left: 59px;
+}
+
+.harry-potter {
+  top: 1200px;
+  left: 59px;
+}
+
+.group {
+  width: 453px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Добавляем линию ко всем группам, кроме последней */
+.all-groups > div:not(:last-child) .line {
+  display: block; /* Линия отображается у всех групп, кроме последней */
+}
+
+.all-groups > div:last-child .line {
+  display: none; /* Скрыть линию у последней группы */
+}
+
+.butt-all-groups {
+  position: absolute;
+  top: 29px;
+  left: 385px;
+  color: #747272;
+  cursor: pointer;
+  padding: 7px;
+  border-radius: 10px;
+  padding: 7px;
+}
+
+.active {
+  background-color: #ededed;
+  border: 1px solid #747272;
+  color: #000;
+}
+
+.passive {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: #747272;
+}
+/* ---------------------------- USERS PAGE STYLE ---------------------------- */
+.fitstagram {
+  width: 220px;
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.header {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.17);
+  border-radius: 15px;
+  background-color: #cde1f9;
+  width: 1875px;
+  height: 77px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 0px 8px 25px;
+  box-sizing: border-box;
+}
+
+.window-users {
+  position: absolute;
+  top: 117px;
+  left: 359px;
+  border-radius: 20px;
+  background-color: #fff;
+  border: 1px solid #888;
+  box-sizing: border-box;
+  width: 1198px;
+  height: 820px;
+}
+
+.button {
+  position: relative;
+}
+
+.butt-my-viewers {
+  position: absolute;
+  top: 29px;
+  left: 39px;
+  border-radius: 10px;
+  background-color: #ededed;
+  border: 1px solid #747272;
+  box-sizing: border-box;
+  width: 255px;
+  height: 57px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.add-viewer-button {
+  position: absolute;
+  top: 29px;
+  left: 822px;
+  border-radius: 10px;
+  background-color: #cde1f9;
+  border: 1px solid #24558f;
+  box-sizing: border-box;
+  width: 338px;
+  height: 57px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.avatar {
+  position: absolute;
+  height: 83.77%;
+  width: 11.85%;
+  top: 0%;
+  right: 88.15%;
+  bottom: 16.23%;
+  left: 0%;
+  border-radius: 100px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.user1, .user2, .user3, .user4, .user5, .user6 {
+  width: 453px;
+  position: relative;
+  display: inline-block;
+}
+
+.name-user {
+  position: absolute;
+  height: 41.56%;
+  width: 86.57%;
+  top: 23.38%;
+  right: 0%;
+  bottom: 35.06%;
+  left: 13.43%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.line {
+  position: absolute;
+  height: 0.65%;
+  width: 99.91%;
+  top: 99.68%;
+  right: -0.05%;
+  bottom: -0.32%;
+  left: 0.14%;
+  border-top: 1px solid #747272;
+  box-sizing: border-box;
+}
+
+.user, .user5, .user6{
+  align-self: stretch;
+  position: relative;
+  height: 154px;
+}
+
+#hiddenUsers {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center; 
+  padding: 10px; 
+  overflow-y: auto; 
+  max-height: 160px; 
+  
+}
+
+.window-hide {
+  position: absolute;
+  top: 178px;
+  left: 82px;
+  border-radius: 0px 0px 10px 10px;
+  background-color: #eeecec;
+  border: 1px solid #b1afaf;
+  box-sizing: border-box;
+  width: 586px;
+  height: 170px;
+  max-height: 250px; 
+  overflow: hidden; 
+}
+
+#hiddenUsers img{
+  position: absolute;
+  height: 70px;
+  width: 70px;
+  top: 35px;
+  right: 88.15%;
+  left: 10px;
+  border-radius: 100px;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 50%; 
+  margin-right: 10px; 
+  
+}
+
+#hiddenUsers .user5, 
+#hiddenUsers .user6 {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  width: 100%; 
+}
+
+#hiddenUsers .name-user {
+  font-size: 20px;
+  padding-left: 15px;
+}
+
+.users {
+  position: absolute;
+  top: 137px;
+  left: 69px;
+  width: 1080px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 49px;
+  font-family: Silkscreen;
+}
+
+.button2 {
+  position: absolute;
+  top: 29px;
+  left: 403px;
+  color: #747272;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 7px;
+}
+
+.all-users {
+  position: absolute;
+  top: 118px;
+  left: 359px;
+  width: 1198px;
+  height: 815px;
+  overflow-y: auto;
+}
+
+.arrow-icon {
+  position: absolute;
+  top: 153px;
+  left: 45px;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.add-viewer {
+  width: 753px;
+  position: relative;
+  border-radius: 30px;
+  background-color: #fff;
+  border: 1px solid #747272;
+  box-sizing: border-box;
+  height: 395px;
+  overflow: hidden;
+  max-width: 90%;
+  max-height: 90%;
+  text-align: left;
+  font-size: 32px;
+  color: #000;
+  font-family: Silkscreen;
+}
+
+.add-viewer-text {
+  position: absolute;
+  top: 36px;
+  left: 267px;
+}
+
+.create {
+  position: relative;
+}
+
+.window-search {
+  position: absolute;
+  height: 12.43%;
+  width: 77.95%;
+  top: 34.68%;
+  right: 11.02%;
+  bottom: 52.89%;
+  left: 11.02%;
+  border-radius: 10px;
+  background-color: #eeecec;
+  border: 1px solid #9d9a9a;
+  box-sizing: border-box;
+}
+
+.icon {
+  cursor: pointer;
+  position: absolute;
+  top: 150px;
+  left: 629px;
+  width: 27px;
+  height: 27px;
+  overflow: hidden;
+}
+
+.search-text {
+  position: absolute;
+  top: 3px;
+  left: 43px;
+}
+
+.search-icon {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 28px;
+  height: 28px;
+}
+
+.search {
+  position: absolute;
+  top: 147px;
+  left: 96px;
+  width: 121px;
+  height: 28px;
+  font-size: 20px;
+  color: #747272;
+  font-family: Roboto;
+}
+
+body {
+  margin: 0;
+  line-height: normal;
+}
+
+.popup-overlay {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0;
+}
+
+.viewers {
+  width: 100%;
+  position: relative;
+  background-color: #e5f1ff;
+  height: 950px;
+  overflow: hidden;
+  text-align: left;
+  font-size: 32px;
+  color: #000;
+  font-family: Silkscreen;
+}
+
+#addViewerPopup .button-add {
+  cursor: pointer;
+  position: absolute;
+  top: 259px;
+  left: 259px;
+  border-radius: 10px;
+  background-color: #cde1f9;
+  border: 1px solid #24558f;
+  box-sizing: border-box;
+  width: 235px;
+  height: 70px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Стили для активной кнопки */
+.active {
+  background-color: #ededed;
+  border: 1px solid #747272;
+  color: #000;
+}
+
+/* Стили для пассивной кнопки */
+.passive {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: #747272;
+  cursor: pointer;
+}
+
+/* Линия для всех пользователей */
+.user .line {
+  border-top: 1px solid #747272;
+}
+
+/* Скрытие линии у последнего видимого пользователя */
+.user.last-visible .line {
+  display: none;
+} 

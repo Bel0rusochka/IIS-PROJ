@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+  	<div class="groups">
+    		<div class="header">
+      			<div class="fitstagram" id="FITstagramText">FITstagram</div>
+    		</div>
+    		<div class="window-groups">
+    		</div>
+    		<div class="all-groups">
+        				<div class="butt-my-groups active" id="myGroupsButton">
+          					<div class="button">My groups</div>
+        				</div>
+          				<div class="search">
+            				<div class="search-text">Search...</div>
+            				<img class="search-icon" alt="" src="img/search.svg">	
+          				</div>
+        				<div class="butt-all-groups passive" id="allGroupsButton">All groups</div>
+        				<div class="butt-create-group" id="createGroupButton">
+          					<div class="button">Create a group</div>
+        				</div>
+        				<div class="gaming">
+          					<img class="avatar" alt="" src="img/gaming.png">
+          					<div class="name-of-group">
+            					<div class="group">Gaming</div>
+            					<div class="subscribers">367,283 subscribers</div>
+          					</div>
+          					<div class="line">
+          					</div>
+        				</div>
+        				<div class="lmao">
+          					<img class="avatar" alt="" src="img/lmao.png">
+          					<div class="name-of-group">
+            					<div class="group">Lmao</div>
+            					<div class="subscribers">27,952 subscribers</div>
+          					</div>
+          					<div class="line">
+          					</div>
+        				</div>
+        				<div class="we-love-cats">
+          					<img class="avatar" alt="" src="img/cats.png">
+          					<div class="name-of-group">
+            					<div class="group">We love cats</div>
+            					<div class="subscribers">50,725 subscribers</div>
+          					</div>
+          					<div class="line">
+          					</div>
+        				</div>
+        				<div class="fortnite">
+          					<img class="avatar" alt="" src="img/fortnite.png">
+          					<div class="name-of-group">
+            					<div class="group">Fortnite</div>
+            					<div class="subscribers">984,421 subscribers</div>
+          					</div>
+							  <div class="line">
+							</div>
+        				</div>
+
+						<div class="dota2">
+							<img class="avatar" alt="" src="img/dota 2.png">
+							<div class="name-of-group">
+								<div class="group">Dota 2</div>
+								<div class="subscribers">592,734 subscribers</div>
+							</div>
+							<div class="line">
+							</div>
+						</div>
+						
+						<div class="harry-potter">
+							<img class="avatar" alt="" src="img/harry potter.png">
+							<div class="name-of-group">
+								<div class="group">Harry Potter</div>
+								<div class="subscribers">204,671 subscribers</div>
+							</div>
+						</div>
+						
+    		</div>
+    		<img class="arrow-icon" alt="" src="img/arrow2.svg" id="arrowIcon">
+  	</div>
+  	
+  	<div id="createGroupContainer" class="popup-overlay" style="display:none">
+    		
+    	<div class="window-create-group">
+      		<div class="create-group-text">Create a group</div>
+      		<div class="create-butt">
+        		<div class="create">Create</div>
+      		</div>
+      		<div class="window-name">
+      		</div>
+      		<div class="window-privacy">
+      		</div>
+      		<div class="public">Public</div>
+      		<div class="group-name">Group name</div>
+      		<div class="group-privacy">Group privacy</div>
+      		<img class="icon" alt="" src="img/ChevronDownOutline.svg">
+      		<div class="enter-a-name">Enter a name</div>
+    	</div>	
+  	</div>
+    	
+{% endblock %}

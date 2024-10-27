@@ -139,3 +139,213 @@ function displayImage(file) {
     }
   
 
+ // Show/hide the "add viewer" popup
+ var addViewerButton = document.getElementById("addViewerButton");
+ var addViewerPopup = document.getElementById("addViewerPopup");
+
+ if (addViewerButton) {
+     addViewerButton.addEventListener("click", function () {
+         addViewerPopup.style.display = "flex";
+         addViewerPopup.style.zIndex = 100;
+         addViewerPopup.style.backgroundColor = "rgba(113, 113, 113, 0.3)";
+         addViewerPopup.style.alignItems = "center";
+         addViewerPopup.style.justifyContent = "center";
+     });
+ }
+
+ // Close popup when clicked outside
+ addViewerPopup.addEventListener("click", function (e) {
+     if (e.target === addViewerPopup) {
+         addViewerPopup.style.display = "none";
+     }
+ });
+
+ // Toggle hidden users in search when the arrow (chevron) is clicked
+ var chevronIcon = document.getElementById("chevronIcon");
+ var hiddenUsers = document.getElementById("hiddenUsers");
+ var isUsersVisible = false; // Track visibility state
+
+ chevronIcon.addEventListener("click", function () {
+     console.log("Chevron clicked!"); // Debugging log to check click
+     isUsersVisible = !isUsersVisible; // Toggle the state
+     if (isUsersVisible) {
+         hiddenUsers.style.display = "block";
+     } else {
+         hiddenUsers.style.display = "none";
+     }
+ });
+
+ // Получение элементов кнопок
+ var myViewersButton = document.getElementById("myViewersButton");
+ var allUsersButton = document.getElementById("allUsersButton");
+ var hiddenUsersList = document.querySelectorAll('.hidden-user');
+
+ // Событие при клике на "My viewers"
+ myViewersButton.addEventListener("click", function () {
+     hiddenUsersList.forEach(function(user) {
+         user.style.display = "none";
+     });
+     myViewersButton.classList.add("active");
+     myViewersButton.classList.remove("passive");
+     allUsersButton.classList.add("passive");
+     allUsersButton.classList.remove("active");
+ });
+
+ // Событие при клике на "All users"
+ allUsersButton.addEventListener("click", function () {
+     hiddenUsersList.forEach(function(user) {
+         user.style.display = "flex";
+     });
+     allUsersButton.classList.add("active");
+     allUsersButton.classList.remove("passive");
+     myViewersButton.classList.add("passive");
+     myViewersButton.classList.remove("active");
+ });
+
+
+ // Функция для обновления линий у пользователей
+ function updateUserLines() {
+     // Убираем у всех пользователей класс "last-visible"
+     document.querySelectorAll('.user').forEach(user => {
+         user.classList.remove('last-visible');
+     });
+
+     // Выбираем последний видимый элемент с классом "user"
+     const visibleUsers = Array.from(document.querySelectorAll('.user'))
+         .filter(user => user.style.display !== 'none');
+     
+     if (visibleUsers.length > 0) {
+         // Добавляем класс "last-visible" последнему видимому пользователю
+         visibleUsers[visibleUsers.length - 1].classList.add('last-visible');
+     }
+ }
+
+ // Вызываем updateUserLines при загрузке страницы
+ updateUserLines();
+
+ // Обновляем линии при клике на кнопки
+ myViewersButton.addEventListener("click", function () {
+     hiddenUsersList.forEach(function(user) {
+         user.style.display = "none";
+     });
+     updateUserLines();
+ });
+
+ allUsersButton.addEventListener("click", function () {
+     hiddenUsersList.forEach(function(user) {
+         user.style.display = "flex";
+     });
+     updateUserLines();
+ });
+
+ //ГРУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУУПППТЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫ
+
+
+ 	// Show/hide the "create group" popup
+   var createGroupButton = document.getElementById("createGroupButton");
+   var createGroupPopup = document.getElementById("createGroupContainer");
+
+   if (createGroupButton) {
+     createGroupButton.addEventListener("click", function () {
+       createGroupPopup.style.display = "flex";
+       createGroupPopup.style.zIndex = 100;
+       createGroupPopup.style.backgroundColor = "rgba(113, 113, 113, 0.3)";
+       createGroupPopup.style.alignItems = "center";
+       createGroupPopup.style.justifyContent = "center";
+     });
+   }
+
+   // Close popup when clicked outside
+   createGroupPopup.addEventListener("click", function (e) {
+     if (e.target === createGroupPopup) {
+       createGroupPopup.style.display = "none";
+     }
+   });
+
+   ////////////////////////////////
+   // Получаем кнопки
+   var myGroupsButton = document.getElementById("myGroupsButton");
+   var allGroupsButton = document.getElementById("allGroupsButton");
+   var allGroups = document.querySelectorAll('.gaming, .lmao, .we-love-cats, .fortnite, .dota2, .harry-potter');
+
+   // Функция для отображения первых 4 видимых групп
+   function showLimitedGroups() {
+     allGroups.forEach((group, index) => {
+       if (index < 4) {
+         group.style.display = "flex";
+       } else {
+         group.style.display = "none";
+       }
+     });
+   }
+
+   // Функция для отображения всех групп
+   function showAllGroups() {
+     allGroups.forEach(group => {
+       group.style.display = "flex";
+     });
+   }
+
+   // События для кнопок
+   myGroupsButton.addEventListener("click", showLimitedGroups);
+   allGroupsButton.addEventListener("click", showAllGroups);
+
+   // Вызываем `showLimitedGroups()` при загрузке страницы
+   showLimitedGroups();
+
+   ////////////////////////
+   // Обновляем видимость линий у всех видимых групп
+   function updateLines() {
+     // Получаем все видимые группы
+     var visibleGroups = Array.from(allGroups).filter(group => group.style.display === "flex");
+     
+     // Показываем линии у всех, кроме последней видимой группы
+     visibleGroups.forEach((group, index) => {
+       var line = group.querySelector('.line');
+       if (line) {
+         line.style.display = (index === visibleGroups.length - 1) ? "none" : "block";
+       }
+     });
+   }
+
+   // Обновляем кнопки для вызова функции updateLines
+   myGroupsButton.addEventListener("click", () => {
+     showLimitedGroups();
+     updateLines();
+   });
+
+   allGroupsButton.addEventListener("click", () => {
+     showAllGroups();
+     updateLines();
+   });
+
+   // Вызываем `updateLines()` при загрузке страницы
+   updateLines();
+
+   ////////////////////////
+   // Получение элементов кнопок
+   var myGroupsButton = document.getElementById("myGroupsButton");
+   var allGroupsButton = document.getElementById("allGroupsButton");
+   var hiddenUsersList = document.querySelectorAll('.hidden-user');
+
+   // Событие при клике на "My Groups"
+   myGroupsButton.addEventListener("click", function () {
+     hiddenUsersList.forEach(function(user) {
+       user.style.display = "none"; 
+     });
+     myGroupsButton.classList.add("active");
+     myGroupsButton.classList.remove("passive");
+     allGroupsButton.classList.add("passive");
+     allGroupsButton.classList.remove("active");
+   });
+
+   // Событие при клике на "All Groups"
+   allGroupsButton.addEventListener("click", function () {
+     hiddenUsersList.forEach(function(user) {
+       user.style.display = "flex"; 
+     });
+     allGroupsButton.classList.add("active");
+     allGroupsButton.classList.remove("passive");
+     myGroupsButton.classList.add("passive");
+     myGroupsButton.classList.remove("active");
+   });

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+    <div class="viewers">
+        <div class="header">
+            <div class="fitstagram" id="FITstagramText">FITstagram</div>
+        </div>
+        <div class="window-users"></div>
+        <div class="all-users">
+            <div class="butt-my-viewers active" id="myViewersButton">
+                <div class="button">My viewers</div>
+            </div>
+            <div class="button2 passive" id="allUsersButton">All users</div>
+            <div class="add-viewer-button" id="addViewerButton">
+                <div class="button">Add viewer</div>
+            </div>
+            <div class="users" id="usersList">
+                <div class="user">
+                    <img class="avatar" alt="" src="img/user1.png">
+                    <div class="name-user">
+                        <div class="user1">User One</div>
+                    </div>
+					<div class="line"></div>
+                </div>
+                <div class="user">
+                    <img class="avatar" alt="" src="img/user2.png">
+                    <div class="name-user">
+                        <div class="user2">User Two</div>
+                    </div>
+					<div class="line"></div>
+                </div>
+                <div class="user">
+                    <img class="avatar" alt="" src="img/user3.png">
+                    <div class="name-user">
+                        <div class="user3">User Three</div>
+                    </div>
+					<div class="line"></div>
+                </div>
+                <div class="user">
+                    <img class="avatar" alt="" src="img/user4.png">
+                    <div class="name-user">
+                        <div class="user4">User Four</div>
+                    </div>
+					<div class="line"></div>
+                </div>
+
+                 <!-- Пользователи, которые скрыты по умолчанию -->
+                 <div class="user hidden-user" style="display: none;">
+                    <img class="avatar" alt="" src="img/user5.png">
+                    <div class="name-user">
+                        <div class="user5">User Five</div>
+                    </div>
+                    <div class="line"></div>
+                </div>
+                <div class="user hidden-user" style="display: none;">
+                    <img class="avatar" alt="" src="img/user6.png">
+                    <div class="name-user">
+                        <div class="user6">User Six</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img class="arrow-icon" alt="" src="img/arrow2.svg" id="arrowIcon">
+    </div>
+    
+    <!-- Popup for adding viewer -->
+    <div id="addViewerPopup" class="popup-overlay" style="display:none">
+        <div class="add-viewer">
+            <div class="add-viewer-text">Add viewer</div>
+            <div class="button-add">
+                <div class="button">Add</div>
+            </div>
+            <div class="window-search"></div>
+            <img class="icon" alt="" src="img/ChevronDownOutline.svg" id="chevronIcon" style="z-index: 10;">
+            <div class="search">
+                <div class="search-text">Search...</div>
+                <img class="search-icon" alt="" src="img/search.svg">
+            </div>
+            <!-- Hidden users in search -->
+            <div id="hiddenUsers" class="window-hide" style="display: none;">
+                <div class="user5">
+                    <img class="avatar" alt="" src="img/user5.png">
+                    <div class="name-user">
+                        <div>User Five</div>
+                    </div>
+                </div>
+				<div class="user6">
+                    <img class="avatar" alt="" src="img/user6.png">
+                    <div class="name-user">
+                        <div>User Six</div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+{% endblock %}
