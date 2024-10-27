@@ -43,9 +43,10 @@ class Users(db.Model):
     send_shares = db.relationship('Shares', backref='sender', foreign_keys="Shares.sender_login",
                                 cascade="all, delete-orphan", lazy='dynamic')
 
-    viewers = db.relationship('Viewers', backref='user', foreign_keys="Viewers.user_login", lazy='dynamic',cascade="all, delete-orphan")
+    friends = db.relationship('Friends', backref='user', foreign_keys="Friends.user_login", lazy='dynamic',cascade="all, delete-orphan")
 
-
+    def get_friends_login_list(self):
+        return [friend.friend_login for friend in self.friends]
 class Groups(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True, index=True)
     name = db.Column(db.String(60),nullable=False)
@@ -112,6 +113,6 @@ class Shares(db.Model):
     shares_recipient = db.relationship('Users', single_parent=True, foreign_keys=[recipient_login], viewonly=True)
 
 
-class Viewers(db.Model):
+class Friends(db.Model):
     user_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)
-    viewer_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)
+    friend_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)

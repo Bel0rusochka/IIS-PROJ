@@ -1,6 +1,6 @@
 from PIL import Image as PILImage
 from app import db, create_app
-from models import Users, Groups, Tags, Posts, Comments, Shares, Viewers, GroupsUsers, UsersLikePosts, PostsGroups
+from models import Users, Groups, Tags, Posts, Comments, Shares, Friends, GroupsUsers, UsersLikePosts, PostsGroups
 from faker import Faker
 import random
 import hashlib
@@ -144,11 +144,11 @@ with app.app_context():
         return shares
 
 
-    def create_viewers(users):
+    def create_friends(users):
         for user in users:
-            viewers = random.sample([u for u in users if u != user], random.randint(1, len(users) - 1))
-            for viewer in viewers:
-                db.session.add(Viewers(user_login=user.login, viewer_login=viewer.login))
+            friends = random.sample([u for u in users if u != user], random.randint(1, len(users) - 1))
+            for friend in friends:
+                db.session.add(Friends(user_login=user.login, friend_login=friend.login))
         db.session.commit()
 
     def create_likes(users, posts):
@@ -156,7 +156,7 @@ with app.app_context():
             if post.status == 'public':
                 likers = random.sample(users, random.randint(1, len(users)))
             else:
-                likers = [viewer for viewer in post.author.viewers if viewer.user_login != post.author_login]
+                likers = [friend for friend in post.author.friends if friend.user_login != post.author_login]
 
             for liker in likers:
                 db.session.execute(
@@ -174,7 +174,7 @@ with app.app_context():
         posts = create_posts(users, groups, tags, 20)
         comments = create_comments(users, posts, 40)
         shares = create_shares(users, posts, 15)
-        create_viewers(users)
+        create_friends(users)
         create_likes(users, posts)
 
         print("Тестовые данные успешно инициализированы!")

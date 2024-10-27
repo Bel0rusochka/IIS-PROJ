@@ -36,6 +36,18 @@
 									<button type="submit" class="delete-profile">delete profile</button>
 								</form>
 							</div>
+						{% else %}
+							{% if session.user.login in user.get_friends_login_list() %}
+								<form method="POST" action="{{ url_for('unsubscribe') }}">
+									<input type="hidden" name="user_login" value="{{ user.login }}">
+									<button type="submit" class="subscribe">unsubscribe</button>
+								</form>
+							{% else %}
+								<form method="POST" action="{{ url_for('subscribe') }}">
+									<input type="hidden" name="user_login" value="{{ user.login }}">
+									<button type="submit" class="subscribe">subscribe</button>
+								</form>
+							{% endif %}
 						{% endif %}
 					</div>
 				</div>

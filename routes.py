@@ -15,20 +15,16 @@ def registrate_routes(app, db):
                 # Posts.status == "group",
                 and_(
                     Posts.status == "private",
-                    Users.viewers.any(
+                    Users.friends.any(
                         and_(
-                            Viewers.viewer_login == session['user']['login'],
-                            # Viewers.user_login == Posts.author_login
+                            Friends.friend_login == session['user']['login'],
+                            Friends.user_login == Posts.author_login
                         )
                     )
                 ),
                 and_(
                     Posts.status == "private",
-                    or_(
-                        Posts.author_login == session['user']['login'],
-                        # session['user']['role'] == 'admin',
-                        # session['user']['role'] == 'moderator'
-                    )
+                    Posts.author_login == session['user']['login']
                 )
             )
         ).order_by(Posts.date.desc())
@@ -102,8 +98,7 @@ def registrate_routes(app, db):
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-        if request.method == 'GET' and login != session['user']['login']:
-            flash("You are not allowed to view this profile", "error")
+
         elif request.method == 'GET' and login == session['user']['login']:
             post_type = request.args.get('posts_type', 'all')
             if post_type == 'all':
@@ -126,6 +121,54 @@ def registrate_routes(app, db):
             user = Users.query.get(login)
             posts = posts_for_user(active_login).filter_by(author_login=login).all()
             return  render_template("profile.html", user=user, posts=posts)
+
+    @app.route('/subscribe', methods=['GET', 'POST'])
+    def subscribe():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+        if request.method == 'POST':
+            user_login = request.form['user_login']
+            user = Users.query.get(user_login)
+            friend_login = session['user']['login']
+
+            if user is None:
+                flash("User not found", "error")
+            elif user_login == friend_login:
+                flash("You can't subscribe to yourself", "error")
+            elif friend_login in user.get_friends_login_list():
+                flash("You are already friends", "error")
+            else:
+                friend = Friends(user_login=user_login, friend_login=friend_login)
+                db.session.add(friend)
+                db.session.commit()
+                flash("You are now friends", "success")
+            return redirect(url_for('profile', login=user_login))
+        return redirect(url_for('index'))
+
+    @app.route('/unsubscribe', methods=['GET', 'POST'])
+    def unsubscribe():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+        if request.method == 'POST':
+            user_login = request.form['user_login']
+            user = Users.query.get(user_login)
+            friend_login = session['user']['login']
+
+            if user is None:
+                flash("User not found", "error")
+            elif user_login == friend_login:
+                flash("You can't unsubscribe from yourself", "error")
+            elif friend_login not in user.get_friends_login_list():
+                flash("You are not friends", "error")
+            else:
+                friend = Friends.query.filter_by(user_login=user_login, friend_login=friend_login).first()
+                db.session.delete(friend)
+                db.session.commit()
+                flash("You are not friends anymore", "success")
+            return redirect(url_for('profile', login=user_login))
+        return redirect(url_for('index'))
 
     @app.route('/edit_group/<int:id>', methods=['GET', 'POST'])
     def edit_group(id):
@@ -192,12 +235,12 @@ def registrate_routes(app, db):
     def users():
         if session.get('user') is None:
             return redirect(url_for('login'))
-        viewer = Viewers.query.filter_by(user_login=session['user']['login']).all()
+        friend = Friends.query.filter_by(user_login=session['user']['login']).all()
         users = Users.query.all()
         return '''
         <h1>Users</h1>
-        <p>Viewers:</p>
-        <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.viewer_login)}">{user.viewer_login}</a></li>' for user in viewer]) + '''</ul>
+        <p>My Friends:</p>
+        <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.friend_login)}">{user.friend_login}</a></li>' for user in friend]) + '''</ul>
         <p>Users:</p>
         <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.login)}">{user.login}</a></li>' for user in users]) + '''</ul>
         '''
@@ -379,7 +422,13 @@ def registrate_routes(app, db):
 
     @app.route('/posts/<int:post_id>')
     def post(post_id):
-        post = Posts.query.get_or_404(post_id)
+        if session.get('user') is None:
+            post = Posts.query.filter_by(status="public", id=post_id).first()
+        else:
+            posts = posts_for_user(session['user']['login'])
+            post = posts.filter_by(id=post_id).first()
+            if post is None:
+                abort(404)
         return render_template("post.html", post=post, comments=post.comments.all())
 
     @app.route('/add_comment/<int:post_id>', methods=['POST'])
@@ -506,8 +555,8 @@ def registrate_routes(app, db):
 
             if post.status == 'private':
                 author = post.author
-                viewers_logins = [viewer.viewer_login for viewer in author.viewers.all()]
-                if recipient_login in viewers_logins:
+
+                if recipient_login in author.get_friends_login_list() or recipient_login == author.login:
                     share = Shares(posts_id=post_id, sender_login=sender_login, recipient_login=recipient_login)
                     db.session.add(share)
                     db.session.commit()
