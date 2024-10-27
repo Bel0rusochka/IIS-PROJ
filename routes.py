@@ -196,13 +196,7 @@ def registrate_routes(app, db):
             return redirect(url_for('login'))
         friend = Friends.query.filter_by(user_login=session['user']['login']).all()
         users = Users.query.all()
-        return '''
-        <h1>Users</h1>
-        <p>My Friends:</p>
-        <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.friend_login)}">{user.friend_login}</a></li>' for user in friend]) + '''</ul>
-        <p>Users:</p>
-        <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.login)}">{user.login}</a></li>' for user in users]) + '''</ul>
-        '''
+        return render_template('users.html', friend=friend, users=users)
 
     @app.route('/groups')
     def groups():
@@ -210,11 +204,7 @@ def registrate_routes(app, db):
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
         groups = Groups.query.all()
-        return '''
-        <h1>Groups</h1>
-        <p>Groups:</p>
-        <ul>''' + ''.join([f'<li><a href="{url_for("group", id=group.id)}">{group.name}</a></li>' for group in groups]) + '''</ul>
-        '''
+        return render_template('groups.html', groups=groups)
 
     @app.route('/make_admin_group', methods=['GET', 'POST'])
     def make_admin_group():
