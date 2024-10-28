@@ -190,31 +190,56 @@ def registrate_routes(app, db):
         Shares sent: <ul>''' + ''.join([f'<li><a href="{url_for("post", post_id=share.posts_id)}">{share.posts_id}</a></li>' for share in shares_sent]) + '''</ul>
         '''
 
-    @app.route('/users')
+    @app.route('/users', methods=['GET', 'POST'])
     def users():
         if session.get('user') is None:
             return redirect(url_for('login'))
+
         friend = Friends.query.filter_by(user_login=session['user']['login']).all()
         users = Users.query.all()
-        return '''
-        <h1>Users</h1>
-        <p>My Friends:</p>
-        <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.friend_login)}">{user.friend_login}</a></li>' for user in friend]) + '''</ul>
-        <p>Users:</p>
-        <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.login)}">{user.login}</a></li>' for user in users]) + '''</ul>
-        '''
 
-    @app.route('/groups')
+        show_my_viewers = False
+        show_all_users = True
+
+        if request.method == 'POST':
+            if 'show_my_viewers' in request.form:
+                show_my_viewers = True
+                show_all_users = False
+            elif 'show_all_users' in request.form:
+                show_my_viewers = False
+                show_all_users = True
+            elif 'add_viewer' in request.form:
+                flash("Add Viewer functionality is not implemented", "info")
+
+        return render_template('users.html', friend=friend, users=users, show_my_viewers=show_my_viewers,
+                               show_all_users=show_all_users)
+
+    @app.route('/groups', methods=['GET', 'POST'])
     def groups():
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-        groups = Groups.query.all()
-        return '''
-        <h1>Groups</h1>
-        <p>Groups:</p>
-        <ul>''' + ''.join([f'<li><a href="{url_for("group", id=group.id)}">{group.name}</a></li>' for group in groups]) + '''</ul>
-        '''
+
+        show_my_groups = False
+        show_all_groups = True
+
+        if request.method == 'POST':
+            if 'my_groups' in request.form:
+                show_my_groups = True
+                show_all_groups = False
+            elif 'all_groups' in request.form:
+                show_my_groups = False
+                show_all_groups = True
+
+        if show_my_groups:
+            groups = Groups.query.filter_by(user_id=session['user']['login']).all()  # Example query for user's groups
+        else:
+            groups = Groups.query.all()
+
+        return render_template('groups.html',
+                               groups=groups,
+                               show_my_groups=show_my_groups,
+                               show_all_groups=show_all_groups)
 
     @app.route('/make_admin_group', methods=['GET', 'POST'])
     def make_admin_group():

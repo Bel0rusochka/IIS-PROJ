@@ -108,7 +108,9 @@ img {
 /* Signup form large heading */
 .pagesignup-text12 {
   font-size: 48px;
-  
+  word-break: break-word;     /* Break words if they're too long */
+  overflow-wrap: break-word;  /* Ensures long words wrap properly */
+  white-space: normal;
 }
 
 /* Input field styles */
@@ -321,6 +323,7 @@ img {
 }
 .projekt-sidebar .avatar{
   height: 200px;
+  width: 200px;
 }
 
 .projekt-menu {
@@ -377,12 +380,6 @@ img {
   transition: margin-right 0.5s; /* Add transition for smoother movement */
 }
 
-.projekt-foto {
-  display: flex; /* Use Flexbox for the gallery */
-  flex-wrap: wrap; /* Allows the items to wrap */
-  margin-top: 100px; /* Maintain the margin for spacing */
-  align-items: stretch;
-}
 
 .projekt-projekt {
   width: 100%;
@@ -415,29 +412,33 @@ img {
   width: 1874px;
   height: 77px;
 }
-
-.projekt-foto img {
-  height: 470px; /* Set this to the height of the tallest rectangle */
-  object-fit: cover; /* Ensures the image covers the entire area without distortion */
-
-  border-radius: 15px;
-  margin: 20px;
-  flex-grow: 1;
-}
 .projekt-foto {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px; /* Space between the images */
+  flex-wrap: wrap; /* Ensures images wrap to the next line if necessary */
+  justify-content: space-between; /* Spreads the images evenly across the row */
+  margin: 0;
+  padding: 0;
 }
 
-.projekt-foto img {
-  object-fit: cover; /* Ensure the image fills the width while maintaining aspect ratio */
-  transition: transform 0.3s ease; /* Smooth hover effect */
+.gallery-image {
+  flex-grow: 1;
+  margin: 10px; /* Adjust the margin between images */
+  width: calc(100% / 4 - 20px); /* Each image takes up 1/4th of the container, subtracting the margin */
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.projekt-foto img:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
+.gallery-image img {
+  width: 100%;
+  height: 470px; /* Set this to the height of the tallest rectangle */
+  object-fit: cover; /* Ensures the image covers the container area without distortion */
+  transition: transform 0.3s ease;
 }
+
+.gallery-image img:hover {
+  transform: scale(1.05); /* Smooth zoom effect on hover */
+}
+
 
 /* Hidden by default, centered container for image detail */
 #imageDetail {
@@ -976,7 +977,6 @@ textarea {
 }
 
 .my-posts {
-  flex-grow: 1;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   display: flex;
   flex-wrap: wrap;
@@ -1079,4 +1079,333 @@ textarea {
 .line {
   border-top: 1px solid #747272;
   width: 100%;
+}
+
+
+
+/* ---------------------------- USERS PAGE STYLE ---------------------------- */
+
+
+.viewers {
+  width: 100%;
+  position: relative;
+  height: 950px;
+  overflow: hidden;
+  text-align: left;
+  font-size: 32px;
+  color: #000;
+}
+
+.all-users {
+  position: relative; /* Change absolute positioning to relative */
+  top: 20px; /* Adjust top spacing for responsiveness */
+  left: auto; /* Center align */
+  width: 90%; /* Make width responsive */
+  max-width: 1198px; /* Maintain max width */
+  height: 815px;
+  overflow-y: auto;
+  margin-top: 100px;
+  margin-left: auto; /* Center horizontally */
+  margin-right: auto;
+  background-color: #fff;
+  border: 1px solid #888;
+  box-sizing: border-box;
+  border-radius: 20px;
+}
+
+.button-container {
+  display: flex; /* Align buttons horizontally */
+  justify-content: space-between; /* Ensure space between buttons */
+  align-items: center; /* Align items vertically centered */
+  gap: 20px; /* Add some space between the buttons */
+  padding: 20px;
+}
+
+.butt-my-viewers,
+.button2,
+.add-viewer-button {
+  font-size: 30px; /* Increase font size */
+  font-weight: bold; /* Make text bold */
+  border-radius: 12px; /* Slightly rounder corners */
+  background-color: #cde1f9; /* Cool blue background color */
+  width: 300px; /* Increase width for a larger button */
+  height: 50px; /* Increase height for larger button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+}
+.butt-my-viewers,
+.button2{
+  background-color: #ebebeb
+}
+.butt-my-viewers:hover,
+.button2:hover,
+.add-viewer-button:hover {
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+}
+
+.active {
+  background-color: #ededed;
+  border: 1px solid #747272;
+  color: #000;
+}
+
+.passive {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: #747272;
+  cursor: pointer;
+}
+
+.user .avatar {
+  height: 100px; /* Set a fixed size for the avatar */
+  width: 100px; 
+  border-radius: 50%; /* Make the image circular */
+  object-fit: cover;
+  margin-right: 20px; /* Space between image and name */
+}
+
+.name-user {
+  height: auto; 
+  width: auto; 
+  margin-left: 10px; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.line {
+  position: relative;
+  height: 0.65%;
+  width: 99.91%;
+  border-top: 1px solid #747272;
+  box-sizing: border-box;
+}
+
+.user {
+  display: flex;
+  flex-direction: row; /* Arrange items horizontally */
+  align-items: center; /* Align items vertically centered */
+  position: relative;
+  height: 154px;
+}
+.popup-overlay {
+  position: fixed;               /* Fixed positioning */
+  display: flex;                 /* Enable flexbox */
+  justify-content: center;       /* Center horizontally */
+  align-items: center;           /* Center vertically */
+  top: 50%;                        /* Cover full height */
+  left: 50%;                       /* Cover full width */
+  width: 100%;                   /* Full width of the viewport */
+  height: 100%;                  /* Full height of the viewport */
+  z-index: 1000;                /* On top of everything */
+}
+
+.add-viewer {
+  display: flex;                 /* Enable flexbox */
+  justify-content: center;       /* Center horizontally */
+  align-items: center;           /* Center vertically */
+  flex-direction: column; /* Stack items vertically */
+  gap: 10px;
+  width: 750px;                  /* Fixed width for the popup */
+  max-width: 90%;                /* Responsive max width */
+  border-radius: 30px;           /* Rounded corners */
+  background-color: #fff;       /* White background */
+  border: 1px solid #747272;    /* Border styling */
+  box-sizing: border-box;        /* Include padding and border in total width/height */
+  padding: 36px 80px;           /* Internal spacing */
+  transform: translate(-50%, -50%); /* Center the popup */
+  position: relative;            /* Make sure this is positioned relative to the overlay */
+}
+
+.add-viewer-text {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 30px;
+
+}
+
+.window-search {
+  height: 50px; /* Fixed height for search */
+  width: 100%;
+  border-radius: 10px;
+  background-color: #eeecec;
+  border: 1px solid #9d9a9a;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+}
+.search{
+  display: flex;
+  align-items: center;
+}
+.search-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.search-text {
+  margin-left: 15px;
+  font-size: 20px;
+  color: #747272;
+}
+
+.chevronIcon {
+  cursor: pointer;
+  width: 27px;
+  height: 27px;
+  margin-left: auto; /* Push it to the right */
+}
+
+.button-add {
+  cursor: pointer;
+  margin: 0 auto; /* Center the button */
+  border-radius: 10px;
+  background-color: #cde1f9;
+  border: 1px solid #24558f;
+  box-sizing: border-box;
+  width: 235px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user .line {
+  border-top: 1px solid #747272;
+}
+
+.user.last-visible .line {
+  display: none;
+}
+
+#hiddenUsers {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center; 
+  padding: 10px; 
+  overflow-y: auto; 
+  max-height: 160px; 
+  
+}
+
+.window-hide {
+  position: relative;
+  border-radius: 0px 0px 10px 10px;
+  background-color: #eeecec;
+  border: 1px solid #b1afaf;
+  box-sizing: border-box;
+  width: 585px;
+  height: 170px;
+  max-height: 250px; 
+  overflow: hidden; 
+}
+
+#hiddenUsers img{
+  position: relative;
+  height: 70px;
+  width: 70px;
+  margin-left: -325px;
+  margin-top: 0px;
+  border-radius: 100px;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 50%; 
+  margin-right: 10px; 
+  
+}
+
+#hiddenUsers .user5, 
+#hiddenUsers .user6 {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  margin-left: 0px;
+  width: 100%; 
+  height: 100px;
+}
+
+#hiddenUsers .name-user {
+  font-size: 20px;
+  padding-left: 5px;
+}
+
+.users {
+  position: relative;
+  top: 37px;
+  left: 69px;
+  width: 1080px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 40px;
+}
+
+/* ---------------------------- GROUP PAGE STYLE ---------------------------- */
+
+.window-name {
+  width: 100%;
+}
+
+.group-name {
+  margin-bottom: 10px; /* Space between label and input */
+  font-size: 20px;     /* Label font size */
+}
+
+input[type="text"] {
+  width: 100%; /* Full width of the input */
+  height: 40px; /* Set height for the input */
+  border-radius: 10px; /* Rounded corners */
+  border: 1px solid #9d9a9a; /* Border style */
+  padding: 0 10px; /* Padding inside input */
+}
+
+.window-search {
+  width: 100%; /* Full width for the search area */
+}
+
+.group-privacy {
+  font-size: 20px; /* Privacy label size */
+  margin-bottom: 5px; /* Space between label and public text */
+}
+
+.public {
+  cursor: pointer; /* Cursor change on hover */
+  color: #24558f;  /* Color for public text */
+}
+
+.privacy-options {
+  margin-top: 10px; /* Space above privacy options */
+}
+
+.privacy-option {
+  cursor: pointer; /* Pointer for hover */
+}
+
+.button-add {
+  cursor: pointer;
+  margin: 20px auto; /* Center the button */
+  border-radius: 10px;
+  background-color: #cde1f9;
+  border: 1px solid #24558f;
+  box-sizing: border-box;
+  width: 235px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px; /* Font size for the button text */
+}
+
+.user .line {
+  border-top: 1px solid #747272; /* Line for user separation */
+}
+
+.user.last-visible .line {
+  display: none; /* Hide line for last visible user */
 }

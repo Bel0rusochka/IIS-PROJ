@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Groups{% endblock %}
+
+{% block content %}
+  	<div class="viewers">
+		<a href="{{ url_for('index') }}">
+            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+        </a>
+		<div class="all-users">
+			<!-- Form for switching between My Groups and All Groups -->
+			<form method="POST" action="{{ url_for('groups') }}"class="button-container">
+				<!-- My Groups Button -->
+				<input type="submit" name="my_groups" value="My Groups" id="myGroupsButton"class="{{ 'butt-my-viewers active' if show_my_viewers else 'butt-my-viewers passive' }}">
+				
+				<!-- All Groups Button -->
+				<input type="submit" name="all_groups" value="All Groups" id="allGroupsButton"  class="{{ 'button2 active' if show_all_users else 'button2 passive' }}">
+
+				    <!-- Add Viewer Button -->
+					<input type="button" name="add_viewer" value="Create Group" class="add-viewer-button" onclick="showAddViewerPopup()">
+			</form>
+			<!-- Search Field -->
+			<div class="search">
+				<div class="search-text">Search...</div>
+				<img class="search-icon" alt="" src="../static/images/search.svg">
+			</div>
+
+            <!-- Loop through users from the database -->
+            <div class="users" id="usersList">
+				{% for group in groups %}
+                <div class="user">
+                    <img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/no_avatar.svg' }}">
+                    <div class="name-user">
+						<div class="user-name">{{ group.name }}</div>
+
+						<div class="subscribers">{{ group.subscribers_count }} subscribers</div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                {% endfor %}
+            </div>
+		</div>
+  	</div>
+
+  	<!-- Popup for creating a group (still controlled by JavaScript) -->
+<div id="createGroupContainer" class="popup-overlay" style="display:none">
+    <div class="add-viewer">
+        <div class="add-viewer-text">Create a Group</div>
+        <div class="window-name">
+            <div class="group-name">Group Name</div>
+            <input type="text" name="group-name" placeholder="Enter a name" required>
+        </div>
+		<div class="window-search">
+			<div class="group-privacy">Group Privacy: <span id="currentPrivacy">Public</span></div>
+			<img class="chevronIcon" alt="Toggle Privacy" src="../static/images/ChevronDownOutline.svg" onclick="togglePrivacyOptions()">
+		</div>
+		<div class="window-hide" id="privacyOptions" style="display: none;">
+			<div class="privacy-option" data-privacy="public" onclick="selectPrivacy('public')">
+				Public <br>
+				<span class="privacy-description">All users can view content in the group and leave comments on the wall.</span>
+			</div>
+			<div class="privacy-option" data-privacy="private" onclick="selectPrivacy('private')">
+				Private <br>
+				<span class="privacy-description">Content is seen only by subscribers of the group. To subscribe, you need to submit an application or receive an invitation.</span>
+			</div>
+		</div>
+		<div class="button-add">
+			<div class="create">Create</div>
+		</div>
+	</div>
+</div>
+
+
+	  <script>
+        // Show/hide the "create group" popup
+        var createGroupButton = document.getElementById("createGroupButton");
+        var createGroupPopup = document.getElementById("createGroupContainer");
+
+        function showAddViewerPopup() {
+            createGroupPopup.style.display = "flex";
+        }
+
+        // Close popup when clicked outside
+        createGroupPopup.addEventListener("click", function (e) {
+            if (e.target === createGroupPopup) {
+                createGroupPopup.style.display = "none";
+            }
+        });
+		function selectPrivacy(option) {
+    var currentPrivacyText = document.getElementById("currentPrivacy");
+    currentPrivacyText.innerText = option.charAt(0).toUpperCase() + option.slice(1); // Capitalize first letter
+
+    // Close the privacy options
+    var privacyOptions = document.getElementById("privacyOptions");
+    privacyOptions.style.display = "none";
+
+    // Additional logic for saving the selected privacy to your Flask app can be added here
+    console.log("Selected privacy: " + option); // This will log the selected option; replace with AJAX or form submission as needed
+}
+        // Optional: Add event listener for the "Create" button inside the popup
+        document.querySelector('.create').addEventListener('click', function () {
+            // Add your create logic here
+            createGroupPopup.style.display = "none"; // Close popup after creating
+        });
+		function togglePrivacyOptions() {
+			var privacyOptions = document.getElementById("privacyOptions");
+			if (privacyOptions.style.display === "none") {
+				privacyOptions.style.display = "block"; // Show privacy options
+			} else {
+				privacyOptions.style.display = "none"; // Hide privacy options
+			}
+		}
+
+    </script>
+{% endblock %}

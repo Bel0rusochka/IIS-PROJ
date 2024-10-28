@@ -138,4 +138,3 @@ function displayImage(file) {
         .catch(error => console.error('Error:', error));
     }
   
-
