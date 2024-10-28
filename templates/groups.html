@@ -34,7 +34,7 @@
             <div class="groupsList" >
 			{% for group in groups %}
         			<div class="group-item">
-          				<img class="avatar" alt="" src="{{ group.avatar_url or 'img/default_group.png' }}">
+          				<img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/no_avatar.svg' }}">
           				<div class="name-of-group">
             				<div class="group">{{ group.name }}</div>
             				<div class="subscribers">{{ group.subscribers_count }} subscribers</div>
