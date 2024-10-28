@@ -1080,7 +1080,6 @@ textarea {
   border-top: 1px solid #747272;
   width: 100%;
 }
-/* ---------------------------- GROUP PAGE STYLE ---------------------------- */
 
 
 
@@ -1146,6 +1145,20 @@ textarea {
 .add-viewer-button:hover {
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
 }
+
+.active {
+  background-color: #ededed;
+  border: 1px solid #747272;
+  color: #000;
+}
+
+.passive {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: #747272;
+  cursor: pointer;
+}
+
 .user .avatar {
   height: 100px; /* Set a fixed size for the avatar */
   width: 100px; 
@@ -1331,4 +1344,68 @@ textarea {
   align-items: flex-start;
   justify-content: flex-start;
   gap: 40px;
+}
+
+/* ---------------------------- GROUP PAGE STYLE ---------------------------- */
+
+.window-name {
+  width: 100%;
+}
+
+.group-name {
+  margin-bottom: 10px; /* Space between label and input */
+  font-size: 20px;     /* Label font size */
+}
+
+input[type="text"] {
+  width: 100%; /* Full width of the input */
+  height: 40px; /* Set height for the input */
+  border-radius: 10px; /* Rounded corners */
+  border: 1px solid #9d9a9a; /* Border style */
+  padding: 0 10px; /* Padding inside input */
+}
+
+.window-search {
+  width: 100%; /* Full width for the search area */
+}
+
+.group-privacy {
+  font-size: 20px; /* Privacy label size */
+  margin-bottom: 5px; /* Space between label and public text */
+}
+
+.public {
+  cursor: pointer; /* Cursor change on hover */
+  color: #24558f;  /* Color for public text */
+}
+
+.privacy-options {
+  margin-top: 10px; /* Space above privacy options */
+}
+
+.privacy-option {
+  cursor: pointer; /* Pointer for hover */
+}
+
+.button-add {
+  cursor: pointer;
+  margin: 20px auto; /* Center the button */
+  border-radius: 10px;
+  background-color: #cde1f9;
+  border: 1px solid #24558f;
+  box-sizing: border-box;
+  width: 235px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px; /* Font size for the button text */
+}
+
+.user .line {
+  border-top: 1px solid #747272; /* Line for user separation */
+}
+
+.user.last-visible .line {
+  display: none; /* Hide line for last visible user */
 }

@@ -19,6 +19,11 @@
                 <input type="button" name="add_viewer" value="Add Viewer" class="add-viewer-button" onclick="showAddViewerPopup()">
             </form>
 
+            <!-- Search Field -->
+			<div class="search">
+				<div class="search-text">Search...</div>
+				<img class="search-icon" alt="" src="../static/images/search.svg">
+			</div>
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
                 {% for user in users %}
