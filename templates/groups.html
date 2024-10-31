@@ -8,17 +8,10 @@
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
 		<div class="all-users">
-			<!-- Form for switching between My Groups and All Groups -->
-			<form method="POST" action="{{ url_for('groups') }}"class="button-container">
-				<!-- My Groups Button -->
-				<input type="submit" name="my_groups" value="My Groups" id="myGroupsButton"class="{{ 'butt-my-viewers active' if show_my_viewers else 'butt-my-viewers passive' }}">
-				
-				<!-- All Groups Button -->
-				<input type="submit" name="all_groups" value="All Groups" id="allGroupsButton"  class="{{ 'button2 active' if show_all_users else 'button2 passive' }}">
 
-				    <!-- Add Viewer Button -->
-					<input type="button" name="add_viewer" value="Create Group" class="add-viewer-button" onclick="showAddViewerPopup()">
-			</form>
+			<a href="{{ url_for('groups')}}"  id="myGroupsButton" class = 'butt-my-viewers passive'>All Groups</a>
+			<a href="{{ url_for('my_groups')}}" id="allGroupsButton" class = 'butt-my-viewers passive'>My Groups</a>
+			<a class="add-viewer-button" onclick="showAddViewerPopup()">Create Group</a>
 			<!-- Search Field -->
 			<div class="search">
 				<div class="search-text">Search...</div>
@@ -28,15 +21,27 @@
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
 				{% for group in groups %}
-                <div class="user">
-                    <img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/no_avatar.svg' }}">
-                    <div class="name-user">
-						<div class="user-name">{{ group.name }}</div>
-
-						<div class="subscribers">{{ group.subscribers_count }} subscribers</div>
-                    </div>
-                </div>
-                <div class="line"></div>
+				<a href="{{ url_for('group', id=group.id) }}" class="user">
+					<div class="user">
+						<img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/no_avatar.svg' }}">
+						<div class="name-user">
+							<div class="user-name">{{ group.name }}</div>
+							<div class="subscribers">Subscribers: {{ group.user_count() }}</div>
+							{% if not group.is_member(session.user.login) %}
+								<form method="POST" action="{{ url_for('join_group', id=group.id) }}">
+									<input type="hidden" name="group_id" value="{{ group.id }}">
+									<button type="submit" class="subscribe">Join</button>
+								</form>
+							{% else %}
+								<form method="POST" action="{{ url_for('leave_group', id=group.id) }}">
+									<input type="hidden" name="group_id" value="{{ group.id }}">
+									<button type="submit" class="subscribe">Leave</button>
+								</form>
+							{% endif %}
+						</div>
+					</div>
+					<div class="line"></div>
+				</a>
                 {% endfor %}
             </div>
 		</div>
@@ -46,27 +51,19 @@
 <div id="createGroupContainer" class="popup-overlay" style="display:none">
     <div class="add-viewer">
         <div class="add-viewer-text">Create a Group</div>
-        <div class="window-name">
-            <div class="group-name">Group Name</div>
-            <input type="text" name="group-name" placeholder="Enter a name" required>
-        </div>
-		<div class="window-search">
-			<div class="group-privacy">Group Privacy: <span id="currentPrivacy">Public</span></div>
-			<img class="chevronIcon" alt="Toggle Privacy" src="../static/images/ChevronDownOutline.svg" onclick="togglePrivacyOptions()">
-		</div>
-		<div class="window-hide" id="privacyOptions" style="display: none;">
-			<div class="privacy-option" data-privacy="public" onclick="selectPrivacy('public')">
-				Public <br>
-				<span class="privacy-description">All users can view content in the group and leave comments on the wall.</span>
+		<form method="POST" action="{{ url_for('create_group') }}">
+			<div class="window-name">
+				<div class="group-name">Group Name</div>
+				<input type="text" name="group-name" placeholder="Enter a name" required>
 			</div>
-			<div class="privacy-option" data-privacy="private" onclick="selectPrivacy('private')">
-				Private <br>
-				<span class="privacy-description">Content is seen only by subscribers of the group. To subscribe, you need to submit an application or receive an invitation.</span>
+			<div class="window-name">
+				<div class="group-name">Group Description</div>
+				<input type="text" name="group-description" placeholder="Enter a description" required>
 			</div>
-		</div>
-		<div class="button-add">
-			<div class="create">Create</div>
-		</div>
+			<div class="button-add">
+				<button type="submit" class="create">Create</button>
+			</div>
+		</form>
 	</div>
 </div>
 

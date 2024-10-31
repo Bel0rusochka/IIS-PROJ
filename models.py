@@ -132,6 +132,14 @@ class Users(db.Model):
             self.password = password
         db.session.commit()
 
+    def get_friend_to_me(self):
+        return [friend.friend_login for friend in self.friends]
+
+    def get_friend_by_me(self):
+        friend_by_me = Friends.query.filter_by(friend_login=self.login).all()
+        print([friend.user_login for friend in friend_by_me])
+        return [friend.user for friend in friend_by_me]
+
 
 class Groups(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True, index=True)
@@ -141,14 +149,30 @@ class Groups(db.Model):
     posts = db.relationship('Posts', secondary=PostsGroups)
     users = db.relationship('Users', secondary=GroupsUsers)
 
+    def is_member(self, login):
+        return login in [user.login for user in self.users]
+
     def post_count(self):
         return len(self.posts)
+
+    def user_count(self):
+        print(self.users)
+        return len(self.users)
 
     def get_users_with_role(self):
         return dict(db.session.query(
             GroupsUsers.c.user_login,
             GroupsUsers.c.role
         ).filter(GroupsUsers.c.group_id == self.id).all())
+
+    @staticmethod
+    def create_group(name, description, user):
+        group = Groups(name=name, description=description)
+        group.users.append(user)
+        db.session.add(group)
+        db.session.commit()
+        group.make_admin(user.login)
+        return group
 
     def edit_group(self, name, description):
         self.name = name

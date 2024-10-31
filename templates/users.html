@@ -8,16 +8,8 @@
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
         <div class="all-users">
-            <form method="POST" action="{{ url_for('users') }}" class="button-container">
-                <!-- My Viewers Button -->
-                <input type="submit" name="show_my_viewers" value="My Viewers" class="{{ 'butt-my-viewers active' if show_my_viewers else 'butt-my-viewers passive' }}">
-                
-                <!-- All Users Button -->
-                <input type="submit" name="show_all_users" value="All Users" class="{{ 'button2 active' if show_all_users else 'button2 passive' }}">
-                
-                <!-- Add Viewer Button -->
-                <input type="button" name="add_viewer" value="Add Viewer" class="add-viewer-button" onclick="showAddViewerPopup()">
-            </form>
+            <a href="{{ url_for('users')}}"  id="myGroupsButton" class = 'butt-my-viewers passive'>All Users</a>
+			<a href="{{ url_for('friends')}}" id="allGroupsButton" class = 'butt-my-viewers passive'>My Friends</a>
 
             <!-- Search Field -->
 			<div class="search">
@@ -27,75 +19,18 @@
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
                 {% for user in users %}
-                <div class="user">
-                    <img class="avatar" alt="" src="{{ user.avatar_url or '../static/images/no_avatar.svg' }}">
-                    <div class="name-user">
-                        <div class="user-name">{{ user.name }}</div>
+                <a href="{{ url_for('profile', login=user.login) }}" class="user">
+                    <div class="user">
+                        <img class="avatar" alt="" src="{{ user.avatar_url or '../static/images/no_avatar.svg' }}">
+                        <div class="name-user">
+                            <div class="user-name">{{ user.name }}</div>
+                        </div>
                     </div>
-                </div>
+                </a>
                 <div class="line"></div>
 
                 {% endfor %}
             </div>
         </div>
     </div>
-
-    <!-- Popup for adding viewer -->
-    <div id="addViewerPopup" class="popup-overlay" style="display:none">
-        <div class="add-viewer">
-            <div class="add-viewer-text">Add viewer</div>
-
-            <div class="window-search">
-                <div class="search">
-                    <img class="search-icon" alt="" src="../static/images/search.svg">
-                    <div class="search-text">Search...</div>
-                </div>
-                <img class="chevronIcon" alt="" src="../static/images/ChevronDownOutline.svg" id="chevronIcon" style="z-index: 10;" onclick="toggleHiddenUsers()">
-            </div>
-
-            <!-- Hidden users in search -->
-            <div id="hiddenUsers" class="window-hide" style="display: none;">
-                {% for friends in friend %}
-                <div class="user">
-                    <img class="avatar" alt="" src="{{ friends.avatar_url or '../static/images/default_user.svg' }}">
-                    <div class="name-user">
-                        <div>{{ friends.name }}</div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-
-            <div class="button-add">
-                <div class="button">Add</div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Function to show the Add Viewer popup
-        function showAddViewerPopup() {
-            var popup = document.getElementById("addViewerPopup");
-            popup.style.display = "block";
-        }
-
-        // Close the popup when clicking outside the popup area
-        window.onclick = function(event) {
-            var popup = document.getElementById("addViewerPopup");
-            if (event.target == popup) {
-                popup.style.display = "none";
-            }
-        }
-
-        // Function to toggle the visibility of hidden users
-        function toggleHiddenUsers() {
-            var hiddenUsers = document.getElementById("hiddenUsers");
-            if (hiddenUsers.style.display === "none") {
-                hiddenUsers.style.display = "block"; // Show hidden users
-            } else {
-                hiddenUsers.style.display = "none"; // Hide hidden users
-            }
-        }
-
-
-    </script>
 {% endblock %}
