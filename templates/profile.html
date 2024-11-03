@@ -15,7 +15,7 @@
   	<div class="profile">
 		<div class="my-profile">
 			<div class="fit-arrow">
-				<a href="{{ url_for('users') }}">
+				<a {% if session.user.login == user.login %}href="{{ url_for('index') }}"{% else %}href="{{ url_for('users') }}"{% endif %}>
 					<img class="arrow-icon" alt="Back" src="../static/images/arrow.svg" id="arrowIcon"> <!-- Added alt text for accessibility -->
 				</a>
 				<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
@@ -30,22 +30,22 @@
 						</div>
 						{% if session.user.login == user.login %}
 							<div class="button-group">
-								<a class="edit-profile" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">edit profile</a>
+								<a class="edit-profile" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
 								<form method="POST" action="{{ url_for('delete_user') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="delete-profile">delete profile</button>
+									<button type="submit" class="delete-profile">Delete profile</button>
 								</form>
 							</div>
 						{% else %}
 							{% if session.user.login in user.get_friends_login_list() %}
 								<form method="POST" action="{{ url_for('unsubscribe') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="subscribe">unsubscribe</button>
+									<button type="submit" class="subscribe">Unsubscribe</button>
 								</form>
 							{% else %}
 								<form method="POST" action="{{ url_for('subscribe') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="subscribe">subscribe</button>
+									<button type="submit" class="subscribe">Subscribe</button>
 								</form>
 							{% endif %}
 						{% endif %}

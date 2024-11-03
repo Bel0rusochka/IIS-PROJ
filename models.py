@@ -145,7 +145,7 @@ class Groups(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True, index=True)
     name = db.Column(db.String(60),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
-    description = db.Column(db.String(20),nullable=False)
+    description = db.Column(db.String(60),nullable=False)
     posts = db.relationship('Posts', secondary=PostsGroups)
     users = db.relationship('Users', secondary=GroupsUsers)
 

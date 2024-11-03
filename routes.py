@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, abort
+from urllib.parse import urlencode
 from models import *
 import hashlib
 from PIL import Image as PILImage
@@ -10,34 +11,81 @@ def registrate_routes(app, db):
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         if request.method == 'POST' and session.get('user') is None:
-            login = request.form['login']
-            name = request.form['name']
-            surname = request.form['surname']
-            email = request.form['email']
-            password = request.form['password']
-            confirm_password = request.form['confirm_password']
+            login = request.form['login'].strip()
+            name = request.form['name'].strip()
+            surname = request.form['surname'].strip()
+            email = request.form['email'].strip()
+            password = request.form['password'].strip()
+            confirm_password = request.form['confirm_password'].strip()
             role = 'user'
             request_data = {'login': login, 'name': name, 'surname': surname, 'email': email, 'password': password, 'confirm_password': confirm_password}
+            bad_data = False
+
             if password != confirm_password:
-                flash("Passwords do not match", "error")
+                flash("Confirm password does not match", "error")
                 request_data.pop('password')
                 request_data.pop('confirm_password')
-            elif Users.get_user(login) is not None:
-                flash("User already exists with this login", "error")
-                request_data.pop('login')
-            elif '@' in login:
-                flash("Login cannot contain '@'", "error")
-                request_data.pop('login')
-            elif Users.get_user(email) is not None:
-                flash("User already exists with this email", "error")
-                request_data.pop('email')
+                bad_data = True
             elif len(password) < 8:
                 flash("Password is too short. It should be at least 8 characters", "error")
                 request_data.pop('password')
                 request_data.pop('confirm_password')
-            else:
-                session['user'] = {"login":login, "role": role, "name": email, "surname": surname, "mail": name}
+                bad_data = True
 
+            if Users.get_user(login) is not None:
+                flash("User already exists with this login", "error")
+                request_data.pop('login')
+                bad_data = True
+            elif '@' in login or " " in login:
+                flash("Login is invalid", "error")
+                request_data.pop('login')
+                bad_data = True
+            elif login == "":
+                flash("Login is empty", "error")
+                request_data.pop('login')
+                bad_data = True
+            elif len(login) > 60:
+                flash("Login is too long", "error")
+                request_data.pop('login')
+                bad_data = True
+
+            if Users.get_user(email) is not None:
+                flash("User already exists with this email", "error")
+                request_data.pop('email')
+                bad_data = True
+            elif email == "":
+                flash("Email is empty", "error")
+                request_data.pop('name')
+                bad_data = True
+            elif len(email) > 60:
+                flash("Email is too long", "error")
+                request_data.pop('email')
+                bad_data = True
+            elif " " in email:
+                flash("Email is invalid", "error")
+                request_data.pop('email')
+                bad_data = True
+
+            if len(name) > 60:
+                flash("Name is too long", "error")
+                request_data.pop('name')
+                bad_data = True
+            elif " " in name or "@" in name:
+                flash("Name is invalid", "error")
+                request_data.pop('name')
+                bad_data = True
+
+            if len(surname) > 60:
+                flash("Surname is too long", "error")
+                request_data.pop('surname')
+                bad_data = True
+            elif " " in surname or "@" in surname:
+                flash("Surname is invalid", "error")
+                request_data.pop('surname')
+                bad_data = True
+
+            if not bad_data:
+                session['user'] = {"login":login, "role": role, "name": email, "surname": surname, "mail": name}
                 password_db = hashlib.md5(password.encode()).hexdigest()
                 Users.add_user(login, email, password_db, name, surname,role)
                 return redirect(url_for('index'))
@@ -106,7 +154,7 @@ def registrate_routes(app, db):
             else:
                 user.add_friend(friend_login)
                 flash("You are now friends", "success")
-            return redirect(url_for('profile', login=user_login))
+            return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 
     @app.route('/unsubscribe', methods=['GET', 'POST'])
@@ -129,7 +177,7 @@ def registrate_routes(app, db):
             else:
                 user.delete_friend(friend_login)
                 flash("You are not friends anymore", "success")
-            return redirect(url_for('profile', login=user_login))
+            return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 
     @app.route('/edit_group/<int:id>', methods=['GET', 'POST'])
@@ -146,9 +194,28 @@ def registrate_routes(app, db):
             return redirect(url_for('group', id=id))
 
         if request.method == 'POST':
-            flash("Group updated", "success")
-            group.edit_group( request.form['name'], request.form['description'])
-            return redirect(url_for('group', id=id))
+            group_name = request.form['name'].strip()
+            group_description = request.form['description'].strip()
+
+
+            if group_name == '':
+                flash("Group name is empty", "error")
+            elif "@" in group_name or " " in group_name:
+                flash("Group name is invalid", "error")
+            elif len(group_name) > 60:
+                flash("Group name is too long", "error")
+            elif group_name != group.name:
+                flash("Group name updated", "success")
+                group.edit_group( request.form['name'], group.description)
+
+
+            if len(group_description) > 60:
+                flash("Group description is too long", "error")
+            elif group_description != group.description:
+                flash("Group description updated", "success")
+                group.edit_group(group.name, request.form['description'])
+
+
         return render_template("edit_group.html", group=group, users=users_with_roles)
 
     @app.route('/delete_group', methods=['GET', 'POST'])
@@ -221,13 +288,30 @@ def registrate_routes(app, db):
             return redirect(url_for('login'))
 
         if request.method == 'POST':
-            name = request.form['group-name']
-            description = request.form['group-description']
-            user = Users.get_user_or_404(session['user']['login'])
-            group = Groups.create_group(name, description, user)
-            flash("Group created", "success")
-            return redirect(url_for('group', id=group.id))
-        return render_template("create_group.html")
+            group_name = request.form['group-name'].strip()
+            group_description = request.form['group-description'].strip()
+            bad_data = False
+
+            if group_name == '':
+                flash("Group name is empty", "error")
+                bad_data = True
+            elif "@" in group_name or " " in group_name:
+                flash("Group name is invalid", "error")
+                bad_data = True
+            elif len(group_name) > 60:
+                flash("Group name is too long", "error")
+                bad_data = True
+
+            if len(group_description) > 60:
+                flash("Group description is too long", "error")
+                bad_data = True
+
+            if not bad_data:
+                user = Users.get_user_or_404(session['user']['login'])
+                group = Groups.create_group(group_name, group_description, user)
+                flash("Group created", "success")
+                return redirect(url_for('group', id=group.id))
+        return redirect(url_for('groups'))
 
     @app.route('/groups/my_groups', methods=['GET', 'POST'])
     def my_groups():
@@ -298,7 +382,7 @@ def registrate_routes(app, db):
 
             flash("You left the group", "success")
             db.session.commit()
-            return redirect(url_for('group', id=group_id))
+            return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 
     @app.route('/join_group', methods=['GET', 'POST'])
@@ -313,38 +397,13 @@ def registrate_routes(app, db):
             group.add_member_group(user)
 
             flash(f"You joined the group {group.name}", "success")
-            return redirect(url_for('group', id=group_id))
+            return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 
-    @app.route('/search', methods=['GET'])
-    def search_posts():
-        if request.method == 'GET':
-            query = request.args.get('query', '').strip().replace(' ', '#')
-            sort_by = request.args.get('sort_by', 'relevance')
-            tag_list = [tag.strip() for tag in query.split("#") if tag]
-
-            if session.get('user') is not None:
-                user = Users.get_user_or_404(session['user']['login'])
-                results = user.get_posts_for_user_feed()
-                for tag in tag_list:
-                    results = results.filter(Posts.associated_tags.any(Tags.name == tag))
-                results = results.all()
-            else:
-                results = Posts.get_all_posts_by_privacy('public')
-                for tag in tag_list:
-                    results = results.filter(Posts.associated_tags.any(Tags.name == tag))
-                results =  results.all()
-
-            if sort_by == 'popularity':
-                results = sorted(results, key=lambda post: post.shares_count(), reverse=True)
-            elif sort_by == 'date':
-                results = sorted(results, key=lambda post: post.date, reverse=True)
-            elif sort_by == 'likes':
-                results = sorted(results, key=lambda post: post.like_count(), reverse=True)
-            elif sort_by == 'comments':
-                results = sorted(results, key=lambda post: post.comments_count(), reverse=True)
-            return render_template("index.html", posts=results)
-        abort(404)
+    @app.route('/index', methods=['GET'])
+    # def search_posts():
+    #
+    #     abort(404)
 
     @app.route('/delete_user', methods=['GET', 'POST'])
     def delete_user():
@@ -373,13 +432,26 @@ def registrate_routes(app, db):
         if request.method == 'POST':
 
             user = Users.query.get(login)
-            user.change_user_data(name=request.form['name'], surname=request.form['surname'])
-            session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname,
-                               "mail": user.mail}
+            user_name = request.form['name'].strip()
+            user_surname = request.form['surname'].strip()
+            # user.change_user_data(name=request.form['name'], surname=request.form['surname'])
+
+            if "@" in user_name or " " in user_name or len(user_name) > 60:
+                flash("Name is invalid", "error")
+            elif user_name != user.name:
+                flash("Name updated", "success")
+                user.change_user_data(name=user_name)
+
+            if "@" in user_surname or " " in user_surname or len(user_surname) > 60:
+                flash("Surname is invalid", "error")
+            elif user_surname != user.surname:
+                flash("Surname updated", "success")
+                user.change_user_data(surname=user_surname)
 
             if request.form['password'] != '':
                 if ( request.form['password'] == request.form['confirm_password']):
                     if len(request.form['password']) >= 8:
+                        flash("Password updated", "success")
                         user.change_user_data(password=hashlib.md5(request.form['password'].encode()).hexdigest())
                     else:
                         flash("Password is too short. It should be at least 8 characters", "error")
@@ -388,8 +460,9 @@ def registrate_routes(app, db):
                     flash("Passwords do not match", "error")
                     return redirect(url_for('setting', login=login))
 
-            flash("Profile updated", "success")
-            return redirect(url_for('profile', login=login))
+            session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname,
+                               "mail": user.mail}
+            return redirect(url_for('setting', login=login))
         user = Users.query.get(login)
         return render_template("edit_profile.html", user=user)
 
@@ -403,6 +476,14 @@ def registrate_routes(app, db):
         if post is None:
             abort(404)
         return render_template("post.html", post=post, comments=post.comments.all())
+
+    @app.route('/go_to_index')
+    def go_to_index():
+        query_params = session.get('index_params', {})
+        if query_params:
+            return redirect(url_for('index') + '?' + urlencode(query_params))
+        else:
+            return redirect(url_for('index'))
 
     @app.route('/add_comment/<int:post_id>', methods=['POST'])
     def add_comment(post_id):
@@ -555,11 +636,39 @@ def registrate_routes(app, db):
 
     @app.route('/')
     def index():
-        if session.get('user') is not None:
-            user = Users.get_user_or_404(session['user']['login'])
-            return render_template("index.html", posts = user.get_posts_for_user_feed())
+        if request.method == 'GET':
+            session['index_params'] = request.args.to_dict()
+            query = request.args.get('query', '').strip().replace(' ', '#')
+            sort_by = request.args.get('sort_by', 'relevance')
+            tag_list = [tag.strip() for tag in query.split("#") if tag]
+
+            if session.get('user') is not None:
+                user = Users.get_user_or_404(session['user']['login'])
+                results = user.get_posts_for_user_feed()
+                for tag in tag_list:
+                    results = results.filter(Posts.associated_tags.any(Tags.name == tag))
+                results = results.all()
+            else:
+                results = Posts.get_all_posts_by_privacy('public')
+                for tag in tag_list:
+                    results = results.filter(Posts.associated_tags.any(Tags.name == tag))
+                results = results.all()
+
+            if sort_by == 'popularity':
+                results = sorted(results, key=lambda post: post.shares_count(), reverse=True)
+            elif sort_by == 'date':
+                results = sorted(results, key=lambda post: post.date, reverse=True)
+            elif sort_by == 'likes':
+                results = sorted(results, key=lambda post: post.like_count(), reverse=True)
+            elif sort_by == 'comments':
+                results = sorted(results, key=lambda post: post.comments_count(), reverse=True)
+            return render_template("index.html", posts=results)
         else:
-            return render_template("index.html", posts = Posts.get_all_posts_by_privacy('public'))
+            if session.get('user') is not None:
+                user = Users.get_user_or_404(session['user']['login'])
+                return render_template("index.html", posts = user.get_posts_for_user_feed())
+            else:
+                return render_template("index.html", posts = Posts.get_all_posts_by_privacy('public'))
 
     @app.route('/admin')
     def admin():

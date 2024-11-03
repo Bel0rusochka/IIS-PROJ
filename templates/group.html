@@ -33,17 +33,17 @@
 
 				</div>
 				{% if is_admin %}
-					<a class="edit-profile" id="editProfileButton" href="{{url_for('edit_group', id = group.id)}}">edit group</a>
+					<a class="edit-profile" id="editProfileButton" href="{{url_for('edit_group', id = group.id)}}">Edit Group</a>
 				{% endif %}
 				{% if session.user.login in members %}
 					<form method="POST" action="{{url_for('leave_group', id = group.id)}}">
 						<input type="hidden" name="group_id" value="{{group.id}}">
-						<button type="submit" class="edit-profile" id="leaveProfileButton">leave group</button>
+						<button type="submit" class="edit-profile" id="leaveProfileButton">Leave Group</button>
 					</form>
 				{% else %}
 						<form method="POST" action="{{url_for('join_group', id = group.id)}}">
 							<input type="hidden" name="group_id" value="{{group.id}}">
-							<button type="submit" class="edit-profile" id="joinProfileButton">join group</button>
+							<button type="submit" class="edit-profile" id="joinProfileButton">Join Group</button>
 						</form>
 				{% endif %}
 
