@@ -27,9 +27,9 @@
 				<img class="generic-avatar-icon" alt="" src="../static/images/no_avatar.svg">
 				
 			  	<div class="user-info">
-					<div class="group-name">{{group.name}}</div>
-					<div class="group-date">{{group.date}}</div>
-					<div class="group-description">{{group.description}}</div>
+					<div class="group-name" style="font-weight: bold;">{{group.name}}</div>
+					<div class="group-date">Created: {{group.date.strftime("%d %B %Y")}}</div>
+					<div class="group-description">Description: {{group.description}}</div>
 
 				</div>
 				{% if is_admin %}

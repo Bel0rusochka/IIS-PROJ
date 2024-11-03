@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+    <div class="viewers">
+        <a href="{{ url_for('index') }}">
+            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+        </a>
+        <div class="all-users">
+            <a href="{{ url_for('shares')}}"  id="myGroupsButton" class = 'butt-my-viewers passive'>Received Shares</a>
+			<a href="{{ url_for('shares_sent')}}" id="allGroupsButton" class = 'butt-my-viewers passive'>Sent Shares</a>
+
+
+            <!-- Loop through users from the database -->
+            <div class="users" id="usersList">
+                {% for share in shares %}
+                <a href="{{ url_for('post', post_id=share.post_id) }}" class="user">
+                    <div class="user">
+                        <img class="avatar" alt="" src="{{ url_for('image', id=share.post_id) }}">
+                        <div class="name-user">
+                            {% if share.sender_login == session.user.login %}
+                                <div class="user-name">To: @{{ share.recipient_login }}</div>
+                            {% else %}
+                                <div class="user-name">From: @{{ share.sender_login }}</div>
+                            {% endif %}
+
+                            <div class="user-name">Date: {{ share.date.strftime("%d %B %Y, %H:%M") }}</div>
+                        </div>
+                    </div>
+                </a>
+                <div class="line"></div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -15,8 +15,8 @@
   	<div class="profile">
 		<div class="my-profile">
 			<div class="fit-arrow">
-				<a {% if session.user.login == user.login %}href="{{ url_for('index') }}"{% else %}href="{{ url_for('users') }}"{% endif %}>
-					<img class="arrow-icon" alt="Back" src="../static/images/arrow.svg" id="arrowIcon"> <!-- Added alt text for accessibility -->
+				<a href="{{ url_for('go_back') }}">
+					<img class="arrow-icon" alt="Back" src="../static/images/arrow.svg" id="arrowIcon">
 				</a>
 				<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
 			</div>
@@ -37,7 +37,7 @@
 								</form>
 							</div>
 						{% else %}
-							{% if session.user.login in user.get_friends_login_list() %}
+							{% if session.user.login in user.get_followers_login_list() %}
 								<form method="POST" action="{{ url_for('unsubscribe') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
 									<button type="submit" class="subscribe">Unsubscribe</button>

@@ -46,7 +46,9 @@ class Users(db.Model):
     send_shares = db.relationship('Shares', backref='sender', foreign_keys="Shares.sender_login",
                                 cascade="all, delete-orphan", lazy='dynamic')
 
-    friends = db.relationship('Friends', backref='user', foreign_keys="Friends.user_login", lazy='dynamic',cascade="all, delete-orphan")
+    followers = db.relationship('Followers', backref='user', foreign_keys="Followers.user_login", lazy='dynamic',cascade="all, delete-orphan")
+    following = db.relationship('Followers', backref='follower', foreign_keys="Followers.follower_login", lazy='dynamic',cascade="all, delete-orphan")
+
     @staticmethod
     def get_user(login_email):
         return Users.query.filter(or_(Users.login == login_email, Users.mail == login_email)).first()
@@ -67,8 +69,8 @@ class Users(db.Model):
         db.session.delete(user)
         db.session.commit()
 
-    def get_friends_login_list(self):
-        return [friend.friend_login for friend in self.friends]
+    # def get_followers_login_list(self):
+    #     return [follower.follower_login for follower in self.followers]
 
     def get_posts_for_user(self):
         return Posts.query.filter(
@@ -77,10 +79,10 @@ class Users(db.Model):
                 Posts.status == "group",
                 and_(
                     Posts.status == "private",
-                    Users.friends.any(
+                    Users.followers.any(
                         and_(
-                            Friends.friend_login == self.login,
-                            Friends.user_login == Posts.author_login
+                            Followers.follower_login == self.login,
+                            Followers.user_login == Posts.author_login
                         )
                     )
                 ),
@@ -113,14 +115,14 @@ class Users(db.Model):
                 flash("Invalid request", "error")
                 return Posts.query.filter(Posts.author_login == self.login).all()
 
-    def add_friend(self, friend_login):
-        friend = Friends(user_login=self.login, friend_login=friend_login)
-        db.session.add(friend)
+    def add_follower(self, follower_login):
+        follower = Followers(user_login=self.login, follower_login=follower_login)
+        db.session.add(follower)
         db.session.commit()
 
-    def delete_friend(self, friend_login):
-        friend = Friends.query.filter_by(user_login=self.login, friend_login=friend_login).first()
-        db.session.delete(friend)
+    def delete_follower(self, follower_login):
+        follower = Followers.query.filter_by(user_login=self.login, follower_login=follower_login).first()
+        db.session.delete(follower)
         db.session.commit()
 
     def change_user_data(self, name = None, surname = None, password = None):
@@ -132,13 +134,27 @@ class Users(db.Model):
             self.password = password
         db.session.commit()
 
-    def get_friend_to_me(self):
-        return [friend.friend_login for friend in self.friends]
+    def get_followers_list(self):
+        return [Users.get_user(follower.follower_login) for follower in self.followers]
 
-    def get_friend_by_me(self):
-        friend_by_me = Friends.query.filter_by(friend_login=self.login).all()
-        print([friend.user_login for friend in friend_by_me])
-        return [friend.user for friend in friend_by_me]
+    def get_followers_login_list(self):
+        return [follower.follower_login for follower in self.followers]
+
+    def get_following_list(self):
+        return [Users.get_user(following.user_login) for following in self.following]
+
+    def get_following_login_list(self):
+        return [follower.user_login for follower in self.following]
+
+    def managed_groups(self):
+        admin_groups = []
+
+        for group in self.groups:
+            group_user = db.session.query(GroupsUsers).filter_by(user_login=self.login, group_id=group.id).first()
+            if group_user and group_user.role == 'admin':
+                admin_groups.append(group)
+
+        return admin_groups
 
 
 class Groups(db.Model):
@@ -273,9 +289,10 @@ class Posts(db.Model):
         db.session.commit()
 
     def share_post(self, sender_login, recipient_login):
-        share = Shares(posts_id=self.id, sender_login=sender_login, recipient_login=recipient_login)
+        share = Shares(post_id=self.id, sender_login=sender_login, recipient_login=recipient_login)
         db.session.add(share)
         db.session.commit()
+
     @staticmethod
     def get_post_or_404(id):
         return Posts.query.get_or_404(id)
@@ -314,7 +331,7 @@ class Comments(db.Model):
 
 class Shares(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True, index=True)
-    posts_id = db.Column(db.Integer,db.ForeignKey('posts.id',ondelete='CASCADE'),nullable=False)
+    post_id = db.Column(db.Integer,db.ForeignKey('posts.id',ondelete='CASCADE'),nullable=False)
     sender_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     recipient_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
@@ -324,6 +341,6 @@ class Shares(db.Model):
     shares_recipient = db.relationship('Users', single_parent=True, foreign_keys=[recipient_login], viewonly=True)
 
 
-class Friends(db.Model):
+class Followers(db.Model):
     user_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)
-    friend_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)
+    follower_login = db.Column(db.String(60),db.ForeignKey('users.login',ondelete='CASCADE'), primary_key = True)

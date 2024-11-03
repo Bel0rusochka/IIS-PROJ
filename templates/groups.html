@@ -9,8 +9,10 @@
         </a>
 		<div class="all-users">
 
-			<a href="{{ url_for('groups')}}"  id="myGroupsButton" class = 'butt-my-viewers passive'>All Groups</a>
-			<a href="{{ url_for('my_groups')}}" id="allGroupsButton" class = 'butt-my-viewers passive'>My Groups</a>
+			<a href="{{ url_for('groups')}}"  id="allGroupsButton" class = 'butt-my-viewers passive'>All Groups</a>
+			<a href="{{ url_for('following_groups')}}" id="followingGroupsButton" class = 'butt-my-viewers passive'>Following Groups</a>
+			<a href="{{ url_for('managed_groups')}}" id="managedGroupsButton" class = 'butt-my-viewers passive'>Managed Groups</a>
+
 			<a class="add-viewer-button" onclick="showAddViewerPopup()">Create Group</a>
 			<!-- Search Field -->
 			<div class="search">

@@ -8,6 +8,31 @@ import io
 
 def registrate_routes(app, db):
 
+    def add_previous_page():
+        if request.url == request.host_url:
+            session['previous_pages'] = []
+        if len(session['previous_pages']) == 0:
+            session['previous_pages'].append(request.url)
+            session.modified = True
+        elif request.url != session['previous_pages'][-1]:
+            session['previous_pages'].append(request.url)
+            session.modified = True
+
+    @app.before_request
+    def before_request():
+        if session.get('previous_pages') is None:
+            session['previous_pages'] = []
+
+    @app.route('/go_back')
+    def go_back():
+        if len(session['previous_pages']) > 0 and session['previous_pages'][-1] != request.referrer:
+            return redirect(session['previous_pages'].pop())
+        elif session['previous_pages'][-1] == request.referrer:
+            session['previous_pages'].pop()
+            session.modified = True
+            return redirect( session['previous_pages'].pop())
+        return redirect(url_for('index'))
+
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         if request.method == 'POST' and session.get('user') is None:
@@ -126,13 +151,16 @@ def registrate_routes(app, db):
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
         elif request.method == 'GET' and login == session['user']['login']:
+            add_previous_page()
             post_type = request.args.get('posts_type', 'not_group')
             posts = user.get_user_posts_by_privacy(post_type)
             return render_template("profile.html", user=user, posts=posts)
         else:
+            add_previous_page()
             active_user = Users.get_user_or_404(session['user']['login'])
             posts = active_user.get_profile_posts(login)
             return  render_template("profile.html", user=user, posts=posts)
+
 
     @app.route('/subscribe', methods=['GET', 'POST'])
     def subscribe():
@@ -143,17 +171,17 @@ def registrate_routes(app, db):
         if request.method == 'POST':
             user_login = request.form['user_login']
             user = Users.get_user_or_404(user_login)
-            friend_login = session['user']['login']
+            follower_login = session['user']['login']
 
             if user is None:
                 flash("User not found", "error")
-            elif user_login == friend_login:
+            elif user_login == follower_login:
                 flash("You can't subscribe to yourself", "error")
-            elif friend_login in user.get_friends_login_list():
-                flash("You are already friends", "error")
+            elif follower_login in user.get_followers_login_list():
+                flash("You are already followers", "error")
             else:
-                user.add_friend(friend_login)
-                flash("You are now friends", "success")
+                user.add_follower(follower_login)
+                flash("You are now followers", "success")
             return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 
@@ -166,17 +194,17 @@ def registrate_routes(app, db):
         if request.method == 'POST':
             user_login = request.form['user_login']
             user = Users.get_user_or_404(user_login)
-            friend_login = session['user']['login']
+            follower_login = session['user']['login']
 
             if user is None:
                 flash("User not found", "error")
-            elif user_login == friend_login:
+            elif user_login == follower_login:
                 flash("You can't unsubscribe from yourself", "error")
-            elif friend_login not in user.get_friends_login_list():
-                flash("You are not friends", "error")
+            elif follower_login not in user.get_followers_login_list():
+                flash("You are not followers", "error")
             else:
-                user.delete_friend(friend_login)
-                flash("You are not friends anymore", "success")
+                user.delete_follower(follower_login)
+                flash("You are not followers anymore", "success")
             return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 
@@ -197,10 +225,9 @@ def registrate_routes(app, db):
             group_name = request.form['name'].strip()
             group_description = request.form['description'].strip()
 
-
             if group_name == '':
                 flash("Group name is empty", "error")
-            elif "@" in group_name or " " in group_name:
+            elif "@" in group_name:
                 flash("Group name is invalid", "error")
             elif len(group_name) > 60:
                 flash("Group name is too long", "error")
@@ -250,35 +277,54 @@ def registrate_routes(app, db):
     def shares():
         if session.get('user') is None:
             return redirect(url_for('login'))
+
+        add_previous_page()
+
         shares_received = Shares.query.filter_by(recipient_login=session['user']['login']).all()
         shares_sent = Shares.query.filter_by(sender_login=session['user']['login']).all()
-        return '''
-        Shares received: <ul>''' + ''.join([f'<li><a href="{url_for("post", post_id=share.posts_id)}">{share.posts_id}</a></li>' for share in shares_received]) + '''</ul>
-        Shares sent: <ul>''' + ''.join([f'<li><a href="{url_for("post", post_id=share.posts_id)}">{share.posts_id}</a></li>' for share in shares_sent]) + '''</ul>
-        '''
+        return render_template('shares.html', shares=shares_received)
+
+    @app.route('/shares/sent')
+    def shares_sent():
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+
+        add_previous_page()
+        shares = Shares.query.filter_by(sender_login=session['user']['login']).all()
+        return render_template('shares.html', shares=shares)
 
     @app.route('/users')
     def users():
         if session.get('user') is None:
             return redirect(url_for('login'))
+        add_previous_page()
         users = Users.query.all()
         return render_template('users.html', users=users)
 
-    @app.route('/users/friends')
-    def friends():
+    @app.route('/users/followers')
+    def followers():
         if session.get('user') is None:
             return redirect(url_for('login'))
+        add_previous_page()
         user = Users.get_user_or_404(session['user']['login'])
-        return render_template('users.html', users=user.get_friend_by_me())
+        return render_template('users.html', users=user.get_followers_list())
+
+    @app.route('/users/following')
+    def following():
+        if session.get('user') is None:
+            return redirect(url_for('login'))
+        add_previous_page()
+        user = Users.get_user_or_404(session['user']['login'])
+        return render_template('users.html', users=user.get_following_list())
+
 
     @app.route('/groups', methods=['GET', 'POST'])
     def groups():
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-
+        add_previous_page()
         groups = Groups.query.all()
-
         return render_template('groups.html',groups=groups)
 
     @app.route('/create_group', methods=['GET', 'POST'])
@@ -295,7 +341,7 @@ def registrate_routes(app, db):
             if group_name == '':
                 flash("Group name is empty", "error")
                 bad_data = True
-            elif "@" in group_name or " " in group_name:
+            elif "@" in group_name:
                 flash("Group name is invalid", "error")
                 bad_data = True
             elif len(group_name) > 60:
@@ -313,15 +359,23 @@ def registrate_routes(app, db):
                 return redirect(url_for('group', id=group.id))
         return redirect(url_for('groups'))
 
-    @app.route('/groups/my_groups', methods=['GET', 'POST'])
-    def my_groups():
+    @app.route('/groups/following_groups', methods=['GET', 'POST'])
+    def following_groups():
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
-
+        add_previous_page()
         user = Users.get_user_or_404(session['user']['login'])
-
         return render_template('groups.html',groups=user.groups )
+
+    @app.route('/managed_groups', methods=['GET', 'POST'])
+    def managed_groups():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+        add_previous_page()
+        user = Users.get_user_or_404(session['user']['login'])
+        return render_template('groups.html',groups=user.managed_groups())
 
     @app.route('/make_admin_group', methods=['GET', 'POST'])
     def make_admin_group():
@@ -400,11 +454,6 @@ def registrate_routes(app, db):
             return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 
-    @app.route('/index', methods=['GET'])
-    # def search_posts():
-    #
-    #     abort(404)
-
     @app.route('/delete_user', methods=['GET', 'POST'])
     def delete_user():
         if session.get('user') is None:
@@ -428,6 +477,7 @@ def registrate_routes(app, db):
         if login != session['user']['login']:
             flash("You are not allowed to edit this profile", "error")
             return redirect(url_for('setting', login=session['user']['login']))
+
 
         if request.method == 'POST':
 
@@ -475,6 +525,7 @@ def registrate_routes(app, db):
             post = user.get_posts_for_user().filter_by(id=post_id).first()
         if post is None:
             abort(404)
+        add_previous_page()
         return render_template("post.html", post=post, comments=post.comments.all())
 
     @app.route('/go_to_index')
@@ -600,7 +651,7 @@ def registrate_routes(app, db):
             if post.status == 'private':
                 author = post.author
 
-                if recipient_login in author.get_friends_login_list() or recipient_login == author.login:
+                if recipient_login in author.get_followers_login_list() or recipient_login == author.login:
                     post.share_post(sender_login, recipient_login)
                     flash("Post shared", "success")
                     return redirect(url_for('post', post_id=post.id))
@@ -610,9 +661,7 @@ def registrate_routes(app, db):
             else:
 
                 flash("Post shared", "success")
-                share = Shares(posts_id=post_id, sender_login=sender_login, recipient_login=recipient_login)
-                db.session.add(share)
-                db.session.commit()
+                post.share_post(sender_login, recipient_login)
 
             return redirect(url_for('post', post_id=post.id))
         abort(404)
@@ -636,25 +685,40 @@ def registrate_routes(app, db):
 
     @app.route('/')
     def index():
+        add_previous_page()
         if request.method == 'GET':
             session['index_params'] = request.args.to_dict()
             query = request.args.get('query', '').strip().replace(' ', '#')
+
             sort_by = request.args.get('sort_by', 'relevance')
+            filter_by = request.args.get('filter', 'all')
             tag_list = [tag.strip() for tag in query.split("#") if tag]
 
             if session.get('user') is not None:
                 user = Users.get_user_or_404(session['user']['login'])
                 results = user.get_posts_for_user_feed()
+
                 for tag in tag_list:
                     results = results.filter(Posts.associated_tags.any(Tags.name == tag))
                 results = results.all()
+                print(filter_by)
+                if filter_by == 'all':
+                    results = results
+                elif filter_by == 'followers':
+                    print(user.get_followers_login_list())
+                    results = [post for post in results if
+                               post.author_login in user.get_followers_login_list() and post.author_login != user.login]
+                elif filter_by == 'following':
+
+                    results = [post for post in results if
+                               post.author_login in user.get_following_login_list() and post.author_login != user.login]
             else:
                 results = Posts.get_all_posts_by_privacy('public')
                 for tag in tag_list:
                     results = results.filter(Posts.associated_tags.any(Tags.name == tag))
                 results = results.all()
 
-            if sort_by == 'popularity':
+            if sort_by == 'shares':
                 results = sorted(results, key=lambda post: post.shares_count(), reverse=True)
             elif sort_by == 'date':
                 results = sorted(results, key=lambda post: post.date, reverse=True)
@@ -662,6 +726,9 @@ def registrate_routes(app, db):
                 results = sorted(results, key=lambda post: post.like_count(), reverse=True)
             elif sort_by == 'comments':
                 results = sorted(results, key=lambda post: post.comments_count(), reverse=True)
+
+
+
             return render_template("index.html", posts=results)
         else:
             if session.get('user') is not None:

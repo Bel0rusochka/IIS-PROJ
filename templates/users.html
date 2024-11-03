@@ -8,9 +8,9 @@
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
         <div class="all-users">
-            <a href="{{ url_for('users')}}"  id="myGroupsButton" class = 'butt-my-viewers passive'>All Users</a>
-			<a href="{{ url_for('friends')}}" id="allGroupsButton" class = 'butt-my-viewers passive'>My Friends</a>
-
+            <a href="{{ url_for('users')}}"  id="allUsersButton" class = 'butt-my-viewers passive'>All Users</a>
+			<a href="{{ url_for('following')}}" id="myFollowingButton" class = 'butt-my-viewers passive'>My Following</a>
+            <a href="{{ url_for('followers')}}" id="myFollowersButton" class = 'butt-my-viewers passive'>My Followers</a>
             <!-- Search Field -->
 			<div class="search">
 				<div class="search-text">Search...</div>
