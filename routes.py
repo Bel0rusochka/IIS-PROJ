@@ -694,20 +694,27 @@ def registrate_routes(app, db):
     def upload():
         if session.get('user') is not None:
             if request.method == 'POST':
-                text = request.form['text']
+                text = request.form['text'].strip()
                 status = request.form['privacy']
                 image = request.files['image']
-
                 tags = request.form['tags'].strip()
                 tags = list(filter(None, tags.split('#')))
                 hash_count = request.form['tags'].count('#')
+                bad_data = False
+
                 if hash_count != (len(tags)) and not request.form['tags'].startswith('#'):
                     flash("Tags should start with # and be separated by #", "error")
+                    bad_data = True
                 elif hash_count != (len(tags)):
                     flash("Tags should be separated by #", "error")
-                else:
+                    bad_data = True
+
+                if len(text) > 1000:
+                    flash("Text is too long", "error")
+                    bad_data = True
+
+                if not bad_data:
+                    flash("Post created", "success")
                     Posts.create_post(session['user']['login'], status, text, transform_images(image),tags)
                     return redirect(url_for('index'))
-
-        flash("You are not logged in", "error")
         return redirect(url_for('index'))
