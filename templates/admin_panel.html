@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block content %}
+    <div class="viewers">
+        <a href="{{ url_for('index') }}">
+            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+        </a>
+        <div class="all-users">
+
+            <a href="{{ url_for('admin_panel_users')}}"  id="usersButton" class = 'butt-my-viewers passive'>Users</a>
+			<a href="{{ url_for('admin_panel_groups')}}" id="groupsButton" class = 'butt-my-viewers passive'>Groups</a>
+            <a href="{{ url_for('admin_panel_posts')}}"  id="postsButton" class = 'butt-my-viewers passive'>Posts</a>
+			<a href="{{ url_for('admin_panel_comments')}}" id="commentsButton" class = 'butt-my-viewers passive'>Comments</a>
+            <a href="{{ url_for('admin_panel_tags')}}"  id="tagsButton" class = 'butt-my-viewers passive'>Tags</a>
+
+            <!-- Loop through users from the database -->
+            <div class="users" id="usersList">
+                {% for element in elements %}
+                    {% if panel_type == 'users' and element.login != session.user.login %}
+                        <a href="{{ url_for('profile', login=element.login) }}" class="user">
+                            <div class="user">
+                                <img class="avatar" alt="" src="{{ element.avatar_url or '../static/images/no_avatar.svg' }}">
+                                <div class="name-user">
+                                    <div class="user-login">@{{ element.login }}</div>
+                                    <div class="user-email">Email: {{ element.mail }}</div>
+                                    <div class="user-role">Role: {{ element.role }}</div>
+                                    <div class="user-role">Banned: {{ element.is_banned }}</div>
+                                </div>
+                            </div>
+                        </a>
+                        <form method="POST" action="{{ url_for('admin_panel_users') }}">
+                            <input type="hidden" name="user_login" value="{{ element.login }}">
+
+
+
+                            {% if session.user.role == 'admin' %}
+                                {% if element.role == 'user' and not element.is_banned %}
+                                    <button type="submit" name="action" value="make_moderator" class="moderate">Make Moderator</button>
+                                    <button type="submit" name="action" value="make_admin" class="admin">Make Admin</button>
+                                    <button type="submit" name="action" value="delete" class="delete">Delete</button>
+                                {% elif element.role == 'moderator' %}
+                                    <button type="submit" name="action" value="make_user" class="user">Make User</button>
+                                    <button type="submit" name="action" value="make_admin" class="admin">Make Admin</button>
+                                    <button type="submit" name="action" value="delete" class="delete">Delete</button>
+                                {% endif %}
+
+                            {% endif %}
+
+                            {% if element.role != 'admin' and ((session.user.role == 'moderator' and element.role != 'moderator') or session.user.role == 'admin') %}
+                                {% if element.is_banned %}
+                                    <button type="submit" name="action" value="unban" class="unban">Unban</button>
+                                {% else %}
+                                    <button type="submit" name="action" value="ban" class="ban">Ban</button>
+                                {% endif %}
+                            {% endif %}
+
+                        </form>
+
+
+
+                    {% elif panel_type == 'groups' %}
+                        <a href="{{ url_for('group', id=element.id) }}" class="user">
+                            <div class="user">
+                                <img class="avatar" alt="" src="{{ element.avatar_url or '../static/images/no_avatar.svg' }}">
+                                <div class="name-user">
+                                    <div class="usser-name">{{ element.name }}</div>
+                                    <div class="user-name">Members: {{ element.user_count() }}</div>
+                                </div>
+                            </div>
+                        </a>
+                        <form method="POST" action="{{ url_for('admin_panel_groups') }}">
+                            <input type="hidden" name="group_id" value="{{ element.id }}">
+                            <button type="submit" class="subscribe">Delete</button>
+                        </form>
+
+                    {% elif panel_type == 'posts' %}
+                        <a href="{{ url_for('post', post_id=element.id) }}" class="user">
+                            <div class="user">
+                                <img class="avatar" alt="" src="{{ url_for('image', id=element.id) }}">
+                                <div class="name-user">
+                                    <div class="user-name">Author: {{ element.author_login }}</div>
+                                    <div class="user-name">Date: {{ element.date.strftime("%d %B %Y") }}</div>
+                                    <div class="user-name">Likes: {{ element.like_count() }}</div>
+                                    <div class="user-name">Shares: {{ element.shares_count() }}</div>
+                                    <div class="user-name">Comments: {{ element.comments_count() }}</div>
+                                </div>
+                            </div>
+                        </a>
+                        <form method="POST" action="{{ url_for('admin_panel_posts') }}">
+                            <input type="hidden" name="post_id" value="{{ element.id }}">
+                            <button type="submit" class="subscribe">Delete</button>
+                        </form>
+                    {% elif panel_type == 'comments' %}
+                        <a href="{{ url_for('post', post_id=element.post_id) }}" class="user">
+                            <div class="user">
+                                <img class="avatar" alt="" src="{{ url_for('image', id=element.post_id) }}">
+                                <div class="name-user">
+                                    <div class="user-name">Author: {{ element.author_login }}</div>
+                                    <div class="user-name">Date: {{ element.date.strftime("%d %B %Y") }}</div>
+                                    <div class="user-name">Text: {{ element.text }}</div>
+                                </div>
+                            </div>
+                        </a>
+                        <form method="POST" action="{{ url_for('admin_panel_comments') }}">
+                            <input type="hidden" name="comment_id" value="{{ element.id }}">
+                            <button type="submit" class="subscribe">Delete</button>
+                        </form>
+                    {% elif panel_type == 'tags' %}
+                        <a href="{{ url_for('index', query=element.name) }}" class="user">
+                            <div class="user">
+                                <div class="name-user">
+                                    <div class="user-name">#{{ element.name }}</div>
+                                    <div class="user-name">Posts: {{ element.posts_count() }}</div>
+                                </div>
+                            </div>
+                        </a>
+                        <form method="POST" action="{{ url_for('admin_panel_tags') }}">
+                            <input type="hidden" name="tag_name" value="{{ element.name }}">
+                            <button type="submit" class="subscribe">Delete</button>
+                        </form>
+                    {% endif %}
+
+                <div class="line"></div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

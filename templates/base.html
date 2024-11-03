@@ -23,8 +23,8 @@
         <a href="{{ url_for('groups') }}" class="projekt-sidebar-item">Groups</a> 
         <a href="{{ url_for('shares') }}" class="projekt-sidebar-item">Shares</a> 
         <a href="{{ url_for('setting', login=session.user.login) }}" class="projekt-sidebar-item">Settings</a> 
-        {% if session.user.role == 'admin' %}
-          <a href="{{ url_for('admin') }}" class="projekt-sidebar-item" style="color: red;">Admin</a> <!-- Admin link -->
+        {% if session.user.role == 'admin' or session.user.role == 'moderator' %}
+          <a href="{{ url_for('admin_panel_users') }}" class="projekt-sidebar-item" style="color: red;">Admin</a> <!-- Admin link -->
         {% endif %}
         <a href="{{ url_for('logout') }}" class="projekt-sidebar-item">Log Out</a> 
       </div>

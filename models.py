@@ -125,13 +125,17 @@ class Users(db.Model):
         db.session.delete(follower)
         db.session.commit()
 
-    def change_user_data(self, name = None, surname = None, password = None):
+    def change_user_data(self, name = None, surname = None, password = None, role = None, banned = None):
         if name:
             self.name = name
         if surname:
             self.surname = surname
         if password:
             self.password = password
+        if role:
+            self.role = role
+        if banned is not None:
+            self.is_banned = banned
         db.session.commit()
 
     def get_followers_list(self):
@@ -172,7 +176,6 @@ class Groups(db.Model):
         return len(self.posts)
 
     def user_count(self):
-        print(self.users)
         return len(self.users)
 
     def get_users_with_role(self):
@@ -195,8 +198,10 @@ class Groups(db.Model):
         self.description = description
         db.session.commit()
 
-    def delete_group(self):
-        db.session.delete(self)
+    @staticmethod
+    def delete_group(id):
+        group = Groups.query.get(id)
+        db.session.delete(group)
         db.session.commit()
 
     def make_admin(self, login):
@@ -228,6 +233,14 @@ class Tags(db.Model):
 
     associated_post = db.relationship('Posts',secondary=PostsTags, viewonly=True)
 
+    def posts_count(self):
+        return len(self.associated_post)
+
+    @staticmethod
+    def delete_tag(name):
+        tag = Tags.query.get(name)
+        db.session.delete(tag)
+        db.session.commit()
 
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True)
@@ -261,8 +274,10 @@ class Posts(db.Model):
             self.likes.append(user)
             db.session.commit()
 
-    def delete_post(self):
-        db.session.delete(self)
+    @staticmethod
+    def delete_post(id):
+        post = Posts.query.get(id)
+        db.session.delete(post)
         db.session.commit()
 
     def add_comment(self, text, author_login):
@@ -296,6 +311,7 @@ class Posts(db.Model):
     @staticmethod
     def get_post_or_404(id):
         return Posts.query.get_or_404(id)
+
     @staticmethod
     def get_all_posts_by_privacy(privacy):
         match privacy:
@@ -324,8 +340,10 @@ class Comments(db.Model):
     def get_comment_or_404(id):
         return Comments.query.get_or_404(id)
 
-    def delete_comment(self):
-        db.session.delete(self)
+    @staticmethod
+    def delete_comment(id):
+        comment = Comments.query.get(id)
+        db.session.delete(comment)
         db.session.commit()
 
 
