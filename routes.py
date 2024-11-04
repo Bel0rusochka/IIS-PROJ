@@ -157,7 +157,7 @@ def registrate_routes(app, db):
             flash("You are banned", "error")
             return redirect(url_for('index'))
 
-        if request.method == 'GET' and login == active_user:
+        if request.method == 'GET' and login == active_user.login:
             add_previous_page()
             post_type = request.args.get('posts_type', 'not_group')
             posts = user.get_user_posts_by_privacy(post_type)
@@ -168,8 +168,8 @@ def registrate_routes(app, db):
             return  render_template("profile.html", user=user, posts=posts)
 
 
-    @app.route('/subscribe', methods=['GET', 'POST'])
-    def subscribe():
+    @app.route('/follow', methods=['GET', 'POST'])
+    def follow():
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
@@ -191,8 +191,8 @@ def registrate_routes(app, db):
             return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 
-    @app.route('/unsubscribe', methods=['GET', 'POST'])
-    def unsubscribe():
+    @app.route('/unfollow', methods=['GET', 'POST'])
+    def unfollow():
         if session.get('user') is None:
             flash("You are not logged in", "error")
             return redirect(url_for('login'))
@@ -290,7 +290,7 @@ def registrate_routes(app, db):
             return redirect(url_for('index'))
 
         add_previous_page()
-        shares_received = Shares.query.filter_by(recipient_login=active_user).all()
+        shares_received = Shares.query.filter_by(recipient_login=active_user.login).all()
         return render_template('shares.html', shares=shares_received)
 
     @app.route('/shares/sent')
@@ -304,7 +304,7 @@ def registrate_routes(app, db):
             return redirect(url_for('index'))
 
         add_previous_page()
-        shares = Shares.query.filter_by(sender_login=active_user).all()
+        shares = Shares.query.filter_by(sender_login=active_user.login).all()
         return render_template('shares.html', shares=shares)
 
     @app.route('/users')
@@ -470,7 +470,7 @@ def registrate_routes(app, db):
         group = Groups.get_group_or_404(id)
         subscribers_dict = group.get_users_with_role()
         add_previous_page()
-        is_admin =  subscribers_dict.get(active_user) == 'admin'
+        is_admin =  subscribers_dict.get(active_user.login) == 'admin'
         return render_template("group.html", group=group, posts = group.posts, is_admin=is_admin, members=subscribers_dict.keys())
 
     @app.route('/leave_group', methods=['GET', 'POST'])
@@ -484,9 +484,8 @@ def registrate_routes(app, db):
             group = Groups.get_group_or_404(group_id)
             user = Users.get_user_or_404(session['user']['login'])
             group.delete_member_group(user)
-
             flash("You left the group", "success")
-            db.session.commit()
+
             return redirect(request.referrer or url_for('index'))
         return redirect(url_for('index'))
 

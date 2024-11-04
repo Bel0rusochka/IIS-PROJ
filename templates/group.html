@@ -16,12 +16,12 @@
   	<div class="profile">
 		<div class="my-profile">
 			<div class="fit-arrow">
-				<a href="{{ url_for('go_back') }}">
-					<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
-				  </a>
+					<a href="{{ url_for('go_back') }}">
+						<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
+				  	</a>
 				
 					<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
-		  </div>
+		  	</div>
 			<div class="white">
 			<div class="usernameedit">
 				<img class="generic-avatar-icon" alt="" src="../static/images/no_avatar.svg">
@@ -30,6 +30,8 @@
 					<div class="group-name" style="font-weight: bold;">{{group.name}}</div>
 					<div class="group-date">Created: {{group.date.strftime("%d %B %Y")}}</div>
 					<div class="group-description">Description: {{group.description}}</div>
+					<div class="group-members">Members: {{group.user_count()}}</div>
+					<div class="group-posts">Posts: {{group.posts_count()}}</div>
 
 				</div>
 				{% if is_admin %}

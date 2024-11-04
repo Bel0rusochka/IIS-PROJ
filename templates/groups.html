@@ -28,7 +28,7 @@
 						<img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/no_avatar.svg' }}">
 						<div class="name-user">
 							<div class="user-name">{{ group.name }}</div>
-							<div class="subscribers">Subscribers: {{ group.user_count() }}</div>
+							<div class="subscribers">Members: {{ group.user_count() }}</div>
 							{% if not group.is_member(session.user.login) %}
 								<form method="POST" action="{{ url_for('join_group', id=group.id) }}">
 									<input type="hidden" name="group_id" value="{{ group.id }}">

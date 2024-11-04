@@ -150,6 +150,15 @@ class Users(db.Model):
     def get_following_login_list(self):
         return [follower.user_login for follower in self.following]
 
+    def get_followers_count(self):
+        return len(self.followers.all())
+
+    def get_following_count(self):
+        return len(self.following.all())
+
+    def get_posts_count(self):
+        return len(self.posts)
+
     def managed_groups(self):
         admin_groups = []
 
@@ -172,7 +181,7 @@ class Groups(db.Model):
     def is_member(self, login):
         return login in [user.login for user in self.users]
 
-    def post_count(self):
+    def posts_count(self):
         return len(self.posts)
 
     def user_count(self):

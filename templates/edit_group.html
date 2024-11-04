@@ -14,54 +14,53 @@
 <body>
   	
   	<div class="edit-profile2">
-    		 <div class="pagesignup-bluefit">
-				<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
-			  </div>
-    		<div class="edit_information">
+		<div class="pagesignup-bluefit">
+			<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
+		</div>
+		<a href="{{ url_for('go_back') }}">
+			<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
+		</a>
+		<div class="edit_information">
 
-				<form method="POST" action="{{ url_for('edit_group', id = group.id) }}">
-					<div class="name">
-						<input type="text" name="name" class="name" value="{{ group.name }}">
-					</div>
+			<form method="POST" action="{{ url_for('edit_group', id = group.id) }}">
+				<div class="name">
+					<input type="text" name="name" class="name" value="{{ group.name }}">
+				</div>
 
-					<div class="description">
-						<input type="text" name="description" class="description" value="{{ group.description }}">
-					</div>
+				<div class="description">
+					<input type="text" name="description" class="description" value="{{ group.description }}">
+				</div>
 
-					<button type="submit" class="save-changes">Save changes</button>
+				<button type="submit" class="save-changes">Save changes</button>
 
+			</form>
+
+				<form method="POST" action="{{ url_for('delete_group') }}">
+					<input type="hidden" name="group_id" value="{{ group.id }}">
+					<button type="submit" class="save-changes">Delete group</button>
 				</form>
 
-					<form method="POST" action="{{ url_for('delete_group') }}">
-						<input type="hidden" name="group_id" value="{{ group.id }}">
-						<button type="submit" class="save-changes">Delete group</button>
-					</form>
+				<h2>Members</h2>
+				{% for login,role in users.items() %}
+					<div class="user">
+						<a href="{{ url_for('profile', login=login ) }}" class="user-name">{{ login }} {{role}}</a>
 
-					<h2>Members</h2>
-					{% for login,role in users.items() %}
-						<div class="user">
-							<a href="{{ url_for('profile', login=login ) }}" class="user-name">{{ login }} {{role}}</a>
+						{% if role == 'member' %}
+							<form method="POST" action="{{ url_for('make_admin_group') }}">
+								<input type="hidden" name="user_login" value="{{ login }}">
+								<input type="hidden" name="group_id" value="{{ group.id }}">
+								<button type="submit">Make admin</button>
+							</form>
+							<form method="POST" action="{{ url_for('delete_member_group') }}">
+								<input type="hidden" name="user_login" value="{{ login }}">
+								<input type="hidden" name="group_id" value="{{ group.id }}">
+								<button type="submit">Delete user</button>
+							</form>
 
-							{% if role == 'member' %}
-								<form method="POST" action="{{ url_for('make_admin_group') }}">
-									<input type="hidden" name="user_login" value="{{ login }}">
-									<input type="hidden" name="group_id" value="{{ group.id }}">
-									<button type="submit">Make admin</button>
-								</form>
-								<form method="POST" action="{{ url_for('delete_member_group') }}">
-									<input type="hidden" name="user_login" value="{{ login }}">
-									<input type="hidden" name="group_id" value="{{ group.id }}">
-									<button type="submit">Delete user</button>
-								</form>
-
-							{% endif %}
-						</div>
-					{% endfor %}
-    		</div>
-    		<img class="arrow-icon2" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
-    		
-  	</div>
-  	
-  	
-  	</body>
+						{% endif %}
+					</div>
+				{% endfor %}
+		</div>
+	</div>
+</body>
 </html>

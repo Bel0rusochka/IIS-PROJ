@@ -27,6 +27,9 @@
 						<div class="user-info">
 							<div class="user-name">{{ user.name }} {{ user.surname }}</div>
 							<div class="user-login">@{{ user.login }}</div>
+							<div class="user-followers">Followers: {{ user.get_followers_count() }}</div>
+							<div class="user-following">Following: {{ user.get_following_count() }}</div>
+							<div class="user-posts">Posts: {{ user.get_posts_count() }}</div>
 						</div>
 						{% if session.user.login == user.login %}
 							<div class="button-group">
@@ -38,14 +41,14 @@
 							</div>
 						{% else %}
 							{% if session.user.login in user.get_followers_login_list() %}
-								<form method="POST" action="{{ url_for('unsubscribe') }}">
+								<form method="POST" action="{{ url_for('unfollow') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="subscribe">Unsubscribe</button>
+									<button type="submit" class="unfollow">Unfollow</button>
 								</form>
 							{% else %}
-								<form method="POST" action="{{ url_for('subscribe') }}">
+								<form method="POST" action="{{ url_for('follow') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="subscribe">Subscribe</button>
+									<button type="submit" class="follow">Follow</button>
 								</form>
 							{% endif %}
 						{% endif %}
