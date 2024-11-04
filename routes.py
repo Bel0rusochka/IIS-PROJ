@@ -4,13 +4,41 @@ from models import *
 import hashlib
 from PIL import Image as PILImage
 import io
+from functools import wraps
 
 
 def registrate_routes(app, db):
 
+    def transform_images(image):
+        img = PILImage.open(image)
+        img = img.convert('RGB')
+        img.thumbnail((600, 600), PILImage.LANCZOS)
+
+        img_io = io.BytesIO()
+        img.save(img_io, 'JPEG', quality=100)
+        img_io.seek(0)
+        return img_io.read()
+
+    def require_login_and_not_banned(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if session.get('user') is None:
+                flash("You are not logged in", "error")
+                return redirect(url_for('login'))
+
+            active_user = Users.get_user_or_404(session['user']['login'])
+            if active_user.is_banned:
+                flash("You are banned", "error")
+                return redirect(url_for('banned'))
+
+            return f(*args, **kwargs)
+
+        return decorated_function
+
     def add_previous_page():
         if request.url == request.host_url:
             session['previous_pages'] = []
+
         if len(session['previous_pages']) == 0:
             session['previous_pages'].append(request.url)
             session.modified = True
@@ -111,6 +139,7 @@ def registrate_routes(app, db):
                 bad_data = True
 
             if not bad_data:
+                # TODO change to session['user'] = login
                 session['user'] = {"login":login, "role": role, "name": email, "surname": surname, "mail": name}
                 password_db = hashlib.md5(password.encode()).hexdigest()
                 Users.add_user(login, email, password_db, name, surname,role)
@@ -137,6 +166,7 @@ def registrate_routes(app, db):
                 flash("Invalid password", "error")
             else:
                 flash("You are logged in", "success")
+                #TODO change to session['user'] = login
                 session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname, "mail": user.mail}
                 return redirect(url_for('index'))
             return render_template("login.html", previos_values=request_data)
@@ -146,17 +176,10 @@ def registrate_routes(app, db):
         return render_template("login.html")
 
     @app.route('/profile/<login>')
+    @require_login_and_not_banned
     def profile(login):
         user = Users.get_user_or_404(login)
-
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
 
         if request.method == 'GET' and login == active_user.login:
             add_previous_page()
@@ -171,10 +194,6 @@ def registrate_routes(app, db):
 
     @app.route('/follow', methods=['GET', 'POST'])
     def follow():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         if request.method == 'POST':
             user_login = request.form['user_login']
             user = Users.get_user_or_404(user_login)
@@ -190,14 +209,10 @@ def registrate_routes(app, db):
                 user.add_follower(follower_login)
                 flash("You are now followers", "success")
             return redirect(request.referrer or url_for('index'))
-        return redirect(url_for('index'))
+        abort(404)
 
     @app.route('/unfollow', methods=['GET', 'POST'])
     def unfollow():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         if request.method == 'POST':
             user_login = request.form['user_login']
             user = Users.get_user_or_404(user_login)
@@ -213,14 +228,12 @@ def registrate_routes(app, db):
                 user.delete_follower(follower_login)
                 flash("You are not followers anymore", "success")
             return redirect(request.referrer or url_for('index'))
-        return redirect(url_for('index'))
+        abort(404)
 
     @app.route('/edit_group/<int:id>', methods=['GET', 'POST'])
+    @require_login_and_not_banned
     def edit_group(id):
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
+        #TODO change function
         group = Groups.get_group_or_404(id)
         users_with_roles = group.get_users_with_role_group()
 
@@ -242,22 +255,16 @@ def registrate_routes(app, db):
                 flash("Group name updated", "success")
                 group.edit_group( request.form['name'], group.description)
 
-
             if len(group_description) > 60:
                 flash("Group description is too long", "error")
             elif group_description != group.description:
                 flash("Group description updated", "success")
                 group.edit_group(group.name, request.form['description'])
 
-
         return render_template("edit_group.html", group=group, users=users_with_roles, posts=group.posts)
 
     @app.route('/manage_users_group', methods=['GET', 'POST'])
     def manage_users_group():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         if request.method == 'POST':
             group_id = request.form['group_id']
             user_login = request.form['user_login']
@@ -278,155 +285,92 @@ def registrate_routes(app, db):
                 flash(f"User {user_login} is added to the group", "success")
 
             return redirect(request.referrer or url_for('edit_group', id=group_id))
-        return redirect(url_for('index'))
+        abort(404)
 
     @app.route('/manage_posts_group', methods=['GET', 'POST'])
     def manage_posts_group():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         if request.method == 'POST':
             group_id = request.form['group_id']
             post_id = request.form['post_id']
             action = request.form['action']
             group = Groups.get_group_or_404(group_id)
-            post = Posts.get_post_or_404(post_id)
 
             if action == "delete":
                 group.delete_post_group(post_id)
                 flash("Post deleted", "success")
             return redirect(url_for('edit_group', id=group_id))
-        return redirect(url_for('index'))
+        abort(404)
 
     @app.route('/delete_group', methods=['GET', 'POST'])
     def delete_group():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
         if request.method == 'POST':
             flash("Group deleted", "success")
             group_id = request.form['group_id']
             Groups.delete_group(group_id)
             return redirect(url_for('groups'))
-        return redirect(url_for('index'))
+        abort(404)
 
     @app.route('/shares')
+    @require_login_and_not_banned
     def shares():
-        if session.get('user') is None:
-            return redirect(url_for('login'))
-
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
         add_previous_page()
         shares_received = Shares.query.filter_by(recipient_login=active_user.login).all()
         return render_template('shares.html', shares=shares_received)
 
     @app.route('/shares/sent')
+    @require_login_and_not_banned
     def shares_sent():
-        if session.get('user') is None:
-            return redirect(url_for('login'))
 
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
         add_previous_page()
         shares = Shares.query.filter_by(sender_login=active_user.login).all()
         return render_template('shares.html', shares=shares)
 
     @app.route('/users')
+    @require_login_and_not_banned
     def users():
-        if session.get('user') is None:
-            return redirect(url_for('login'))
-        active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
         add_previous_page()
         users = Users.query.all()
         return render_template('users.html', users=users)
 
     @app.route('/users/followers')
+    @require_login_and_not_banned
     def followers():
-        if session.get('user') is None:
-            return redirect(url_for('login'))
-
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
         add_previous_page()
         return render_template('users.html', users=active_user.get_followers_list())
 
     @app.route('/users/following')
+    @require_login_and_not_banned
     def following():
-        if session.get('user') is None:
-            return redirect(url_for('login'))
-
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
         add_previous_page()
         return render_template('users.html', users=active_user.get_following_list())
 
-    @app.route('/groups', methods=['GET', 'POST'])
+    @app.route('/groups')
+    @require_login_and_not_banned
     def groups():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
-        active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
         add_previous_page()
         groups = Groups.query.all()
         return render_template('groups.html',groups=groups)
 
-    @app.route('/groups/following_groups', methods=['GET', 'POST'])
+    @app.route('/groups/following_groups')
+    @require_login_and_not_banned
     def following_groups():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
         add_previous_page()
         return render_template('groups.html', groups=active_user.groups)
 
-    @app.route('/managed_groups', methods=['GET', 'POST'])
+    @app.route('/managed_groups')
+    @require_login_and_not_banned
     def managed_groups():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
         add_previous_page()
         return render_template('groups.html', groups=active_user.managed_groups())
 
     @app.route('/create_group', methods=['GET', 'POST'])
     def create_group():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         if request.method == 'POST':
             group_name = request.form['group-name'].strip()
             group_description = request.form['group-description'].strip()
@@ -451,18 +395,13 @@ def registrate_routes(app, db):
                 group = Groups.create_group(group_name, group_description, user)
                 flash("Group created", "success")
                 return redirect(url_for('group', id=group.id))
-        return redirect(url_for('groups'))
+        abort(404)
 
     @app.route('/groups/<int:id>')
+    @require_login_and_not_banned
     def group(id):
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
+        #TODO change function
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
 
         group = Groups.get_group_or_404(id)
         subscribers_dict = group.get_users_with_role_group()
@@ -472,10 +411,6 @@ def registrate_routes(app, db):
 
     @app.route('/delete_user', methods=['GET', 'POST'])
     def delete_user():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         if request.method == 'POST':
             user_login = request.form['user_login']
             Users.delete_user(user_login)
@@ -485,23 +420,15 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/setting/<login>', methods=['GET', 'POST'])
+    @require_login_and_not_banned
     def setting(login):
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
 
         if login != active_user.login and active_user.role != 'admin':
             flash("You are not allowed to edit this profile", "error")
             return redirect(url_for('setting', login=active_user.login))
 
-
         if request.method == 'POST':
-
             user = Users.query.get(login)
             user_name = request.form['name'].strip()
             user_surname = request.form['surname'].strip()
@@ -546,7 +473,7 @@ def registrate_routes(app, db):
             active_user = Users.get_user_or_404(session['user']['login'])
             if active_user.is_banned:
                 flash("You are banned", "error")
-                return redirect(url_for('index'))
+                return redirect(url_for('banned'))
 
             post = active_user.get_posts_for_user().filter_by(id=post_id).first()
         if post is None:
@@ -578,18 +505,13 @@ def registrate_routes(app, db):
 
     @app.route('/delete_comment', methods=['GET', 'POST'])
     def delete_comment():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
-        comment = Comments.get_comment_or_404(request.form['comment_id'])
-
-        if request.method == 'POST' and  comment.author_login == session['user']['login']:
-
-            Comments.delete_comment(request.form['comment_id'])
-            flash("Comment deleted", "success")
-            return redirect(url_for('post', post_id=comment.post_id))
-        return "Edit comment"
+        if request.method == 'POST':
+            comment = Comments.get_comment_or_404(request.form['comment_id'])
+            if comment.author_login == session['user']['login']:
+                Comments.delete_comment(request.form['comment_id'])
+                flash("Comment deleted", "success")
+                return redirect(url_for('post', post_id=comment.post_id))
+        abort(404)
 
     @app.route('/like', methods=['POST'])
     def like_post():
@@ -605,15 +527,10 @@ def registrate_routes(app, db):
             post.like_post(user_login)
 
             return redirect(url_for('post', post_id=post.id))
-        flash("Invalid request", "error")
-        return redirect(url_for('index'))
+        abort(404)
 
     @app.route('/delete_post', methods=['POST'])
     def delete_post():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
         if request.method == 'POST':
             post_id = request.form['post_id']
             post = Posts.get_post_or_404(post_id)
@@ -621,18 +538,13 @@ def registrate_routes(app, db):
                 Posts.delete_post(post_id)
                 flash("Post deleted", "success")
             return redirect(url_for('index'))
-        return "Delete post"
+        abort(404)
 
     @app.route('/edit_post/<int:post_id>', methods=['GET', 'POST'])
+    @require_login_and_not_banned
     def edit_post(post_id):
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
         active_user = Users.get_user_or_404(session['user']['login'])
         post = Posts.get_post_or_404(post_id)
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
 
         if Posts.get_post_or_404(post_id).author_login != active_user.login:
             flash("You are not the author of this post", "error")
@@ -723,7 +635,7 @@ def registrate_routes(app, db):
     def index():
         if session.get('user') is not None and Users.get_user(session['user']['login']).is_banned:
             flash("You are banned", "error")
-            return redirect(url_for('logout'))
+            return redirect(url_for('banned'))
 
         add_previous_page()
         if request.method == 'GET':
@@ -774,12 +686,10 @@ def registrate_routes(app, db):
                 return render_template("index.html", posts = Posts.get_all_posts_by_privacy('public'))
 
     @app.route('/admin/users', methods=['GET', 'POST'])
+    @require_login_and_not_banned
     def admin_panel_users():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
         if session['user']['role'] != 'admin' and session['user']['role'] != 'moderator':
-            flash("You are not an admin", "error")
+            flash("You are not an admin or moderator", "error")
             return redirect(url_for('index'))
         if request.method == 'POST':
             user_login = request.form['user_login']
@@ -807,12 +717,10 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Users.query.all(), panel_type = 'users')
 
     @app.route('/admin/groups', methods=['POST', 'GET'])
+    @require_login_and_not_banned
     def admin_panel_groups():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
         if session['user']['role'] != 'admin' and session['user']['role'] != 'moderator':
-            flash("You are not an admin", "error")
+            flash("You are not an admin or moderator", "error")
             return redirect(url_for('index'))
         if request.method == 'POST':
             group_id = request.form['group_id']
@@ -822,10 +730,8 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Groups.query.all(), panel_type = 'groups')
 
     @app.route('/admin/posts', methods=['POST', 'GET'])
+    @require_login_and_not_banned
     def admin_panel_posts():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
         if session['user']['role'] != 'admin' and session['user']['role'] != 'moderator':
             flash("You are not an admin", "error")
             return redirect(url_for('index'))
@@ -837,12 +743,10 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Posts.query.all(), panel_type = 'posts')
 
     @app.route('/admin/tags', methods=['POST', 'GET'])
+    @require_login_and_not_banned
     def admin_panel_tags():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
         if session['user']['role'] != 'admin' and session['user']['role'] != 'moderator':
-            flash("You are not an admin", "error")
+            flash("You are not an admin or moderator", "error")
             return redirect(url_for('index'))
         if request.method == 'POST':
             tag_name = request.form['tag_name'].strip()
@@ -852,12 +756,10 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Tags.query.all(), panel_type = 'tags')
 
     @app.route('/admin/comments', methods=['POST', 'GET'])
+    @require_login_and_not_banned
     def admin_panel_comments():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
         if session['user']['role'] != 'admin' and session['user']['role'] != 'moderator':
-            flash("You are not an admin", "error")
+            flash("You are not an admin or moderator", "error")
             return redirect(url_for('index'))
         add_previous_page()
         if request.method == 'POST':
@@ -866,41 +768,38 @@ def registrate_routes(app, db):
             flash("Comment deleted", "success")
         return render_template("admin_panel.html", elements=Comments.query.all(), panel_type = 'comments')
 
-    def transform_images(image):
-        img = PILImage.open(image)
-        img = img.convert('RGB')
-        img.thumbnail((600, 600), PILImage.LANCZOS)
-
-        img_io = io.BytesIO()
-        img.save(img_io, 'JPEG', quality=100)
-        img_io.seek(0)
-        return img_io.read()
-
     @app.route('/upload', methods=['POST', 'GET'])
+    @require_login_and_not_banned
     def upload():
-        if session.get('user') is not None:
-            if request.method == 'POST':
-                text = request.form['text'].strip()
-                status = request.form['privacy']
-                image = request.files['image']
-                tags = request.form['tags'].strip()
-                tags = list(filter(None, tags.split('#')))
-                hash_count = request.form['tags'].count('#')
-                bad_data = False
+        if request.method == 'POST':
+            text = request.form['text'].strip()
+            status = request.form['privacy']
+            image = request.files['image']
+            tags = request.form['tags'].strip()
+            tags = list(filter(None, tags.split('#')))
+            hash_count = request.form['tags'].count('#')
+            bad_data = False
 
-                if hash_count != (len(tags)) and not request.form['tags'].startswith('#'):
-                    flash("Tags should start with # and be separated by #", "error")
-                    bad_data = True
-                elif hash_count != (len(tags)):
-                    flash("Tags should be separated by #", "error")
-                    bad_data = True
+            if hash_count != (len(tags)) and not request.form['tags'].startswith('#'):
+                flash("Tags should start with # and be separated by #", "error")
+                bad_data = True
+            elif hash_count != (len(tags)):
+                flash("Tags should be separated by #", "error")
+                bad_data = True
 
-                if len(text) > 1000:
-                    flash("Text is too long", "error")
-                    bad_data = True
+            if len(text) > 1000:
+                flash("Text is too long", "error")
+                bad_data = True
 
-                if not bad_data:
-                    flash("Post created", "success")
-                    Posts.create_post(session['user']['login'], status, text, transform_images(image),tags)
-                    return redirect(url_for('index'))
-        return redirect(url_for('index'))
+            if not bad_data:
+                flash("Post created", "success")
+                Posts.create_post(session['user']['login'], status, text, transform_images(image),tags)
+                return redirect(url_for('index'))
+
+    @app.route('/banned')
+    def banned():
+        return '''
+        <h1>You are banned</h1>
+        <p>Sorry, you are banned</p>
+        <a href="/logout">Logout</a>
+        '''
