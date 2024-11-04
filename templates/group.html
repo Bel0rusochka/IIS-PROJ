@@ -16,11 +16,11 @@
   	<div class="profile">
 		<div class="my-profile">
 			<div class="fit-arrow">
-					<a href="{{ url_for('go_back') }}">
-						<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
-				  	</a>
-				
-					<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
+				<a href="{{ url_for('go_back') }}">
+					<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
+				</a>
+
+				<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
 		  	</div>
 			<div class="white">
 			<div class="usernameedit">
@@ -30,24 +30,24 @@
 					<div class="group-name" style="font-weight: bold;">{{group.name}}</div>
 					<div class="group-date">Created: {{group.date.strftime("%d %B %Y")}}</div>
 					<div class="group-description">Description: {{group.description}}</div>
-					<div class="group-members">Members: {{group.user_count()}}</div>
+					<div class="group-members">Members: {{group.members_count()}}</div>
 					<div class="group-posts">Posts: {{group.posts_count()}}</div>
 
 				</div>
 				{% if is_admin %}
 					<a class="edit-profile" id="editProfileButton" href="{{url_for('edit_group', id = group.id)}}">Edit Group</a>
 				{% endif %}
-				{% if session.user.login in members %}
-					<form method="POST" action="{{url_for('leave_group', id = group.id)}}">
+
+					<form method="POST" action="{{url_for('manage_users_group')}}">
 						<input type="hidden" name="group_id" value="{{group.id}}">
-						<button type="submit" class="edit-profile" id="leaveProfileButton">Leave Group</button>
+						<input type="hidden" name="user_login" value="{{session.user.login}}">
+						{% if group.is_subscribed(session.user.login) %}
+							<button type="submit" class="edit-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
+						{% else %}
+							<button type="submit" class="edit-profile" id="joinProfileButton" name="action" value="add">Join Group</button>
+						{% endif %}
 					</form>
-				{% else %}
-						<form method="POST" action="{{url_for('join_group', id = group.id)}}">
-							<input type="hidden" name="group_id" value="{{group.id}}">
-							<button type="submit" class="edit-profile" id="joinProfileButton">Join Group</button>
-						</form>
-				{% endif %}
+
 
 			</div>
 			</div>

@@ -6,7 +6,7 @@ from sqlalchemy import or_, and_
 GroupsUsers = db.Table('group_users',
     db.Column('user_login', db.String(60), db.ForeignKey('users.login', ondelete='CASCADE'), primary_key=True),
     db.Column('group_id', db.Integer, db.ForeignKey('groups.id', ondelete='CASCADE'), primary_key=True),
-    db.Column('role', db.String(10), nullable=False, default='member')
+    db.Column('role', db.String(10), nullable=False, default='pending')
 )
 
 
@@ -179,19 +179,29 @@ class Groups(db.Model):
     users = db.relationship('Users', secondary=GroupsUsers)
 
     def is_member(self, login):
-        return login in [user.login for user in self.users]
+        return login in [user.login for user in self.users if user.role != 'pending']
+
+    def is_subscribed(self, login):
+        return login in [user.login for user in self.users ]
 
     def posts_count(self):
         return len(self.posts)
 
-    def user_count(self):
-        return len(self.users)
+    def members_count(self):
+        members = [user for user in self.users if user.role != 'pending']
+        return len(members)
 
-    def get_users_with_role(self):
+    def get_users_with_role_group(self):
         return dict(db.session.query(
             GroupsUsers.c.user_login,
             GroupsUsers.c.role
         ).filter(GroupsUsers.c.group_id == self.id).all())
+
+    def get_members_group(self):
+        return [user for user in self.users if user.role != 'member']
+
+    def get_pending_group(self):
+        return [user for user in self.users if user.role == 'pending']
 
     @staticmethod
     def create_group(name, description, user):
@@ -199,7 +209,7 @@ class Groups(db.Model):
         group.users.append(user)
         db.session.add(group)
         db.session.commit()
-        group.make_admin(user.login)
+        group.make_admin_group(user.login)
         return group
 
     def edit_group(self, name, description):
@@ -213,7 +223,7 @@ class Groups(db.Model):
         db.session.delete(group)
         db.session.commit()
 
-    def make_admin(self, login):
+    def make_admin_group(self, login):
         db.session.execute(
             GroupsUsers.update().values(
                 role='admin'
@@ -225,15 +235,32 @@ class Groups(db.Model):
     def get_group_or_404(id):
         return Groups.query.get_or_404(id)
 
-    def delete_member_group(self, user):
+    def delete_user_group(self, user_login):
+        user = Users.query.get(user_login)
         user_posts = [post for post in self.posts if post.author_login == user.login]
         for post in user_posts:
             self.posts.remove(post)
         self.users.remove(user)
         db.session.commit()
 
-    def add_member_group(self, user):
+    def add_pending_group(self, user_login):
+        user = Users.query.get(user_login)
         self.users.append(user)
+        db.session.commit()
+
+    def approve_member_group(self, login):
+        db.session.execute(
+            GroupsUsers.update().values(
+                role='member'
+            ).where(and_(GroupsUsers.c.user_login == login, GroupsUsers.c.group_id == self.id))
+        )
+        db.session.commit()
+
+    def delete_post_group(self, post_id):
+        #Delete post from posts_groups table
+        db.session.execute(
+            PostsGroups.delete().where(and_(PostsGroups.c.post_id == post_id, PostsGroups.c.groups_id == self.id))
+        )
         db.session.commit()
 
 

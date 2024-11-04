@@ -20,6 +20,7 @@ def registrate_routes(app, db):
 
     @app.before_request
     def before_request():
+        session.permanent = True
         if session.get('previous_pages') is None:
             session['previous_pages'] = []
 
@@ -221,12 +222,12 @@ def registrate_routes(app, db):
             return redirect(url_for('login'))
 
         group = Groups.get_group_or_404(id)
-        users_with_roles = group.get_users_with_role()
+        users_with_roles = group.get_users_with_role_group()
 
         if  users_with_roles.get(session['user']['login'])  != 'admin':
             flash("You are not an admin of this group", "error")
             return redirect(url_for('group', id=id))
-
+        add_previous_page()
         if request.method == 'POST':
             group_name = request.form['name'].strip()
             group_description = request.form['description'].strip()
@@ -249,7 +250,54 @@ def registrate_routes(app, db):
                 group.edit_group(group.name, request.form['description'])
 
 
-        return render_template("edit_group.html", group=group, users=users_with_roles)
+        return render_template("edit_group.html", group=group, users=users_with_roles, posts=group.posts)
+
+    @app.route('/manage_users_group', methods=['GET', 'POST'])
+    def manage_users_group():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+
+        if request.method == 'POST':
+            group_id = request.form['group_id']
+            user_login = request.form['user_login']
+            action = request.form['action']
+            group = Groups.get_group_or_404(group_id)
+
+            if action == "delete":
+                group.delete_user_group(user_login)
+                flash(f"User {user_login} is removed from the group", "success")
+            elif action == "make_admin":
+                group.make_admin_group(user_login)
+                flash(f"User {user_login} is an admin now", "success")
+            elif action == "accept_pending":
+                group.approve_member_group(user_login)
+                flash(f"User {user_login} is a member now", "success")
+            elif action == "add":
+                group.add_pending_group(user_login)
+                flash(f"User {user_login} is added to the group", "success")
+
+            return redirect(request.referrer or url_for('edit_group', id=group_id))
+        return redirect(url_for('index'))
+
+    @app.route('/manage_posts_group', methods=['GET', 'POST'])
+    def manage_posts_group():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+
+        if request.method == 'POST':
+            group_id = request.form['group_id']
+            post_id = request.form['post_id']
+            action = request.form['action']
+            group = Groups.get_group_or_404(group_id)
+            post = Posts.get_post_or_404(post_id)
+
+            if action == "delete":
+                group.delete_post_group(post_id)
+                flash("Post deleted", "success")
+            return redirect(url_for('edit_group', id=group_id))
+        return redirect(url_for('index'))
 
     @app.route('/delete_group', methods=['GET', 'POST'])
     def delete_group():
@@ -259,25 +307,9 @@ def registrate_routes(app, db):
         if request.method == 'POST':
             flash("Group deleted", "success")
             group_id = request.form['group_id']
-            group = Groups.query.get(group_id)
             Groups.delete_group(group_id)
             return redirect(url_for('groups'))
         return redirect(url_for('index'))
-
-    # @app.route('/profile')
-    # def profiles():
-    #     if session.get('user') is None:
-    #         return redirect(url_for('login'))
-    #     elif session['user']['role'] in ['admin', 'moderator']:
-    #         users = Users.query.all()
-    #         return '''
-    #         <h1>Profiles</h1>
-    #         <p>Users:</p>
-    #         <ul>''' + ''.join([f'<li><a href="{url_for("profile", login=user.login)}">{user.login}</a></li>' for user in users]) + '''</ul>
-    #         '''
-    #         # return render_template("profiles.html", users=users)
-    #     else:
-    #         return redirect(url_for('profile', login=session['user']['login']))
 
     @app.route('/shares')
     def shares():
@@ -346,7 +378,6 @@ def registrate_routes(app, db):
         add_previous_page()
         return render_template('users.html', users=active_user.get_following_list())
 
-
     @app.route('/groups', methods=['GET', 'POST'])
     def groups():
         if session.get('user') is None:
@@ -361,6 +392,34 @@ def registrate_routes(app, db):
         add_previous_page()
         groups = Groups.query.all()
         return render_template('groups.html',groups=groups)
+
+    @app.route('/groups/following_groups', methods=['GET', 'POST'])
+    def following_groups():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+
+        active_user = Users.get_user_or_404(session['user']['login'])
+        if active_user.is_banned:
+            flash("You are banned", "error")
+            return redirect(url_for('index'))
+
+        add_previous_page()
+        return render_template('groups.html', groups=active_user.groups)
+
+    @app.route('/managed_groups', methods=['GET', 'POST'])
+    def managed_groups():
+        if session.get('user') is None:
+            flash("You are not logged in", "error")
+            return redirect(url_for('login'))
+
+        active_user = Users.get_user_or_404(session['user']['login'])
+        if active_user.is_banned:
+            flash("You are banned", "error")
+            return redirect(url_for('index'))
+
+        add_previous_page()
+        return render_template('groups.html', groups=active_user.managed_groups())
 
     @app.route('/create_group', methods=['GET', 'POST'])
     def create_group():
@@ -394,68 +453,6 @@ def registrate_routes(app, db):
                 return redirect(url_for('group', id=group.id))
         return redirect(url_for('groups'))
 
-    @app.route('/groups/following_groups', methods=['GET', 'POST'])
-    def following_groups():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
-        active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
-        add_previous_page()
-        return render_template('groups.html',groups=active_user.groups )
-
-    @app.route('/managed_groups', methods=['GET', 'POST'])
-    def managed_groups():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
-        active_user = Users.get_user_or_404(session['user']['login'])
-        if active_user.is_banned:
-            flash("You are banned", "error")
-            return redirect(url_for('index'))
-
-        add_previous_page()
-        return render_template('groups.html',groups=active_user.managed_groups())
-
-    @app.route('/make_admin_group', methods=['GET', 'POST'])
-    def make_admin_group():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
-        if request.method == 'POST':
-            group_id = request.form['group_id']
-            user_login = request.form['user_login']
-
-            flash(f"User {user_login} is an admin now", "success")
-            group = Groups.get_group_or_404(group_id)
-            group.make_admin(user_login)
-            return redirect(url_for('edit_group', id=group_id))
-        flash("You are not an admin of this group", "error")
-        return redirect(url_for('index'))
-
-    @app.route('/delete_member_group', methods=['GET', 'POST'])
-    def delete_member_group():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-        if request.method == 'POST':
-            group_id = request.form['group_id']
-            user_login = request.form['user_login']
-            flash(f"User {user_login} is removed from the group", "success")
-
-            user = Users.query.get_or_404(user_login)
-            group = Groups.query.get_or_404(group_id)
-            group.delete_member_group(user)
-            return redirect(url_for('edit_group', id=group_id))
-        flash("You are not an admin of this group", "error")
-        return redirect(url_for('index'))
-
     @app.route('/groups/<int:id>')
     def group(id):
         if session.get('user') is None:
@@ -468,41 +465,10 @@ def registrate_routes(app, db):
             return redirect(url_for('index'))
 
         group = Groups.get_group_or_404(id)
-        subscribers_dict = group.get_users_with_role()
+        subscribers_dict = group.get_users_with_role_group()
         add_previous_page()
         is_admin =  subscribers_dict.get(active_user.login) == 'admin'
-        return render_template("group.html", group=group, posts = group.posts, is_admin=is_admin, members=subscribers_dict.keys())
-
-    @app.route('/leave_group', methods=['GET', 'POST'])
-    def leave_group():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-
-        if request.method == 'POST':
-            group_id = request.form['group_id']
-            group = Groups.get_group_or_404(group_id)
-            user = Users.get_user_or_404(session['user']['login'])
-            group.delete_member_group(user)
-            flash("You left the group", "success")
-
-            return redirect(request.referrer or url_for('index'))
-        return redirect(url_for('index'))
-
-    @app.route('/join_group', methods=['GET', 'POST'])
-    def join_group():
-        if session.get('user') is None:
-            flash("You are not logged in", "error")
-            return redirect(url_for('login'))
-        if request.method == 'POST':
-            group_id = request.form['group_id']
-            group = Groups.get_group_or_404(group_id)
-            user = Users.get_user_or_404(session['user']['login'])
-            group.add_member_group(user)
-
-            flash(f"You joined the group {group.name}", "success")
-            return redirect(request.referrer or url_for('index'))
-        return redirect(url_for('index'))
+        return render_template("group.html", group=group, posts = group.posts, is_admin=is_admin, subscribers=subscribers_dict.keys())
 
     @app.route('/delete_user', methods=['GET', 'POST'])
     def delete_user():
@@ -529,7 +495,7 @@ def registrate_routes(app, db):
             flash("You are banned", "error")
             return redirect(url_for('index'))
 
-        if login != active_user.login:
+        if login != active_user.login and active_user.role != 'admin':
             flash("You are not allowed to edit this profile", "error")
             return redirect(url_for('setting', login=active_user.login))
 
@@ -553,20 +519,21 @@ def registrate_routes(app, db):
                 flash("Surname updated", "success")
                 user.change_user_data(surname=user_surname)
 
-            if request.form['password'] != '':
-                if ( request.form['password'] == request.form['confirm_password']):
-                    if len(request.form['password']) >= 8:
-                        flash("Password updated", "success")
-                        user.change_user_data(password=hashlib.md5(request.form['password'].encode()).hexdigest())
-                    else:
-                        flash("Password is too short. It should be at least 8 characters", "error")
-                        return redirect(url_for('setting', login=login))
-                else:
-                    flash("Passwords do not match", "error")
-                    return redirect(url_for('setting', login=login))
 
-            session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname,
-                               "mail": user.mail}
+            if session['user']['login'] == login:
+                if request.form['password'] != '':
+                    if (request.form['password'] == request.form['confirm_password']):
+                        if len(request.form['password']) >= 8:
+                            flash("Password updated", "success")
+                            user.change_user_data(password=hashlib.md5(request.form['password'].encode()).hexdigest())
+                        else:
+                            flash("Password is too short. It should be at least 8 characters", "error")
+                            return redirect(url_for('setting', login=login))
+                    else:
+                        flash("Passwords do not match", "error")
+                        return redirect(url_for('setting', login=login))
+                session['user'] = {"login": user.login, "role": user.role, "name": user.name, "surname": user.surname,
+                                   "mail": user.mail}
             return redirect(url_for('setting', login=login))
         user = Users.query.get(login)
         return render_template("edit_profile.html", user=user)

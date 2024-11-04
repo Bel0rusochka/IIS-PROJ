@@ -24,6 +24,7 @@
 							<input type="text" id="surname" name="surname" class="pagesignup-input"  value="{{ user.surname }}">
 						</div>
 					</div>
+					{% if session.user.login == user.login %}
 					<div class="pagesignup-password">
 						<div class="input-container">
 							<label for="password" class="floating-label">Password</label>
@@ -37,7 +38,7 @@
 							<input type="password" id="confirm_password" name="confirm_password" class="pagesignup-input" placeholder="">
 						</div>
 					</div>
-
+					{% endif %}
 					<button type="submit" class="pagesignup-buttonsingupbig">
 						<span class="pagesignup-text22"><span>Save changes</span></span>
 					</button>
