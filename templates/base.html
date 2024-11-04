@@ -18,12 +18,12 @@
     {% if session.user %}
       <div id="mySidebar" class="projekt-sidebar">
         <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar"> <!-- User avatar -->
-        <a href="{{ url_for('profile', login=session.user.login) }}" class="projekt-sidebar-item">@{{ session.user.login }}</a>
+        <a href="{{ url_for('profile', login=user.login) }}" class="projekt-sidebar-item">@{{ user.login }}</a>
         <a href="{{ url_for('users') }}" class="projekt-sidebar-item">Users</a> 
         <a href="{{ url_for('groups') }}" class="projekt-sidebar-item">Groups</a> 
         <a href="{{ url_for('shares') }}" class="projekt-sidebar-item">Shares</a> 
-        <a href="{{ url_for('setting', login=session.user.login) }}" class="projekt-sidebar-item">Settings</a> 
-        {% if session.user.role == 'admin' or session.user.role == 'moderator' %}
+        <a href="{{ url_for('setting', login=user.login) }}" class="projekt-sidebar-item">Settings</a>
+        {% if user.role == 'admin' or user.role == 'moderator' %}
           <a href="{{ url_for('admin_panel_users') }}" class="projekt-sidebar-item" style="color: red;">Admin</a> <!-- Admin link -->
         {% endif %}
         <a href="{{ url_for('logout') }}" class="projekt-sidebar-item">Log Out</a> 

@@ -31,7 +31,7 @@
 							<div class="user-following">Following: {{ user.get_following_count() }}</div>
 							<div class="user-posts">Posts: {{ user.get_posts_count() }}</div>
 						</div>
-						{% if session.user.login == user.login %}
+						{% if session.user == user.login %}
 							<div class="button-group">
 								<a class="edit-profile" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
 								<form method="POST" action="{{ url_for('delete_user') }}">
@@ -40,7 +40,7 @@
 								</form>
 							</div>
 						{% else %}
-							{% if session.user.login in user.get_followers_login_list() %}
+							{% if session.user in user.get_followers_login_list() %}
 								<form method="POST" action="{{ url_for('unfollow') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
 									<button type="submit" class="unfollow">Unfollow</button>
@@ -57,7 +57,7 @@
 			</div>
 		</div>
 		<div class="my-posts">
-			{% if session.user.login == user.login %}
+			{% if session.user == user.login %}
 				<form method="GET" action="{{ url_for('profile', login=user.login) }}">
 					<input type="hidden" name="posts_type" value="not_group">
 					<button type="submit" class="add-post">My Posts</button>

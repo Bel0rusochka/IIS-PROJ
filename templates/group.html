@@ -40,8 +40,8 @@
 
 					<form method="POST" action="{{url_for('manage_users_group')}}">
 						<input type="hidden" name="group_id" value="{{group.id}}">
-						<input type="hidden" name="user_login" value="{{session.user.login}}">
-						{% if group.is_subscribed(session.user.login) %}
+						<input type="hidden" name="user_login" value="{{session.user}}">
+						{% if group.is_subscribed(session.user) %}
 							<button type="submit" class="edit-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
 						{% else %}
 							<button type="submit" class="edit-profile" id="joinProfileButton" name="action" value="add">Join Group</button>

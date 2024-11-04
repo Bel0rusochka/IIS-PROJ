@@ -24,7 +24,7 @@
 							<input type="text" id="surname" name="surname" class="pagesignup-input"  value="{{ user.surname }}">
 						</div>
 					</div>
-					{% if session.user.login == user.login %}
+					{% if session.user == user.login %}
 					<div class="pagesignup-password">
 						<div class="input-container">
 							<label for="password" class="floating-label">Password</label>

@@ -18,7 +18,7 @@
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
                 {% for element in elements %}
-                    {% if panel_type == 'users' and element.login != session.user.login %}
+                    {% if panel_type == 'users' and element.login != session.user %}
                         <a href="{{ url_for('profile', login=element.login) }}" class="user">
                             <div class="user">
                                 <img class="avatar" alt="" src="{{ element.avatar_url or '../static/images/no_avatar.svg' }}">
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                         </a>
-                        {% if session.user.role == 'admin' and element.role != 'admin' %}
+                        {% if user.role == 'admin' and element.role != 'admin' %}
                             <div class="button-group">
                                 <a class="edit-profile" id="editProfileButton" href="{{ url_for('setting', login=element.login) }}">Edit Profile</a>
                             </div>
@@ -38,7 +38,7 @@
 
                         <form method="POST" action="{{ url_for('admin_panel_users') }}">
                             <input type="hidden" name="user_login" value="{{ element.login }}">
-                            {% if session.user.role == 'admin' %}
+                            {% if user.role == 'admin' %}
                                 {% if element.role == 'user' and not element.is_banned %}
                                     <button type="submit" name="action" value="make_moderator" class="moderate">Make Moderator</button>
                                     <button type="submit" name="action" value="make_admin" class="admin">Make Admin</button>
@@ -50,17 +50,16 @@
                                 {% endif %}
                             {% endif %}
 
-                            {% if element.role != 'admin' and ((session.user.role == 'moderator' and element.role != 'moderator') or session.user.role == 'admin') %}
+                            {% if element.role != 'admin' and ((user.role == 'moderator' and element.role != 'moderator') or user.role == 'admin') %}
                                 {% if element.is_banned %}
                                     <button type="submit" name="action" value="unban" class="unban">Unban</button>
                                 {% else %}
                                     <button type="submit" name="action" value="ban" class="ban">Ban</button>
                                 {% endif %}
+                                <button type="submit" name="action" value="delete" class="delete">Delete</button>
                             {% endif %}
 
                         </form>
-
-
 
                     {% elif panel_type == 'groups' %}
                         <a href="{{ url_for('group', id=element.id) }}" class="user">

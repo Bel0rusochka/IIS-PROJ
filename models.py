@@ -62,6 +62,7 @@ class Users(db.Model):
         user = Users(login=login,mail=mail,password=password,name=name,surname=surname,role=role)
         db.session.add(user)
         db.session.commit()
+        return user
 
     @staticmethod
     def delete_user(login):
@@ -324,7 +325,14 @@ class Posts(db.Model):
     def edit_post(self, text, status, tags):
         self.text = text
         self.status = status
-        self.associated_tags = tags
+        associated_tags = []
+        for tag in tags:
+            if tag == '' or tag == ' ': continue
+            tag_db = Tags.query.get(tag)
+            if tag_db is None:
+                tag_db = Tags(name=tag)
+            associated_tags.append(tag_db)
+        self.associated_tags = associated_tags
         db.session.commit()
 
     @staticmethod

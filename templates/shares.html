@@ -19,7 +19,7 @@
                     <div class="user">
                         <img class="avatar" alt="" src="{{ url_for('image', id=share.post_id) }}">
                         <div class="name-user">
-                            {% if share.sender_login == session.user.login %}
+                            {% if share.sender_login == session.user %}
                                 <div class="user-name">To: @{{ share.recipient_login }}</div>
                             {% else %}
                                 <div class="user-name">From: @{{ share.sender_login }}</div>

@@ -15,7 +15,7 @@
             </div>
     
             <div class="right-section">
-                {% if session.user and session.user.login == post.author_login %}
+                {% if session.user and session.user == post.author_login %}
                     <form action="{{ url_for('delete_post') }}" method="POST" class="post-actions">
                         <input type="hidden" name="post_id" value="{{ post.id }}">
                         <button type="submit" class="delete-button">
@@ -95,7 +95,7 @@
                                 @{{ comment.author.login }} - <small>{{ comment.date.strftime('%Y-%m-%d %H:%M') }}</small>
                             </a>
 
-                            {% if session.user and session.user.login == comment.author.login %}
+                            {% if session.user and session.user == comment.author.login %}
                                 <form action="{{ url_for('delete_comment') }}" method="POST" style="display: inline;">
                                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
                                     <button type="submit" style="background: none; border: none; color: red; font-size: 12px;">delete</button>
