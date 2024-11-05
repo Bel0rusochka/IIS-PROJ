@@ -60,7 +60,7 @@
                             {% endif %}
 
                         </form>
-
+                        <div class="line"></div>
                     {% elif panel_type == 'groups' %}
                         <a href="{{ url_for('group', id=element.id) }}" class="user">
                             <div class="user">
@@ -76,6 +76,7 @@
                             <button type="submit" class="subscribe">Delete</button>
                         </form>
 
+                        <div class="line"></div>
                     {% elif panel_type == 'posts' %}
                         <a href="{{ url_for('post', post_id=element.id) }}" class="user">
                             <div class="user">
@@ -93,6 +94,8 @@
                             <input type="hidden" name="post_id" value="{{ element.id }}">
                             <button type="submit" class="subscribe">Delete</button>
                         </form>
+
+                        <div class="line"></div>
                     {% elif panel_type == 'comments' %}
                         <a href="{{ url_for('post', post_id=element.post_id) }}" class="user">
                             <div class="user">
@@ -108,6 +111,8 @@
                             <input type="hidden" name="comment_id" value="{{ element.id }}">
                             <button type="submit" class="subscribe">Delete</button>
                         </form>
+
+                        <div class="line"></div>
                     {% elif panel_type == 'tags' %}
                         <a href="{{ url_for('index', query=element.name) }}" class="user">
                             <div class="user">
@@ -121,10 +126,9 @@
                             <input type="hidden" name="tag_name" value="{{ element.name }}">
                             <button type="submit" class="subscribe">Delete</button>
                         </form>
+
+                        <div class="line"></div>
                     {% endif %}
-
-                <div class="line"></div>
-
                 {% endfor %}
             </div>
         </div>

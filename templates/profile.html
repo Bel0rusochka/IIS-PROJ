@@ -40,7 +40,7 @@
 								</form>
 							</div>
 						{% else %}
-							{% if session.user in user.get_followers_login_list() %}
+							{% if is_following %}
 								<form method="POST" action="{{ url_for('unfollow') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
 									<button type="submit" class="unfollow">Unfollow</button>

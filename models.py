@@ -1,7 +1,7 @@
 from flask import flash
-
 from app import db
 from sqlalchemy import or_, and_
+
 
 GroupsUsers = db.Table('group_users',
     db.Column('user_login', db.String(60), db.ForeignKey('users.login', ondelete='CASCADE'), primary_key=True),
@@ -70,9 +70,6 @@ class Users(db.Model):
         db.session.delete(user)
         db.session.commit()
 
-    # def get_followers_login_list(self):
-    #     return [follower.follower_login for follower in self.followers]
-
     def get_posts_for_user(self):
         return Posts.query.filter(
             or_(
@@ -101,20 +98,18 @@ class Users(db.Model):
        return self.get_posts_for_user_feed().filter(Posts.author_login == active_user_login).all()
 
     def get_user_posts_by_privacy(self, privacy):
-        match privacy:
-            case 'all':
-                return Posts.query.filter(Posts.author_login == self.login).all()
-            case 'private':
-                return Posts.query.filter(Posts.author_login == self.login, Posts.status == 'private').all()
-            case 'group':
-                return Posts.query.filter(Posts.author_login == self.login, Posts.status == 'group').all()
-            case 'not_group':
-                return Posts.query.filter(Posts.author_login == self.login, Posts.status != 'group').all()
-            case 'not_private':
-                return Posts.query.filter(Posts.author_login == self.login, Posts.status != 'private').all()
-            case _:
+            privacy_filters = {
+                'all': Posts.author_login == self.login,
+                'private': and_(Posts.author_login == self.login, Posts.status == 'private'),
+                'group': and_(Posts.author_login == self.login, Posts.status == 'group'),
+                'not_group': and_(Posts.author_login == self.login, Posts.status != 'group'),
+                'not_private': and_(Posts.author_login == self.login, Posts.status != 'private'),
+            }
+            filter_condition = privacy_filters.get(privacy)
+            if filter_condition is None:
                 flash("Invalid request", "error")
-                return Posts.query.filter(Posts.author_login == self.login).all()
+                return []
+            return Posts.query.filter(filter_condition).all()
 
     def add_follower(self, follower_login):
         follower = Followers(user_login=self.login, follower_login=follower_login)
@@ -126,30 +121,18 @@ class Users(db.Model):
         db.session.delete(follower)
         db.session.commit()
 
-    def change_user_data(self, name = None, surname = None, password = None, role = None, banned = None):
-        if name:
-            self.name = name
-        if surname:
-            self.surname = surname
-        if password:
-            self.password = password
-        if role:
-            self.role = role
-        if banned is not None:
-            self.is_banned = banned
+    def change_user_data(self, **kwargs):
+        for key, value in kwargs.items():
+            print(key, value)
+            if hasattr(self, key) and value is not None:
+                setattr(self, key, value)
         db.session.commit()
 
     def get_followers_list(self):
         return [Users.get_user(follower.follower_login) for follower in self.followers]
 
-    def get_followers_login_list(self):
-        return [follower.follower_login for follower in self.followers]
-
     def get_following_list(self):
         return [Users.get_user(following.user_login) for following in self.following]
-
-    def get_following_login_list(self):
-        return [follower.user_login for follower in self.following]
 
     def get_followers_count(self):
         return len(self.followers.all())
@@ -179,8 +162,24 @@ class Groups(db.Model):
     posts = db.relationship('Posts', secondary=PostsGroups)
     users = db.relationship('Users', secondary=GroupsUsers)
 
-    def is_member(self, login):
-        return login in [user.login for user in self.users if user.role != 'pending']
+    @staticmethod
+    def get_group_or_404(id):
+        return Groups.query.get_or_404(id)
+
+    @staticmethod
+    def create_group(name, description, user):
+        group = Groups(name=name, description=description)
+        group.users.append(user)
+        db.session.add(group)
+        db.session.commit()
+        group.make_admin_group(user.login)
+        return group
+
+    @staticmethod
+    def delete_group(id):
+        group = Groups.query.get(id)
+        db.session.delete(group)
+        db.session.commit()
 
     def is_subscribed(self, login):
         return login in [user.login for user in self.users ]
@@ -198,30 +197,9 @@ class Groups(db.Model):
             GroupsUsers.c.role
         ).filter(GroupsUsers.c.group_id == self.id).all())
 
-    def get_members_group(self):
-        return [user for user in self.users if user.role != 'member']
-
-    def get_pending_group(self):
-        return [user for user in self.users if user.role == 'pending']
-
-    @staticmethod
-    def create_group(name, description, user):
-        group = Groups(name=name, description=description)
-        group.users.append(user)
-        db.session.add(group)
-        db.session.commit()
-        group.make_admin_group(user.login)
-        return group
-
     def edit_group(self, name, description):
         self.name = name
         self.description = description
-        db.session.commit()
-
-    @staticmethod
-    def delete_group(id):
-        group = Groups.query.get(id)
-        db.session.delete(group)
         db.session.commit()
 
     def make_admin_group(self, login):
@@ -232,10 +210,6 @@ class Groups(db.Model):
         )
         db.session.commit()
 
-    @staticmethod
-    def get_group_or_404(id):
-        return Groups.query.get_or_404(id)
-
     def delete_user_group(self, user_login):
         user = Users.query.get(user_login)
         user_posts = [post for post in self.posts if post.author_login == user.login]
@@ -244,12 +218,12 @@ class Groups(db.Model):
         self.users.remove(user)
         db.session.commit()
 
-    def add_pending_group(self, user_login):
+    def add_user_group(self, user_login):
         user = Users.query.get(user_login)
         self.users.append(user)
         db.session.commit()
 
-    def approve_member_group(self, login):
+    def approve_user_group(self, login):
         db.session.execute(
             GroupsUsers.update().values(
                 role='member'
@@ -257,8 +231,7 @@ class Groups(db.Model):
         )
         db.session.commit()
 
-    def delete_post_group(self, post_id):
-        #Delete post from posts_groups table
+    def unbind_post_group(self, post_id):
         db.session.execute(
             PostsGroups.delete().where(and_(PostsGroups.c.post_id == post_id, PostsGroups.c.groups_id == self.id))
         )
@@ -270,14 +243,15 @@ class Tags(db.Model):
 
     associated_post = db.relationship('Posts',secondary=PostsTags, viewonly=True)
 
-    def posts_count(self):
-        return len(self.associated_post)
-
     @staticmethod
     def delete_tag(name):
         tag = Tags.query.get(name)
         db.session.delete(tag)
         db.session.commit()
+
+    def posts_count(self):
+        return len(self.associated_post)
+
 
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement=True)
@@ -292,6 +266,47 @@ class Posts(db.Model):
     comments = db.relationship('Comments', backref='post', cascade="all, delete-orphan", lazy='dynamic')
     likes = db.relationship('Users', secondary=UsersLikePosts, backref='liked_posts', lazy='dynamic')
     shares = db.relationship('Shares', backref='post', cascade="all, delete-orphan", lazy='dynamic')
+
+    @staticmethod
+    def get_post_or_404(id):
+        return Posts.query.get_or_404(id)
+
+    @staticmethod
+    def get_all_posts_by_privacy(privacy):
+        privacy_filters = {
+            'all': None,
+            'public': Posts.status == 'public',
+            'private': Posts.status == 'private',
+            'group': Posts.status == 'group',
+            'not_group': Posts.status != 'group'
+        }
+
+        filter_condition = privacy_filters.get(privacy)
+
+        if filter_condition is None and privacy != 'all':
+            flash("Invalid request", "error")
+            return Posts.query.order_by(Posts.date.desc())
+
+        query = Posts.query.filter(filter_condition) if filter_condition else Posts.query
+        return query.order_by(Posts.date.desc())
+
+    @staticmethod
+    def create_post(author_login, status, text, image_binary, tags):
+        post = Posts(author_login=author_login, status=status, text=text, image_binary=image_binary)
+        for tag in tags:
+            if tag == '' or tag == ' ': continue
+            tag_db = Tags.query.get(tag)
+            if tag_db is None:
+                tag_db = Tags(name=tag)
+            post.associated_tags.append(tag_db)
+        db.session.add(post)
+        db.session.commit()
+
+    @staticmethod
+    def delete_post(id):
+        post = Posts.query.get(id)
+        db.session.delete(post)
+        db.session.commit()
 
     def like_count(self):
         return self.likes.count()
@@ -311,12 +326,6 @@ class Posts(db.Model):
             self.likes.append(user)
             db.session.commit()
 
-    @staticmethod
-    def delete_post(id):
-        post = Posts.query.get(id)
-        db.session.delete(post)
-        db.session.commit()
-
     def add_comment(self, text, author_login):
         comment = Comments(author_login=author_login, post_id=self.id, text=text)
         db.session.add(comment)
@@ -335,43 +344,10 @@ class Posts(db.Model):
         self.associated_tags = associated_tags
         db.session.commit()
 
-    @staticmethod
-    def create_post(author_login, status, text, image_binary, tags):
-        post = Posts(author_login=author_login, status=status, text=text, image_binary=image_binary)
-        for tag in tags:
-            if tag == '' or tag == ' ': continue
-            tag_db = Tags.query.get(tag)
-            if tag_db is None:
-                tag_db = Tags(name=tag)
-            post.associated_tags.append(tag_db)
-        db.session.add(post)
-        db.session.commit()
-
     def share_post(self, sender_login, recipient_login):
         share = Shares(post_id=self.id, sender_login=sender_login, recipient_login=recipient_login)
         db.session.add(share)
         db.session.commit()
-
-    @staticmethod
-    def get_post_or_404(id):
-        return Posts.query.get_or_404(id)
-
-    @staticmethod
-    def get_all_posts_by_privacy(privacy):
-        match privacy:
-            case 'all':
-                return Posts.query
-            case 'public':
-                return Posts.query.filter(Posts.status == 'public').order_by(Posts.date.desc())
-            case 'private':
-                return Posts.query.filter(Posts.status == 'private').order_by(Posts.date.desc())
-            case 'group':
-                return Posts.query.filter(Posts.status == 'group').order_by(Posts.date.desc())
-            case 'not_group':
-                return Posts.query.filter(Posts.status != 'group').order_by(Posts.date.desc())
-            case _:
-                flash("Invalid request", "error")
-                return Posts.query.all().order_by(Posts.date.desc())
 
 
 class Comments(db.Model):
@@ -381,6 +357,7 @@ class Comments(db.Model):
     text = db.Column(db.String(1000),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
 
+    @staticmethod
     def get_comment_or_404(id):
         return Comments.query.get_or_404(id)
 
@@ -397,7 +374,6 @@ class Shares(db.Model):
     sender_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     recipient_login = db.Column(db.String(60),db.ForeignKey('users.login', ondelete='CASCADE'),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
-    # post = db.relationship('Posts', single_parent=True)
 
     shares_sender = db.relationship('Users', single_parent=True, foreign_keys=[sender_login], viewonly=True)
     shares_recipient = db.relationship('Users', single_parent=True, foreign_keys=[recipient_login], viewonly=True)
