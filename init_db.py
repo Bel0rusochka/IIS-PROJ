@@ -1,6 +1,6 @@
 from PIL import Image as PILImage
 from app import db, create_app
-from models import Users, Groups, Tags, Posts, Comments, Shares, Friends, GroupsUsers, UsersLikePosts, PostsGroups
+from models import Users, Groups, Tags, Posts, Comments, Shares, Followers, GroupsUsers, UsersLikePosts, PostsGroups
 from faker import Faker
 import random
 import hashlib
@@ -10,21 +10,23 @@ import os
 fake = Faker()
 app = create_app()
 
+
 with app.app_context():
     db.drop_all()
     db.create_all()
-
+    def code_password(password):
+        return  hashlib.md5(password.encode()).hexdigest()
     def create_users(count=10):
         users = []
         for _ in range(count):
             user = Users(
                 login=fake.user_name(),
                 mail=fake.email(),
-                password=hashlib.md5(fake.password().encode()).hexdigest(),
+                password=code_password(fake.password()),
                 name=fake.first_name(),
                 surname=fake.last_name(),
                 is_banned=False,
-                role=random.choice(['user', 'admin', 'moderator'])
+                role=random.choice(['user', 'moderator'])
             )
             users.append(user)
             db.session.add(user)
@@ -136,7 +138,7 @@ with app.app_context():
             share = Shares(
                 sender_login=random.choice(users).login,
                 recipient_login=random.choice(users).login,
-                posts_id=random.choice(posts).id
+                post_id=random.choice(posts).id
             )
             shares.append(share)
             db.session.add(share)
@@ -144,11 +146,11 @@ with app.app_context():
         return shares
 
 
-    def create_friends(users):
+    def create_followers(users):
         for user in users:
-            friends = random.sample([u for u in users if u != user], random.randint(1, len(users) - 1))
-            for friend in friends:
-                db.session.add(Friends(user_login=user.login, friend_login=friend.login))
+            followers = random.sample([u for u in users if u != user], random.randint(1, len(users) - 1))
+            for follower in followers:
+                db.session.add(Followers(user_login=user.login, follower_login=follower.login))
         db.session.commit()
 
     def create_likes(users, posts):
@@ -156,7 +158,7 @@ with app.app_context():
             if post.status == 'public':
                 likers = random.sample(users, random.randint(1, len(users)))
             else:
-                likers = [friend for friend in post.author.friends if friend.user_login != post.author_login]
+                likers = [follower for follower in post.author.followers if follower.user_login != post.author_login]
 
             for liker in likers:
                 db.session.execute(
@@ -174,7 +176,9 @@ with app.app_context():
         posts = create_posts(users, groups, tags, 20)
         comments = create_comments(users, posts, 40)
         shares = create_shares(users, posts, 15)
-        create_friends(users)
+        create_followers(users)
         create_likes(users, posts)
-
-        print("Тестовые данные успешно инициализированы!")
+        Users.add_user('admin', 'admin@admin.com', code_password('adminadmin'), 'admin', 'admin', 'admin')
+        Users.add_user('moderator','moderator@moderator.com', code_password('moderatormoderator'), 'moderator', 'moderator', 'moderator')
+        Users.add_user('user', 'user@user.com', code_password('user'), 'useruser', 'user', 'user')
+        print("Test data created successfully")
