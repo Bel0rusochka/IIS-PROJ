@@ -32,6 +32,7 @@ def registrate_routes(app, db):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if session.get('user') is not None:
+                print(session['user'])
                 active_user = Users.get_user_or_404(session['user'])
                 if active_user.is_banned:
                     flash("You are banned", "error")
@@ -122,7 +123,7 @@ def registrate_routes(app, db):
                 bad_data = True
 
             if not bad_data:
-                session['user'] = {"login":login, "role": role, "name": email, "surname": surname, "mail": name}
+                session['user'] = login
                 password_db = hashlib.md5(password.encode()).hexdigest()
                 Users.add_user(login, email, password_db, name, surname,role)
                 return redirect(url_for('index'))
