@@ -347,7 +347,7 @@ def registrate_routes(app, db):
         add_previous_page()
         return render_template('groups.html', groups=active_user.groups, user = active_user)
 
-    @app.route('/managed_groups')
+    @app.route('/groups/managed_groups')
     @require_login
     @require_not_banned
     def managed_groups():
