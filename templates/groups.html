@@ -8,12 +8,13 @@
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
 		<div class="all-users">
-
-			<a href="{{ url_for('groups')}}"  id="allGroupsButton" class = 'butt-my-viewers passive'>All Groups</a>
-			<a href="{{ url_for('following_groups')}}" id="followingGroupsButton" class = 'butt-my-viewers passive'>Following Groups</a>
-			<a href="{{ url_for('managed_groups')}}" id="managedGroupsButton" class = 'butt-my-viewers passive'>Managed Groups</a>
-
-			<a class="add-viewer-button" onclick="showAddViewerPopup()">Create Group</a>
+			<div class="button-container">
+				<a href="{{ url_for('groups') }}" id="allGroupsButton" class="butt-my-viewers {% if request.endpoint == 'groups' %}active{% else %}passive{% endif %}">All Groups</a>
+				<a href="{{ url_for('following_groups') }}" id="followingGroupsButton" class="butt-my-viewers {% if request.endpoint == 'following_groups' %}active{% else %}passive{% endif %}">Following Groups</a>
+				<a href="{{ url_for('managed_groups') }}" id="managedGroupsButton" class="butt-my-viewers {% if request.endpoint == 'managed_groups' %}active{% else %}passive{% endif %}">Managed Groups</a>
+				<a class="add-viewer-button" onclick="showAddViewerPopup()">Create Group</a>
+			</div>
+			
 			<!-- Search Field -->
 			<div class="search">
 				<div class="search-text">Search...</div>
@@ -42,8 +43,8 @@
 
 						</div>
 					</div>
-					<div class="line"></div>
 				</a>
+				<div class="line"></div>
                 {% endfor %}
             </div>
 		</div>

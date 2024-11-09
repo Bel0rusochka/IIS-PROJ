@@ -1122,7 +1122,6 @@ textarea {
 }
 
 .butt-my-viewers,
-.button2,
 .add-viewer-button {
   font-size: 30px; /* Increase font size */
   font-weight: bold; /* Make text bold */
@@ -1136,8 +1135,7 @@ textarea {
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
 }
-.butt-my-viewers,
-.button2{
+.butt-my-viewers{
   background-color: #ebebeb
 }
 .butt-my-viewers:hover,
