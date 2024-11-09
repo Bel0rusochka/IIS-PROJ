@@ -736,15 +736,12 @@ def registrate_routes(app, db):
             if tags_input and not tags_input.startswith('#'):
                 flash("Tags should start with # and be separated by #", "error")
                 bad_data = True
-                print("sdfsdf")
             elif tags_input and len(tags) != tags_input.count('#'):
                 flash("Tags should be separated by #", "error")
                 bad_data = True
-                print("sdfsdf")
             if len(text) > 1000:
                 flash("Text is too long", "error")
                 bad_data = True
-                print("sdfsdf")
             if not bad_data:
                 flash("Post created", "success")
                 Posts.create_post(session['user'], status, text, transform_images(image),tags)
