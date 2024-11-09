@@ -8,9 +8,12 @@
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
         <div class="all-users">
-            <a href="{{ url_for('users')}}"  id="allUsersButton" class = 'butt-my-viewers passive'>All Users</a>
-			<a href="{{ url_for('users_following')}}" id="myFollowingButton" class = 'butt-my-viewers passive'>My Following</a>
-            <a href="{{ url_for('users_followers')}}" id="myFollowersButton" class = 'butt-my-viewers passive'>My Followers</a>
+            <div class="button-container">
+                <a href="{{ url_for('users') }}" id="allUsersButton" class="butt-my-viewers {% if request.endpoint == 'users' %}active{% else %}passive{% endif %}">All Users</a>
+                <a href="{{ url_for('users_following') }}" id="myFollowingButton" class="butt-my-viewers {% if request.endpoint == 'users_following' %}active{% else %}passive{% endif %}">My Following</a>
+                <a href="{{ url_for('users_followers') }}" id="myFollowersButton" class="butt-my-viewers {% if request.endpoint == 'users_followers' %}active{% else %}passive{% endif %}">My Followers</a>
+            </div>
+            
             <!-- Search Field -->
 			<div class="search">
 				<div class="search-text">Search...</div>
