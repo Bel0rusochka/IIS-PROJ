@@ -8,13 +8,13 @@
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
         <div class="all-users">
-
-            <a href="{{ url_for('admin_panel_users')}}"  id="usersButton" class = 'butt-my-viewers passive'>Users</a>
-			<a href="{{ url_for('admin_panel_groups')}}" id="groupsButton" class = 'butt-my-viewers passive'>Groups</a>
-            <a href="{{ url_for('admin_panel_posts')}}"  id="postsButton" class = 'butt-my-viewers passive'>Posts</a>
-			<a href="{{ url_for('admin_panel_comments')}}" id="commentsButton" class = 'butt-my-viewers passive'>Comments</a>
-            <a href="{{ url_for('admin_panel_tags')}}"  id="tagsButton" class = 'butt-my-viewers passive'>Tags</a>
-
+            <div class="button-container">
+            <a href="{{ url_for('admin_panel_users') }}" id="usersButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_users' %}active{% else %}passive{% endif %}">Users</a>
+            <a href="{{ url_for('admin_panel_groups') }}" id="groupsButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_groups' %}active{% else %}passive{% endif %}">Groups</a>
+            <a href="{{ url_for('admin_panel_posts') }}" id="postsButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_posts' %}active{% else %}passive{% endif %}">Posts</a>
+            <a href="{{ url_for('admin_panel_comments') }}" id="commentsButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_comments' %}active{% else %}passive{% endif %}">Comments</a>
+            <a href="{{ url_for('admin_panel_tags') }}" id="tagsButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_tags' %}active{% else %}passive{% endif %}">Tags</a>
+        </div>
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
                 {% for element in elements %}
