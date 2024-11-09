@@ -32,7 +32,6 @@ def registrate_routes(app, db):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if session.get('user') is not None:
-                print(session['user'])
                 active_user = Users.get_user_or_404(session['user'])
                 if active_user.is_banned:
                     flash("You are banned", "error")
