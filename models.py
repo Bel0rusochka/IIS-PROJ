@@ -274,7 +274,6 @@ class Posts(db.Model):
     @staticmethod
     def get_all_posts_by_privacy(privacy):
         privacy_filters = {
-            'all': None,
             'public': Posts.status == 'public',
             'private': Posts.status == 'private',
             'group': Posts.status == 'group',
@@ -287,7 +286,8 @@ class Posts(db.Model):
             flash("Invalid request", "error")
             return Posts.query.order_by(Posts.date.desc())
 
-        query = Posts.query.filter(filter_condition) if filter_condition else Posts.query
+
+        query = Posts.query.filter(filter_condition) if filter_condition is not None else Posts.query
         return query.order_by(Posts.date.desc())
 
     @staticmethod
