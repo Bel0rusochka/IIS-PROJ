@@ -382,6 +382,7 @@ def registrate_routes(app, db):
                 group = Groups.create_group(group_name, group_description, user)
                 flash("Group created", "success")
                 return redirect(url_for('group', id=group.id))
+            return redirect(url_for('groups'))
         abort(404)
 
     @app.route('/groups/<int:id>')
@@ -735,18 +736,20 @@ def registrate_routes(app, db):
             if tags_input and not tags_input.startswith('#'):
                 flash("Tags should start with # and be separated by #", "error")
                 bad_data = True
+                print("sdfsdf")
             elif tags_input and len(tags) != tags_input.count('#'):
                 flash("Tags should be separated by #", "error")
                 bad_data = True
-
+                print("sdfsdf")
             if len(text) > 1000:
                 flash("Text is too long", "error")
                 bad_data = True
-
+                print("sdfsdf")
             if not bad_data:
                 flash("Post created", "success")
                 Posts.create_post(session['user'], status, text, transform_images(image),tags)
                 return redirect(url_for('index'))
+            return redirect(url_for('index'))
 
     @app.route('/banned')
     def banned():

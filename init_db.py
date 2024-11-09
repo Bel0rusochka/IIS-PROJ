@@ -180,5 +180,5 @@ with app.app_context():
         create_likes(users, posts)
         Users.add_user('admin', 'admin@admin.com', code_password('adminadmin'), 'admin', 'admin', 'admin')
         Users.add_user('moderator','moderator@moderator.com', code_password('moderatormoderator'), 'moderator', 'moderator', 'moderator')
-        Users.add_user('user', 'user@user.com', code_password('user'), 'useruser', 'user', 'user')
+        Users.add_user('user', 'user@user.com', code_password('useruser'), 'user', 'user', 'user')
         print("Test data created successfully")
