@@ -27,10 +27,11 @@
 						<div class="user-info">
 							<div class="user-name">{{ user.name }} {{ user.surname }}</div>
 							<div class="user-login">@{{ user.login }}</div>
-							<div class="user-followers">Followers: {{ user.get_followers_count() }}</div>
-							<div class="user-following">Following: {{ user.get_following_count() }}</div>
-							<div class="user-posts">Posts: {{ user.get_posts_count() }}</div>
+						
 						</div>
+						<div class="user-followers">Followers: {{ user.get_followers_count() }}</div>
+						<div class="user-following">Following: {{ user.get_following_count() }}</div>
+						<div class="user-posts">Posts: {{ user.get_posts_count() }}</div>
 						{% if session.user == user.login %}
 							<div class="button-group">
 								<a class="edit-profile" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
@@ -43,12 +44,12 @@
 							{% if is_following %}
 								<form method="POST" action="{{ url_for('unfollow') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="unfollow">Unfollow</button>
+									<button type="submit" class="edit-buttons" class="unfollow">Unfollow</button>
 								</form>
 							{% else %}
 								<form method="POST" action="{{ url_for('follow') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="follow">Follow</button>
+									<button type="submit" class="edit-buttons" class="follow">Follow</button>
 								</form>
 							{% endif %}
 						{% endif %}
