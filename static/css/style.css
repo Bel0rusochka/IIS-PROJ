@@ -104,6 +104,9 @@ img {
   border-radius: 20px;
   background-color: rgba(255, 251, 251, 1);
 }
+#postForm.pagesignup-container {
+  padding-top: 400px;
+}
 
 /* Signup form large heading */
 .pagesignup-text12 {
@@ -890,14 +893,13 @@ img {
 }
 
 .popup-header {
+  width: 100%;
   display: flex; /* Use flexbox for header */
   justify-content: space-between; /* Space out elements */
   align-items: center; /* Center elements vertically */
-  padding: 10px 20px; /* Add padding */
 }
 
 .popup-title {
-  flex-grow: 1; /* Allow title to take remaining space */
   text-align: center; /* Center the title */
   margin: 0; /* Remove default margin */
 }
@@ -947,11 +949,7 @@ img {
   border-radius: 8px;
 }
 
-.popup-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+
 
 textarea {
   width: 100%;
