@@ -758,8 +758,4 @@ def registrate_routes(app, db):
 
     @app.route('/banned')
     def banned():
-        return '''
-        <h1>You are banned</h1>
-        <p>Sorry, you are banned</p>
-        <a href="/logout">Logout</a>
-        '''
+        return render_template('banned.html')

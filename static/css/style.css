@@ -1100,14 +1100,14 @@ textarea {
   padding-left:20px;
   flex-direction: column; /* Align name, surname, and login vertically */
 }
-.edit-profile {
+.edit-buttons {
   font-size: 20px;
   cursor: pointer;
   margin-left: auto; /* Push "edit profile" to the right */
 }
 
 /* Styling the edit and delete buttons */
-.edit-profile,
+.edit-buttons,
 .delete-profile {
   display: block;
   padding: 8px 16px;
@@ -1124,7 +1124,7 @@ textarea {
 
 
 /* Button hover effect */
-.edit-profile:hover,
+.edit-buttons:hover,
 .delete-profile:hover {
   background-color: #cccccc; /* Slightly darker on hover */
 }
@@ -1473,4 +1473,55 @@ input[type="text"] {
 
 .user.last-visible .line {
   display: none; /* Hide line for last visible user */
+}
+
+/* ---------------------------- BANNED PAGE STYLE ---------------------------- */
+/* Apply full height to the body and set up Flexbox for centering */
+body.banned-page-body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0; /* Optional, for background color */
+}
+
+/* Styling the banned page content */
+.banned-page {
+  text-align: center;
+  padding: 50px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 10px;
+  width: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the h1 tag */
+.banned-page h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+/* Styling for the paragraph tag */
+.banned-page p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+/* Styling the logout button */
+.logout-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+}
+
+/* Hover effect for the logout button */
+.logout-link:hover {
+  background-color: #0056b3;
 }
