@@ -18,11 +18,19 @@
 
         <div class="post-privacy">
             <label for="privacyOptions">Post Privacy:</label>
-            <select id="privacyOptions" name="privacy">
+            <select id="privacyOptions" name="privacy" onchange="toggleGroupSelect()">
                 <option value="public" {% if post.status == "public" %}selected{% endif %}>Public - Visible to everyone</option>
                 <option value="private" {% if post.status == "private" %}selected{% endif %}>Friends - Visible to friends</option>
                 <option value="group" {% if post.status == "group" %}selected{% endif %}>Groups - Visible only in groups</option>
             </select>
+        </div>
+
+        <div id="groupSelect" style="display: none;">
+            <label for="groupOptions">Select Group:</label>
+            {% for group in user.get_approved_groups() %}
+                <input type="checkbox" id="group{{ group.id }}" name="groups" value="{{ group.id }}" {% if group in post.get_connected_groups() %}checked{% endif %}>
+                <label for="group{{ group.id }}">{{ group.name }}</label>
+            {% endfor %}
         </div>
 
         <div id="imageDescription">
@@ -34,4 +42,21 @@
 
     </form>
     </div>
+
+ <script>
+    function toggleGroupSelect() {
+      const privacyOptions = document.getElementById('privacyOptions');
+      const groupSelect = document.getElementById('groupSelect');
+      groupSelect.style.display = privacyOptions.value === 'group' ? 'block' : 'none';
+    }
+
+    function togglePopup() {
+      const popupModal = document.getElementById('popupModal');
+      popupModal.style.display = popupModal.style.display === 'none' || popupModal.style.display === '' ? 'block' : 'none';
+    }
+
+    window.onload = function() {
+      toggleGroupSelect();
+    };
+</script>
 {% endblock %}

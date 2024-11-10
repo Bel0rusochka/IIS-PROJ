@@ -299,7 +299,7 @@ def registrate_routes(app, db):
             group = Groups.get_group_or_404(group_id)
 
             if action == "delete":
-                group.unbind_post_group(post_id)
+                Groups.unbind_post_group(group_id, post_id)
                 flash("Post deleted", "success")
             return redirect(url_for('edit_group', id=group_id))
         abort(404)
@@ -506,7 +506,7 @@ def registrate_routes(app, db):
                 post = active_user.get_posts_for_user().filter_by(id=post_id).first()
 
         if post is None:
-            abort(404)
+           return redirect(url_for('go_back'))
 
         add_previous_page()
         comments = post.comments.all()
@@ -569,10 +569,10 @@ def registrate_routes(app, db):
             if post.author_login == session['user']:
                 Posts.delete_post(post_id)
                 flash("Post deleted", "success")
-            return redirect(url_for('index'))
+            return redirect(url_for('go_back'))
         abort(404)
 
-    @app.route('/edit_post/<int:post_id>', methods=['POST'])
+    @app.route('/edit_post/<int:post_id>', methods=['POST', 'GET'])
     @user_exists
     @require_login
     @require_not_banned
@@ -595,7 +595,8 @@ def registrate_routes(app, db):
             else:
                 text = request.form['text']
                 status = request.form['privacy']
-                post.edit_post(text, status, tags)
+                selected_group = request.form.getlist('groups')
+                post.edit_post(text, status, tags, selected_group)
                 flash("Post updated", "success")
                 return redirect(url_for('post', post_id=post.id))
         return render_template("edit_post.html", post = post, user = active_user)
@@ -675,7 +676,7 @@ def registrate_routes(app, db):
         if request.method == 'GET':
             session['index_params'] = request.args.to_dict()
             query = request.args.get('query', '').strip().replace(' ', '#')
-            sort_by = request.args.get('sort_by', 'relevance')
+            sort_by = request.args.get('sort_by', 'date')
             filter_by = request.args.get('filter', 'all')
             tag_list = [tag.strip() for tag in query.split("#") if tag]
 
@@ -694,7 +695,6 @@ def registrate_routes(app, db):
             if user:
                 results = filter_posts(results, filter_by, user)
             results = sort_posts(results, sort_by)
-
             return render_template("index.html", posts=results, user=user)
 
     @app.route('/admin/users', methods=['GET', 'POST'])
@@ -790,6 +790,7 @@ def registrate_routes(app, db):
     @require_not_banned
     def upload():
         if request.method == 'POST':
+            selected_group = request.form.getlist('groups')
             text = request.form['text'].strip()
             status = request.form['privacy']
             image = request.files.get('image')
@@ -806,9 +807,11 @@ def registrate_routes(app, db):
             if len(text) > 1000:
                 flash("Text is too long", "error")
                 bad_data = True
+
             if not bad_data:
                 flash("Post created", "success")
-                Posts.create_post(session['user'], status, text, transform_images(image),tags)
+                Posts.create_post(session['user'], status, text, transform_images(image),tags, selected_group)
+
                 return redirect(url_for('index'))
             return redirect(url_for('index'))
 
