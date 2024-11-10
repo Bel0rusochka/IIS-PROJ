@@ -44,12 +44,12 @@
                             {% if user.role == 'admin' %}
                                 {% if element.role == 'user' and not element.is_banned %}
                                     <button type="submit" name="action" class="edit-buttons" value="make_moderator" class="moderate">Make Moderator</button>
-                                    <button type="submit" name="action"class="edit-buttons"  value="make_admin" class="admin">Make Admin</button>
+                                    <button type="submit" name="action" class="edit-buttons" value="make_admin" class="admin">Make Admin</button>
                                     <button type="submit" name="action" class="edit-buttons" value="delete" class="delete">Delete</button>
                                 {% elif element.role == 'moderator' %}
                                     <button type="submit" name="action" class="edit-buttons" value="make_user" class="user">Make User</button>
                                     <button type="submit" name="action" class="edit-buttons" value="make_admin" class="admin">Make Admin</button>
-                                    <button type="submit" name="action"class="edit-buttons"  value="delete" class="delete">Delete</button>
+                                    <button type="submit" name="action" class="edit-buttons" value="delete" class="delete">Delete</button>
                                 {% endif %}
                             {% endif %}
 
