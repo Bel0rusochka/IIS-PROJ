@@ -6,8 +6,8 @@
 <div class="projekt-search1">
     <div class="projekt-group1">
     <img alt="search" src="../static/images/search.svg" class="projekt-search2">
-    <form method="GET" action="{{ url_for('index') }}">
-        <input type="text" name="query" placeholder="Search in users...">
+    <form method="GET" action="{{ url_for(request.endpoint) }}">
+        <input type="text" name="query" placeholder="Search in users..." {% if  request.args.get('query') %}value="{{  request.args.get('query') }}"{% endif %}>
         <button type="submit">Search</button>
     </form>
     </div>
@@ -30,7 +30,8 @@
                     <div class="user">
                         <img class="avatar" alt="" src="{{ user.avatar_url or '../static/images/no_avatar.svg' }}">
                         <div class="name-user">
-                            <div class="user-name">{{ user.name }}</div>
+                            <div class="user-name">{{ user.name }} {{ user.surname }}</div>
+                            <div class="login">@{{ user.login }}</div>
                         </div>
                     </div>
                 </a>

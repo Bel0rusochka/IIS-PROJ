@@ -343,7 +343,9 @@ def registrate_routes(app, db):
     def users():
         add_previous_page()
         active_user = Users.get_user_or_404(session['user'])
-        users = Users.query.all()
+
+        query = request.args.get('query', '')
+        users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
         return render_template('users.html', users=users, user = active_user)
 
     @app.route('/users/followers')
@@ -353,7 +355,10 @@ def registrate_routes(app, db):
     def users_followers():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        return render_template('users.html', users=active_user.get_followers_list(), user = active_user)
+
+        query = request.args.get('query', '')
+        users = [user for user in active_user.get_followers_list() if query in user.login or query in user.name or query in user.surname] if query else active_user.get_followers_list()
+        return render_template('users.html', users=users, user = active_user)
 
     @app.route('/users/following')
     @user_exists
@@ -362,7 +367,10 @@ def registrate_routes(app, db):
     def users_following():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        return render_template('users.html', users=active_user.get_following_list(), user = active_user)
+
+        query = request.args.get('query', '')
+        users = [user for user in active_user.get_following_list() if query in user.login or query in user.name or query in user.surname] if query else active_user.get_following_list()
+        return render_template('users.html', users=users, user = active_user)
 
     @app.route('/groups')
     @user_exists
@@ -371,7 +379,9 @@ def registrate_routes(app, db):
     def groups():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        groups = Groups.query.all()
+        query = request.args.get('query', '')
+        groups = [group for group in Groups.query.all() if query in group.name] if query else Groups.query.all()
+
         return render_template('groups.html',groups=groups, user = active_user)
 
     @app.route('/groups/following_groups')
@@ -381,7 +391,10 @@ def registrate_routes(app, db):
     def following_groups():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        return render_template('groups.html', groups=active_user.groups, user = active_user)
+
+        query = request.args.get('query', '')
+        groups = [group for group in active_user.groups if query in group.name] if query else active_user.groups
+        return render_template('groups.html', groups=groups, user = active_user)
 
     @app.route('/groups/managed_groups')
     @user_exists
@@ -390,7 +403,11 @@ def registrate_routes(app, db):
     def managed_groups():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        return render_template('groups.html', groups=active_user.managed_groups(), user = active_user)
+
+        query = request.args.get('query', '')
+        groups = [group for group in active_user.managed_groups() if query in group.name] if query else active_user.managed_groups()
+
+        return render_template('groups.html', groups=groups, user = active_user)
 
     @app.route('/groups/create_group', methods=['POST','GET'])
     @user_exists
@@ -676,29 +693,28 @@ def registrate_routes(app, db):
     @require_not_banned
     def index():
         add_previous_page()
-        if request.method == 'GET':
-            session['index_params'] = request.args.to_dict()
-            query = request.args.get('query', '').strip().replace(' ', '#')
-            sort_by = request.args.get('sort_by', 'date')
-            filter_by = request.args.get('filter', 'all')
-            tag_list = [tag.strip() for tag in query.split("#") if tag]
 
-            user_login = session.get('user')
-            if user_login:
-                user = Users.get_user_or_404(user_login)
-                results = user.get_posts_for_user_feed()
-            else:
-                user = None
-                results = Posts.get_all_posts_by_privacy('public')
+        query = request.args.get('query', '').strip().replace(' ', '#')
+        sort_by = request.args.get('sort_by', 'date')
+        filter_by = request.args.get('filter', 'all')
+        tag_list = [tag.strip() for tag in query.split("#") if tag]
 
-            for tag in tag_list:
-                results = results.filter(Posts.associated_tags.any(Tags.name == tag))
-            results = results.all()
+        user_login = session.get('user')
+        if user_login:
+            user = Users.get_user_or_404(user_login)
+            results = user.get_posts_for_user_feed()
+        else:
+            user = None
+            results = Posts.get_all_posts_by_privacy('public')
 
-            if user:
-                results = filter_posts(results, filter_by, user)
-            results = sort_posts(results, sort_by)
-            return render_template("index.html", posts=results, user=user)
+        for tag in tag_list:
+            results = results.filter(Posts.associated_tags.any(Tags.name == tag))
+        results = results.all()
+
+        if user:
+            results = filter_posts(results, filter_by, user)
+        results = sort_posts(results, sort_by)
+        return render_template("index.html", posts=results, user=user)
 
     @app.route('/admin/users', methods=['GET', 'POST'])
     @user_exists
