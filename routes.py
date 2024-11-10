@@ -745,7 +745,10 @@ def registrate_routes(app, db):
             elif action == "unban":
                 user = Users.get_user_or_404(user_login)
                 user.change_user_data(is_banned=False)
-        return render_template("admin_panel.html", elements=Users.query.all(), panel_type = 'users', user = active_user)
+
+        query = request.args.get('query', '')
+        users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
+        return render_template("admin_panel.html", elements=users, panel_type = 'users', user = active_user)
 
     @app.route('/admin/groups', methods=['POST', 'GET'])
     @user_exists
@@ -759,7 +762,10 @@ def registrate_routes(app, db):
             group_id = request.form['group_id']
             Groups.delete_group(group_id)
             flash("Group deleted", "success")
-        return render_template("admin_panel.html", elements=Groups.query.all(), panel_type = 'groups', user = active_user)
+
+        query = request.args.get('query', '')
+        groups = [group for group in Groups.query.all() if query in group.name] if query else Groups.query.all()
+        return render_template("admin_panel.html", elements=groups, panel_type = 'groups', user = active_user)
 
     @app.route('/admin/posts', methods=['POST', 'GET'])
     @user_exists
@@ -773,7 +779,10 @@ def registrate_routes(app, db):
             post_id = request.form['post_id']
             Posts.delete_post(post_id)
             flash("Post deleted", "success")
-        return render_template("admin_panel.html", elements=Posts.query.all(), panel_type = 'posts', user = active_user)
+
+        query = request.args.get('query', '').replace('@', '')
+        posts = [post for post in Posts.query.all() if query in post.author_login] if query else Posts.query.all()
+        return render_template("admin_panel.html", elements=posts, panel_type = 'posts', user = active_user)
 
     @app.route('/admin/tags', methods=['POST', 'GET'])
     @user_exists
@@ -787,7 +796,10 @@ def registrate_routes(app, db):
             tag_name = request.form['tag_name'].strip()
             Tags.delete_tag(tag_name)
             flash("Tag deleted", "success")
-        return render_template("admin_panel.html", elements=Tags.query.all(), panel_type = 'tags', user = active_user)
+
+        query = request.args.get('query', '').replace('#', '')
+        tags = [tag for tag in Tags.query.all() if query in tag.name] if query else Tags.query.all()
+        return render_template("admin_panel.html", elements=tags, panel_type = 'tags', user = active_user)
 
     @app.route('/admin/comments', methods=['POST', 'GET'])
     @user_exists
@@ -801,7 +813,10 @@ def registrate_routes(app, db):
             comment_id = request.form['comment_id']
             Comments.delete_comment(comment_id)
             flash("Comment deleted", "success")
-        return render_template("admin_panel.html", elements=Comments.query.all(), panel_type = 'comments', user = active_user)
+
+        query = request.args.get('query', '').replace('@', '')
+        comments = [comment for comment in Comments.query.all() if query in comment.author_login] if query else Comments.query.all()
+        return render_template("admin_panel.html", elements=comments, panel_type = 'comments', user = active_user)
 
     @app.route('/create_post', methods=['POST', 'GET'])
     @user_exists
