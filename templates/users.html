@@ -3,6 +3,15 @@
 {% block title %}Users{% endblock %}
 
 {% block content %}
+<div class="projekt-search1">
+    <div class="projekt-group1">
+    <img alt="search" src="../static/images/search.svg" class="projekt-search2">
+    <form method="GET" action="{{ url_for('index') }}">
+        <input type="text" name="query" placeholder="Search in users...">
+        <button type="submit">Search</button>
+    </form>
+    </div>
+</div>
     <div class="viewers">
         <a href="{{ url_for('index') }}">
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
@@ -14,11 +23,6 @@
                 <a href="{{ url_for('users_followers') }}" id="myFollowersButton" class="butt-my-viewers {% if request.endpoint == 'users_followers' %}active{% else %}passive{% endif %}">My Followers</a>
             </div>
             
-            <!-- Search Field -->
-			<div class="search">
-				<div class="search-text">Search...</div>
-				<img class="search-icon" alt="" src="../static/images/search.svg">
-			</div>
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
                 {% for user in users %}

@@ -3,6 +3,16 @@
 {% block title %}Groups{% endblock %}
 
 {% block content %}
+	<div class="projekt-search1">
+		<div class="projekt-group1">
+		<img alt="search" src="../static/images/search.svg" class="projekt-search2">
+		<form method="GET" action="{{ url_for('index') }}">
+			<input type="text" name="query" placeholder="Search in groups...">
+			<button type="submit">Search</button>
+		</form>
+		</div>
+	</div>
+
   	<div class="viewers">
 		<a href="{{ url_for('go_back') }}">
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
@@ -15,11 +25,6 @@
 				<a class="add-viewer-button" href="{{ url_for('create_group') }}">Create Group</a>
 			</div>
 			
-			<!-- Search Field -->
-			<div class="search">
-				<div class="search-text">Search...</div>
-				<img class="search-icon" alt="" src="../static/images/search.svg">
-			</div>
 
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
