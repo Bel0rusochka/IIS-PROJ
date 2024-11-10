@@ -949,8 +949,6 @@ img {
   border-radius: 8px;
 }
 
-
-
 textarea {
   width: 100%;
   margin-top: 15px;
@@ -959,6 +957,18 @@ textarea {
   border: 1px solid #ccc;
 }
 
+.group-list {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  display: none; /* Initially hidden */
+}
+
+.post-privacy {
+  margin-bottom: 15px;
+}
 
 /* ---------------------------- PROFILE PAGE STYLE ---------------------------- */
 .profile {

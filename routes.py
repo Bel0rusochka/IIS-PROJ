@@ -754,7 +754,8 @@ def registrate_routes(app, db):
         else:
             active_user = Users.get_user_or_404(session['user'])
             add_previous_page()
-            return render_template('create_post.html', user=active_user)
+            return render_template('create_post.html',groups=active_user.groups, user=active_user)
+
     @app.route('/banned')
     def banned():
         return '''

@@ -23,16 +23,54 @@
           <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text"></textarea>
           <textarea id="tags" placeholder="Add tags starting with # and separated by #" name="tags"></textarea>
 
-          <!-- Post Privacy Settings -->
-          <div class="post-privacy">
+           <!-- Post Privacy Settings -->
+           <div class="post-privacy">
             <label for="privacyOptions">Post Privacy:</label>
-            <select id="privacyOptions" name="privacy">
-              <option value="public">Public - Visible to everyone</option>
-              <option value="private">Friends - Visible to friends</option>
-              <option value="group">Groups - Visible only in groups</option>
+            <select id="privacyOptions" name="privacy" onchange="toggleGroupList()">
+                <option value="public" {% if privacy == 'public' %}selected{% endif %}>Public - Visible to everyone</option>
+                <option value="private" {% if privacy == 'private' %}selected{% endif %}>Friends - Visible to friends</option>
+                <option value="group" {% if privacy == 'group' %}selected{% endif %}>Groups - Visible only in groups</option>
             </select>
-          </div>
-        </form>
-    </div>
+        </div>
+
+        <!-- Group Selection (Initially hidden) -->
+        <div id="groupList" class="group-list" style="display: {% if privacy == 'group' %}block{% else %}none{% endif %};">
+            <label>Select Groups:</label>
+            <div>
+                {% for group in groups %}
+                    <label>
+                        <input type="checkbox" name="groups" value="{{ group.id }}">
+                        {{ group.name }}
+                    </label><br>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
 </div>
+</div>
+
+<script>
+// Function to toggle the visibility of the group list
+function toggleGroupList() {
+    const privacySelect = document.getElementById('privacyOptions');
+    const groupList = document.getElementById('groupList');
+
+    // Show the group list only when "Groups" is selected in privacy settings
+    if (privacySelect.value === 'group') {
+        groupList.style.display = 'block';
+        window.scrollTo({
+            top: groupList.offsetTop, // Scroll to the group list
+            behavior: 'smooth' // Smooth scroll effect
+        });
+    } else {
+        groupList.style.display = 'none';
+    }
+}
+
+// Trigger toggleGroupList() on page load to set the initial visibility
+document.addEventListener('DOMContentLoaded', () => {
+    toggleGroupList(); // Ensure correct visibility based on selected privacy
+});
+</script>
+
 {% endblock %}
