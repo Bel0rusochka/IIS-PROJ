@@ -37,10 +37,10 @@
         <div id="groupList" class="group-list" style="display: {% if privacy == 'group' %}block{% else %}none{% endif %};">
             <label>Select Groups:</label>
             <div>
-                {% for group in groups %}
+                {% for group in user.get_approved_groups() %}
                     <label>
+                        <label for="group{{ group.id }}">{{ group.name }}</label>
                         <input type="checkbox" name="groups" value="{{ group.id }}">
-                        {{ group.name }}
                     </label><br>
                 {% endfor %}
             </div>
