@@ -138,7 +138,7 @@ def registrate_routes(app, db):
                 password_db = hashlib.md5(password.encode()).hexdigest()
                 Users.add_user(login, email, password_db, name, surname,role)
                 return redirect(url_for('index'))
-            return render_template("signup.html", previos_values=request_data)
+            return render_template("signup.html", previous_values=request_data)
         return render_template("signup.html")
 
     @app.route('/login', methods=['GET', 'POST'])
@@ -163,7 +163,7 @@ def registrate_routes(app, db):
                 session['user'] = user.login
                 flash("You are logged in", "success")
                 return redirect(url_for('index'))
-            return render_template("login.html", previos_values=request_data)
+            return render_template("login.html", previous_values=request_data)
         return render_template("login.html")
 
     @app.route('/profile/<login>')
@@ -414,35 +414,41 @@ def registrate_routes(app, db):
     @require_login
     @require_not_banned
     def create_group():
+        active_user = Users.get_user_or_404(session['user'])
         if request.method == 'POST':
             group_name = request.form['group-name'].strip()
             group_description = request.form['group-description'].strip()
             bad_data = False
+            previous_values = {'group_name': group_name, 'group_description': group_description}
 
             if group_name == '':
                 flash("Group name is empty", "error")
                 bad_data = True
+                previous_values.pop('group_name')
             elif "@" in group_name:
                 flash("Group name is invalid", "error")
                 bad_data = True
+                previous_values.pop('group_name')
             elif len(group_name) > 60:
                 flash("Group name is too long", "error")
                 bad_data = True
+                previous_values.pop('group_name')
 
             if len(group_description) > 60:
                 flash("Group description is too long", "error")
                 bad_data = True
+                previous_values.pop('group_description')
 
             if not bad_data:
-                user = Users.get_user_or_404(session['user'])
-                group = Groups.create_group(group_name, group_description, user)
+
+                group = Groups.create_group(group_name, group_description, active_user)
                 flash("Group created", "success")
                 return redirect(url_for('group', id=group.id))
-            return redirect(url_for('groups'))
+            return render_template('create_group.html', user=active_user, previous_values=previous_values)
         else:
-            active_user = Users.get_user_or_404(session['user'])
+
             add_previous_page()
-            return render_template('create_group.html', groups=active_user.managed_groups(), user=active_user)
+            return render_template('create_group.html', user=active_user, previous_values={})
 
     @app.route('/groups/<int:id>')
     @user_exists
@@ -823,35 +829,39 @@ def registrate_routes(app, db):
     @require_login
     @require_not_banned
     def create_post():
+        active_user = Users.get_user_or_404(session['user'])
         if request.method == 'POST':
-            selected_group = request.form.getlist('groups')
+            selected_group = list(map(int, request.form.getlist('groups')))
             text = request.form['text'].strip()
             status = request.form['privacy']
             image = request.files.get('image')
             tags_input = request.form['tags'].strip()
             tags = [tag for tag in tags_input.split('#') if tag]
             bad_data = False
+            previous_values = {'text': text, 'tags':  request.form['tags'], 'groups': selected_group, 'privacy': status}
 
             if tags_input and not tags_input.startswith('#'):
                 flash("Tags should start with # and be separated by #", "error")
                 bad_data = True
+                previous_values.pop('tags')
             elif tags_input and len(tags) != tags_input.count('#'):
                 flash("Tags should be separated by #", "error")
                 bad_data = True
+                previous_values.pop('tags')
             if len(text) > 1000:
                 flash("Text is too long", "error")
                 bad_data = True
+                previous_values.pop('text')
 
             if not bad_data:
                 flash("Post created", "success")
-                Posts.create_post(session['user'], status, text, transform_images(image),tags, selected_group)
+                Posts.create_post(active_user.login, status, text, transform_images(image),tags, selected_group)
 
                 return redirect(url_for('index'))
-            return redirect(url_for('index'))
+            return render_template('create_post.html', user=active_user, previous_values=previous_values)
         else:
-            active_user = Users.get_user_or_404(session['user'])
             add_previous_page()
-            return render_template('create_post.html', user=active_user)
+            return render_template('create_post.html', user=active_user, previous_values={})
 
     @app.route('/banned')
     def banned():
