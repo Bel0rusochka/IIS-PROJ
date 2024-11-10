@@ -70,6 +70,10 @@ class Users(db.Model):
         db.session.delete(user)
         db.session.commit()
 
+    def get_approved_groups(self):
+        groups = [group for group in self.groups if group.get_users_with_role_group().get(self.login) != 'pending']
+        return groups
+
     def get_posts_for_user(self):
         return Posts.query.filter(
             or_(
@@ -159,7 +163,7 @@ class Groups(db.Model):
     name = db.Column(db.String(60),nullable=False)
     date = db.Column(db.DateTime,default=db.func.current_timestamp())
     description = db.Column(db.String(60),nullable=False)
-    posts = db.relationship('Posts', secondary=PostsGroups)
+    posts = db.relationship('Posts', secondary=PostsGroups, order_by='Posts.date.desc()')
     users = db.relationship('Users', secondary=GroupsUsers)
 
     @staticmethod
@@ -179,6 +183,23 @@ class Groups(db.Model):
     def delete_group(id):
         group = Groups.query.get(id)
         db.session.delete(group)
+        db.session.commit()
+
+    @staticmethod
+    def unbind_post_group(group_id, post_id):
+        db.session.execute(
+            PostsGroups.delete().where(and_(PostsGroups.c.post_id == post_id, PostsGroups.c.groups_id == group_id))
+        )
+        db.session.commit()
+
+    @staticmethod
+    def bind_post_group(group_id, post_id):
+        db.session.execute(
+            PostsGroups.insert().values(
+                post_id=post_id,
+                groups_id=group_id
+            )
+        )
         db.session.commit()
 
     def is_subscribed(self, login):
@@ -230,13 +251,6 @@ class Groups(db.Model):
             ).where(and_(GroupsUsers.c.user_login == login, GroupsUsers.c.group_id == self.id))
         )
         db.session.commit()
-
-    def unbind_post_group(self, post_id):
-        db.session.execute(
-            PostsGroups.delete().where(and_(PostsGroups.c.post_id == post_id, PostsGroups.c.groups_id == self.id))
-        )
-        db.session.commit()
-
 
 class Tags(db.Model):
     name = db.Column(db.String(60), primary_key = True)
@@ -291,7 +305,7 @@ class Posts(db.Model):
         return query.order_by(Posts.date.desc())
 
     @staticmethod
-    def create_post(author_login, status, text, image_binary, tags):
+    def create_post(author_login, status, text, image_binary, tags, groups_id):
         post = Posts(author_login=author_login, status=status, text=text, image_binary=image_binary)
         for tag in tags:
             if tag == '' or tag == ' ': continue
@@ -299,14 +313,23 @@ class Posts(db.Model):
             if tag_db is None:
                 tag_db = Tags(name=tag)
             post.associated_tags.append(tag_db)
+
         db.session.add(post)
         db.session.commit()
+
+        if status == 'group' and len(groups_id) > 0:
+            for group_id in groups_id:
+                Groups.bind_post_group(group_id, post.id)
 
     @staticmethod
     def delete_post(id):
         post = Posts.query.get(id)
         db.session.delete(post)
         db.session.commit()
+
+    def get_connected_groups(self):
+        groups = db.session.query(PostsGroups).filter_by(post_id=self.id).all()
+        return [Groups.query.get(group.groups_id) for group in groups]
 
     def like_count(self):
         return self.likes.count()
@@ -331,7 +354,7 @@ class Posts(db.Model):
         db.session.add(comment)
         db.session.commit()
 
-    def edit_post(self, text, status, tags):
+    def edit_post(self, text, status, tags, selected_groups):
         self.text = text
         self.status = status
         associated_tags = []
@@ -342,6 +365,13 @@ class Posts(db.Model):
                 tag_db = Tags(name=tag)
             associated_tags.append(tag_db)
         self.associated_tags = associated_tags
+
+        if status == 'group':
+            groups = db.session.query(PostsGroups).filter_by(post_id=self.id).all()
+            for group in groups:
+                Groups.unbind_post_group(group.groups_id, self.id)
+            for group_id in selected_groups:
+                Groups.bind_post_group(group_id, self.id)
         db.session.commit()
 
     def share_post(self, sender_login, recipient_login):

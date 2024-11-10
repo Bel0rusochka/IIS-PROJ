@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_file, abort
-from urllib.parse import urlencode
+from flask import render_template, request, redirect, url_for, flash, session, send_file, abort
 from models import *
 import hashlib
 from PIL import Image as PILImage
@@ -18,7 +17,19 @@ def registrate_routes(app, db):
         img.save(img_io, 'JPEG', quality=100)
         img_io.seek(0)
         return img_io.read()
-    
+
+    def user_exists(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if  session.get('user') is not None:
+                user = Users.get_user(session['user'])
+                if user is None:
+                    session.pop('user', None)
+                    flash("User not found", "error")
+                    return redirect(url_for('login'))
+            return f(*args, **kwargs)
+        return decorated_function
+
     def require_login(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -68,6 +79,7 @@ def registrate_routes(app, db):
             session['previous_pages'] = []
 
     @app.route('/go_back')
+    @user_exists
     def go_back():
         if len(session['previous_pages']) > 0 and session['previous_pages'][-1] != request.referrer:
             return redirect(session['previous_pages'].pop())
@@ -155,6 +167,7 @@ def registrate_routes(app, db):
         return render_template("login.html")
 
     @app.route('/profile/<login>')
+    @user_exists
     @require_login
     @require_not_banned
     def profile(login):
@@ -173,6 +186,9 @@ def registrate_routes(app, db):
             return  render_template("profile.html", user=user, posts=posts, is_following=is_following)
 
     @app.route('/follow', methods=['GET', 'POST'])
+    @user_exists
+    @require_login
+    @require_not_banned
     def follow():
         if request.method == 'POST':
             user_login = request.form['user_login']
@@ -192,6 +208,9 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/unfollow', methods=['GET', 'POST'])
+    @user_exists
+    @require_login
+    @require_not_banned
     def unfollow():
         if request.method == 'POST':
             user_login = request.form['user_login']
@@ -211,6 +230,7 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/groups_setting/<int:id>', methods=['GET', 'POST'])
+    @user_exists
     @require_login
     @require_not_banned
     def edit_group(id):
@@ -241,6 +261,9 @@ def registrate_routes(app, db):
         return render_template("edit_group.html", group=group, users=users_with_roles, posts=group.posts)
 
     @app.route('/groups/manage/users', methods=['POST'])
+    @user_exists
+    @require_login
+    @require_not_banned
     def manage_users_group():
         if request.method == 'POST':
             group_id = request.form['group_id']
@@ -265,6 +288,9 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/groups/manage/posts', methods=['POST'])
+    @user_exists
+    @require_login
+    @require_not_banned
     def manage_posts_group():
         if request.method == 'POST':
             group_id = request.form['group_id']
@@ -273,12 +299,15 @@ def registrate_routes(app, db):
             group = Groups.get_group_or_404(group_id)
 
             if action == "delete":
-                group.unbind_post_group(post_id)
+                Groups.unbind_post_group(group_id, post_id)
                 flash("Post deleted", "success")
             return redirect(url_for('edit_group', id=group_id))
         abort(404)
 
     @app.route('/groups/delete', methods=['POST'])
+    @user_exists
+    @require_login
+    @require_not_banned
     def delete_group():
         if request.method == 'POST':
             flash("Group deleted", "success")
@@ -288,6 +317,7 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/shares')
+    @user_exists
     @require_login
     @require_not_banned
     def shares():
@@ -297,6 +327,7 @@ def registrate_routes(app, db):
         return render_template('shares.html', shares=shares_received, user = active_user)
 
     @app.route('/shares/sent')
+    @user_exists
     @require_login
     @require_not_banned
     def shares_sent():
@@ -306,6 +337,7 @@ def registrate_routes(app, db):
         return render_template('shares.html', shares=shares, user = active_user)
 
     @app.route('/users')
+    @user_exists
     @require_login
     @require_not_banned
     def users():
@@ -315,6 +347,7 @@ def registrate_routes(app, db):
         return render_template('users.html', users=users, user = active_user)
 
     @app.route('/users/followers')
+    @user_exists
     @require_login
     @require_not_banned
     def users_followers():
@@ -323,6 +356,7 @@ def registrate_routes(app, db):
         return render_template('users.html', users=active_user.get_followers_list(), user = active_user)
 
     @app.route('/users/following')
+    @user_exists
     @require_login
     @require_not_banned
     def users_following():
@@ -331,6 +365,7 @@ def registrate_routes(app, db):
         return render_template('users.html', users=active_user.get_following_list(), user = active_user)
 
     @app.route('/groups')
+    @user_exists
     @require_login
     @require_not_banned
     def groups():
@@ -340,6 +375,7 @@ def registrate_routes(app, db):
         return render_template('groups.html',groups=groups, user = active_user)
 
     @app.route('/groups/following_groups')
+    @user_exists
     @require_login
     @require_not_banned
     def following_groups():
@@ -348,6 +384,7 @@ def registrate_routes(app, db):
         return render_template('groups.html', groups=active_user.groups, user = active_user)
 
     @app.route('/groups/managed_groups')
+    @user_exists
     @require_login
     @require_not_banned
     def managed_groups():
@@ -356,6 +393,7 @@ def registrate_routes(app, db):
         return render_template('groups.html', groups=active_user.managed_groups(), user = active_user)
 
     @app.route('/groups/create_group', methods=['POST','GET'])
+    @user_exists
     @require_login
     @require_not_banned
     def create_group():
@@ -390,6 +428,7 @@ def registrate_routes(app, db):
             return render_template('create_group.html', groups=active_user.managed_groups(), user=active_user)
 
     @app.route('/groups/<int:id>')
+    @user_exists
     @require_login
     @require_not_banned
     def group(id):
@@ -401,6 +440,9 @@ def registrate_routes(app, db):
         return render_template("group.html", group=group, posts = group.posts, is_admin=is_admin, subscribers=subscribers_dict.keys())
 
     @app.route('/delete_user', methods=['GET', 'POST'])
+    @user_exists
+    @require_login
+    @require_not_banned
     def delete_user():
         if request.method == 'POST':
             user_login = request.form['user_login']
@@ -411,6 +453,7 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/setting/<login>', methods=['GET', 'POST'])
+    @user_exists
     @require_login
     @require_not_banned
     def setting(login):
@@ -451,6 +494,7 @@ def registrate_routes(app, db):
         return render_template("edit_profile.html", user=user)
 
     @app.route('/posts/<int:post_id>')
+    @user_exists
     @require_not_banned
     def post(post_id):
         user_login = session.get('user')
@@ -465,13 +509,15 @@ def registrate_routes(app, db):
                 post = active_user.get_posts_for_user().filter_by(id=post_id).first()
 
         if post is None:
-            abort(404)
+           return redirect(url_for('go_back'))
 
         add_previous_page()
         comments = post.comments.all()
         return render_template("post.html", post=post, comments=comments, user=active_user if user_login else None)
 
     @app.route('/add_comment/<int:post_id>', methods=['POST'])
+    @user_exists
+    @require_not_banned
     def add_comment(post_id):
         if session.get('user') is None or request.method == 'GET':
             flash("You are not logged in", "error")
@@ -487,6 +533,8 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/delete_comment', methods=['POST'])
+    @user_exists
+    @require_not_banned
     def delete_comment():
         if request.method == 'POST':
             comment = Comments.get_comment_or_404(request.form['comment_id'])
@@ -497,6 +545,8 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/like', methods=['POST'])
+    @user_exists
+    @require_not_banned
     def like_post():
         if request.method == 'POST':
             post_id = request.form['post_id']
@@ -513,6 +563,8 @@ def registrate_routes(app, db):
         abort(404)
 
     @app.route('/delete_post', methods=['POST'])
+    @user_exists
+    @require_not_banned
     def delete_post():
         if request.method == 'POST':
             post_id = request.form['post_id']
@@ -520,10 +572,11 @@ def registrate_routes(app, db):
             if post.author_login == session['user']:
                 Posts.delete_post(post_id)
                 flash("Post deleted", "success")
-            return redirect(url_for('index'))
+            return redirect(url_for('go_back'))
         abort(404)
 
-    @app.route('/edit_post/<int:post_id>', methods=['POST'])
+    @app.route('/edit_post/<int:post_id>', methods=['POST', 'GET'])
+    @user_exists
     @require_login
     @require_not_banned
     def edit_post(post_id):
@@ -545,12 +598,15 @@ def registrate_routes(app, db):
             else:
                 text = request.form['text']
                 status = request.form['privacy']
-                post.edit_post(text, status, tags)
+                selected_group = request.form.getlist('groups')
+                post.edit_post(text, status, tags, selected_group)
                 flash("Post updated", "success")
                 return redirect(url_for('post', post_id=post.id))
         return render_template("edit_post.html", post = post, user = active_user)
 
     @app.route('/share_post', methods=['POST'])
+    @user_exists
+    @require_not_banned
     @require_login
     def share_post():
         if request.method == 'POST':
@@ -616,13 +672,14 @@ def registrate_routes(app, db):
         return results
 
     @app.route('/')
+    @user_exists
     @require_not_banned
     def index():
         add_previous_page()
         if request.method == 'GET':
             session['index_params'] = request.args.to_dict()
             query = request.args.get('query', '').strip().replace(' ', '#')
-            sort_by = request.args.get('sort_by', 'relevance')
+            sort_by = request.args.get('sort_by', 'date')
             filter_by = request.args.get('filter', 'all')
             tag_list = [tag.strip() for tag in query.split("#") if tag]
 
@@ -641,12 +698,13 @@ def registrate_routes(app, db):
             if user:
                 results = filter_posts(results, filter_by, user)
             results = sort_posts(results, sort_by)
-
             return render_template("index.html", posts=results, user=user)
 
     @app.route('/admin/users', methods=['GET', 'POST'])
+    @user_exists
     @require_login
     @require_not_banned
+    @require_admin_or_moder
     def admin_panel_users():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
@@ -674,6 +732,7 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Users.query.all(), panel_type = 'users', user = active_user)
 
     @app.route('/admin/groups', methods=['POST', 'GET'])
+    @user_exists
     @require_login
     @require_not_banned
     @require_admin_or_moder
@@ -687,6 +746,7 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Groups.query.all(), panel_type = 'groups', user = active_user)
 
     @app.route('/admin/posts', methods=['POST', 'GET'])
+    @user_exists
     @require_login
     @require_not_banned
     @require_admin_or_moder
@@ -700,6 +760,7 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Posts.query.all(), panel_type = 'posts', user = active_user)
 
     @app.route('/admin/tags', methods=['POST', 'GET'])
+    @user_exists
     @require_login
     @require_not_banned
     @require_admin_or_moder
@@ -713,6 +774,7 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Tags.query.all(), panel_type = 'tags', user = active_user)
 
     @app.route('/admin/comments', methods=['POST', 'GET'])
+    @user_exists
     @require_login
     @require_not_banned
     @require_admin_or_moder
@@ -726,10 +788,12 @@ def registrate_routes(app, db):
         return render_template("admin_panel.html", elements=Comments.query.all(), panel_type = 'comments', user = active_user)
 
     @app.route('/create_post', methods=['POST', 'GET'])
+    @user_exists
     @require_login
     @require_not_banned
     def create_post():
         if request.method == 'POST':
+            selected_group = request.form.getlist('groups')
             text = request.form['text'].strip()
             status = request.form['privacy']
             image = request.files.get('image')
@@ -746,9 +810,11 @@ def registrate_routes(app, db):
             if len(text) > 1000:
                 flash("Text is too long", "error")
                 bad_data = True
+
             if not bad_data:
                 flash("Post created", "success")
-                Posts.create_post(session['user'], status, text, transform_images(image),tags)
+                Posts.create_post(session['user'], status, text, transform_images(image),tags, selected_group)
+
                 return redirect(url_for('index'))
             return redirect(url_for('index'))
         else:

@@ -75,6 +75,11 @@
             {% endfor %}
         </div>
 
+        {% if post.status == 'group' %}
+            <span>Group:</span>
+            {%  for group in post.get_connected_groups() %}<div id="groupTag"><a href="{{ url_for('group', id=group.id) }}"><span>{{ group.name }}</span></a></div>{% endfor %}
+        {% endif %}
+
         <div id="imageDescription">
             <h3>Description:</h3>
             <p>{{ post.text }}</p>

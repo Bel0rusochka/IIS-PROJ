@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  flask_app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_APP: app.py
+      FLASK_ENV: development
+    command: flask run --host=0.0.0.0
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  migrate:
+    build: .
+    environment:
+      FLASK_APP: app.py
+      FLASK_ENV: development
+    command: >
+      sh -c "
+      flask db init &&
+      flask db migrate &&
+      flask db upgrade
+      "
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: flask_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  adminer:
+        image: adminer
+        ports:
+          - 8080:8080
+volumes:
+  db_data:

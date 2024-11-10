@@ -91,7 +91,7 @@ with app.app_context():
 
     def create_posts(users, groups, tags, count=20):
         posts = []
-        images_lst = load_photos_from_folder('static/images/')
+        images_lst = load_photos_from_folder('static/test_images/')
 
         for _ in range(count):
             post_status = random.choice(['public', 'private', 'group'])
