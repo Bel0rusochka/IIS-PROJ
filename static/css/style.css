@@ -36,6 +36,65 @@ a {
 img {
   display: block;
 }
+/* Flash message container */
+.flash-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: none; /* Initially hidden */
+  flex-direction: column;
+  align-items: center;
+}
+
+.flash-message {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: white;
+  width: 300px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInOut 4s forwards;
+}
+
+/* Specific styles for different flash message categories */
+.flash-message.error {
+  background-color: #f44336; /* Red */
+}
+
+.flash-message.success {
+  background-color: #4CAF50; /* Green */
+}
+
+.flash-message.info {
+  background-color: #2196F3; /* Blue */
+}
+
+.flash-message.warning {
+  background-color: #ff9800; /* Orange */
+}
+
+/* Fade-in and fade-out animation */
+@keyframes fadeInOut {
+  0% {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
+  20% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+  80% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+  100% {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+}
 
 /* ---------------------------- SIGNUP PAGE AND LOGIN PAGE STYLES ---------------------------- */
 
