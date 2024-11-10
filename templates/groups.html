@@ -3,22 +3,28 @@
 {% block title %}Groups{% endblock %}
 
 {% block content %}
+	<div class="projekt-search1">
+		<div class="projekt-group1">
+		<img alt="search" src="../static/images/search.svg" class="projekt-search2">
+		<form method="GET" action="{{ url_for('index') }}">
+			<input type="text" name="query" placeholder="Search in groups...">
+			<button type="submit">Search</button>
+		</form>
+		</div>
+	</div>
+
   	<div class="viewers">
 		<a href="{{ url_for('go_back') }}">
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
 		<div class="all-users">
-
-			<a href="{{ url_for('groups')}}"  id="allGroupsButton" class = 'butt-my-viewers passive'>All Groups</a>
-			<a href="{{ url_for('following_groups')}}" id="followingGroupsButton" class = 'butt-my-viewers passive'>Following Groups</a>
-			<a href="{{ url_for('managed_groups')}}" id="managedGroupsButton" class = 'butt-my-viewers passive'>Managed Groups</a>
-
-			<a class="add-viewer-button" onclick="showAddViewerPopup()">Create Group</a>
-			<!-- Search Field -->
-			<div class="search">
-				<div class="search-text">Search...</div>
-				<img class="search-icon" alt="" src="../static/images/search.svg">
+			<div class="button-container">
+				<a href="{{ url_for('groups') }}" id="allGroupsButton" class="butt-my-viewers {% if request.endpoint == 'groups' %}active{% else %}passive{% endif %}">All Groups</a>
+				<a href="{{ url_for('following_groups') }}" id="followingGroupsButton" class="butt-my-viewers {% if request.endpoint == 'following_groups' %}active{% else %}passive{% endif %}">Following Groups</a>
+				<a href="{{ url_for('managed_groups') }}" id="managedGroupsButton" class="butt-my-viewers {% if request.endpoint == 'managed_groups' %}active{% else %}passive{% endif %}">Managed Groups</a>
+				<a class="add-viewer-button" href="{{ url_for('create_group') }}">Create Group</a>
 			</div>
+			
 
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
@@ -34,81 +40,18 @@
 									<input type="hidden" name="group_id" value="{{group.id}}">
 									<input type="hidden" name="user_login" value="{{session.user}}">
 									{% if group.is_subscribed(session.user) %}
-										<button type="submit" class="edit-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
+										<button type="submit" class="edit-buttons" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
 									{% else %}
-										<button type="submit" class="edit-profile" id="joinProfileButton" name="action" value="add">Join Group</button>
+										<button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
 									{% endif %}
 								</form>
 
 						</div>
 					</div>
-					<div class="line"></div>
 				</a>
+				<div class="line"></div>
                 {% endfor %}
             </div>
 		</div>
   	</div>
-
-  	<!-- Popup for creating a group (still controlled by JavaScript) -->
-<div id="createGroupContainer" class="popup-overlay" style="display:none">
-    <div class="add-viewer">
-        <div class="add-viewer-text">Create a Group</div>
-		<form method="POST" action="{{ url_for('create_group') }}">
-			<div class="window-name">
-				<div class="group-name">Group Name</div>
-				<input type="text" name="group-name" placeholder="Enter a name" required>
-			</div>
-			<div class="window-name">
-				<div class="group-name">Group Description</div>
-				<input type="text" name="group-description" placeholder="Enter a description">
-			</div>
-			<div class="button-add">
-				<button type="submit" class="create">Create</button>
-			</div>
-		</form>
-	</div>
-</div>
-
-
-	  <script>
-        // Show/hide the "create group" popup
-        var createGroupButton = document.getElementById("createGroupButton");
-        var createGroupPopup = document.getElementById("createGroupContainer");
-
-        function showAddViewerPopup() {
-            createGroupPopup.style.display = "flex";
-        }
-
-        // Close popup when clicked outside
-        createGroupPopup.addEventListener("click", function (e) {
-            if (e.target === createGroupPopup) {
-                createGroupPopup.style.display = "none";
-            }
-        });
-		function selectPrivacy(option) {
-    var currentPrivacyText = document.getElementById("currentPrivacy");
-    currentPrivacyText.innerText = option.charAt(0).toUpperCase() + option.slice(1); // Capitalize first letter
-
-    // Close the privacy options
-    var privacyOptions = document.getElementById("privacyOptions");
-    privacyOptions.style.display = "none";
-
-    // Additional logic for saving the selected privacy to your Flask app can be added here
-    console.log("Selected privacy: " + option); // This will log the selected option; replace with AJAX or form submission as needed
-}
-        // Optional: Add event listener for the "Create" button inside the popup
-        document.querySelector('.create').addEventListener('click', function () {
-            // Add your create logic here
-            createGroupPopup.style.display = "none"; // Close popup after creating
-        });
-		function togglePrivacyOptions() {
-			var privacyOptions = document.getElementById("privacyOptions");
-			if (privacyOptions.style.display === "none") {
-				privacyOptions.style.display = "block"; // Show privacy options
-			} else {
-				privacyOptions.style.display = "none"; // Hide privacy options
-			}
-		}
-
-    </script>
 {% endblock %}

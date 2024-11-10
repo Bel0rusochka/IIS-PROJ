@@ -35,70 +35,13 @@
       </a>
     {% endfor %}
   </div>
-
-  {% if session.user %}
-    <!-- New Post Modal Trigger -->
-    <div class="addPost" onclick="togglePopup()">
-      <div class="ellipse">
-        <span class="projekt-text5">+</span>
+    {% if session.user %}
+      <div class="addPost">
+        <a href="{{ url_for('create_post') }}">
+          <div class="ellipse">
+            <span class="projekt-text5">+</span>
+          </div>
+        </a>
       </div>
-    </div>
-
-    <!-- New Post Popup Modal -->
-    <div id="popupModal" class="popup-modal">
-      <div class="popup-content">
-        <form id="postForm" method="POST" action="/upload" enctype="multipart/form-data">
-          <div class="popup-header">
-            <span class="close-popup" onclick="togglePopup()">×</span>
-            <h2 class="popup-title">New Post</h2>
-            <button type="submit" class="post-button">Post</button>
-          </div>
-
-          <!-- Image Upload & Details -->
-          <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
-            <p>Drag & Drop image here</p>
-            <span class="image-upload-label">Click to Upload Image</span>
-            <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image" required>
-          </div>
-          <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text"></textarea>
-          <textarea id="tags" placeholder="Add tags starting with # and separated by #" name="tags"></textarea>
-
-          <!-- Post Privacy Settings -->
-          <div class="post-privacy">
-            <label for="privacyOptions">Post Privacy:</label>
-            <select id="privacyOptions" name="privacy" onchange="toggleGroupSelect()">
-              <option value="public">Public - Visible to everyone</option>
-              <option value="private">Friends - Visible to friends</option>
-              <option value="group">Groups - Visible only in groups</option>
-            </select>
-
-            <div id="groupSelect" style="display: none;">
-                <label for="groupOptions">Select Group:</label>
-                {% for group in user.get_approved_groups() %}
-                    <input type="checkbox" id="group{{ group.id }}" name="groups" value="{{ group.id }}">
-                    <label for="group{{ group.id }}">{{ group.name }}</label>
-                {% endfor %}
-            </div>
-
-          </div>
-        </form>
-      </div>
-    </div>
-  {% endif %}
- <script>
-    function toggleGroupSelect() {
-      const privacyOptions = document.getElementById('privacyOptions');
-      const groupSelect = document.getElementById('groupSelect');
-      groupSelect.style.display = privacyOptions.value === 'group' ? 'block' : 'none';
-    }
-
-    function togglePopup() {
-      const popupModal = document.getElementById('popupModal');
-      popupModal.style.display = popupModal.style.display === 'none' || popupModal.style.display === '' ? 'block' : 'none';
-    }
-
-    window.onload = function() {
-      toggleGroupSelect();
-    };
-</script>
+    {% endif %}
 {% endblock %}

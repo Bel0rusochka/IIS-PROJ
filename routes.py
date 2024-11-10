@@ -383,7 +383,7 @@ def registrate_routes(app, db):
         add_previous_page()
         return render_template('groups.html', groups=active_user.groups, user = active_user)
 
-    @app.route('/managed_groups')
+    @app.route('/groups/managed_groups')
     @user_exists
     @require_login
     @require_not_banned
@@ -392,7 +392,7 @@ def registrate_routes(app, db):
         add_previous_page()
         return render_template('groups.html', groups=active_user.managed_groups(), user = active_user)
 
-    @app.route('/create_group', methods=['POST'])
+    @app.route('/groups/create_group', methods=['POST','GET'])
     @user_exists
     @require_login
     @require_not_banned
@@ -422,7 +422,10 @@ def registrate_routes(app, db):
                 flash("Group created", "success")
                 return redirect(url_for('group', id=group.id))
             return redirect(url_for('groups'))
-        abort(404)
+        else:
+            active_user = Users.get_user_or_404(session['user'])
+            add_previous_page()
+            return render_template('create_group.html', groups=active_user.managed_groups(), user=active_user)
 
     @app.route('/groups/<int:id>')
     @user_exists
@@ -784,11 +787,11 @@ def registrate_routes(app, db):
             flash("Comment deleted", "success")
         return render_template("admin_panel.html", elements=Comments.query.all(), panel_type = 'comments', user = active_user)
 
-    @app.route('/upload', methods=['POST', 'GET'])
+    @app.route('/create_post', methods=['POST', 'GET'])
     @user_exists
     @require_login
     @require_not_banned
-    def upload():
+    def create_post():
         if request.method == 'POST':
             selected_group = request.form.getlist('groups')
             text = request.form['text'].strip()
@@ -814,11 +817,11 @@ def registrate_routes(app, db):
 
                 return redirect(url_for('index'))
             return redirect(url_for('index'))
+        else:
+            active_user = Users.get_user_or_404(session['user'])
+            add_previous_page()
+            return render_template('create_post.html',groups=active_user.groups, user=active_user)
 
     @app.route('/banned')
     def banned():
-        return '''
-        <h1>You are banned</h1>
-        <p>Sorry, you are banned</p>
-        <a href="/logout">Logout</a>
-        '''
+        return render_template('banned.html')

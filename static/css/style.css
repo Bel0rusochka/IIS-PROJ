@@ -36,6 +36,65 @@ a {
 img {
   display: block;
 }
+/* Flash message container */
+.flash-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: none; /* Initially hidden */
+  flex-direction: column;
+  align-items: center;
+}
+
+.flash-message {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: white;
+  width: 300px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInOut 4s forwards;
+}
+
+/* Specific styles for different flash message categories */
+.flash-message.error {
+  background-color: #f44336; /* Red */
+}
+
+.flash-message.success {
+  background-color: #4CAF50; /* Green */
+}
+
+.flash-message.info {
+  background-color: #2196F3; /* Blue */
+}
+
+.flash-message.warning {
+  background-color: #ff9800; /* Orange */
+}
+
+/* Fade-in and fade-out animation */
+@keyframes fadeInOut {
+  0% {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
+  20% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+  80% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+  100% {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+}
 
 /* ---------------------------- SIGNUP PAGE AND LOGIN PAGE STYLES ---------------------------- */
 
@@ -103,6 +162,9 @@ img {
   border: 1px solid rgba(195, 193, 193, 1);
   border-radius: 20px;
   background-color: rgba(255, 251, 251, 1);
+}
+#postForm.pagesignup-container {
+  padding-top: 400px;
 }
 
 /* Signup form large heading */
@@ -890,14 +952,13 @@ img {
 }
 
 .popup-header {
+  width: 100%;
   display: flex; /* Use flexbox for header */
   justify-content: space-between; /* Space out elements */
   align-items: center; /* Center elements vertically */
-  padding: 10px 20px; /* Add padding */
 }
 
 .popup-title {
-  flex-grow: 1; /* Allow title to take remaining space */
   text-align: center; /* Center the title */
   margin: 0; /* Remove default margin */
 }
@@ -947,12 +1008,6 @@ img {
   border-radius: 8px;
 }
 
-.popup-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 textarea {
   width: 100%;
   margin-top: 15px;
@@ -961,6 +1016,18 @@ textarea {
   border: 1px solid #ccc;
 }
 
+.group-list {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  display: none; /* Initially hidden */
+}
+
+.post-privacy {
+  margin-bottom: 15px;
+}
 
 /* ---------------------------- PROFILE PAGE STYLE ---------------------------- */
 .profile {
@@ -1033,14 +1100,14 @@ textarea {
   padding-left:20px;
   flex-direction: column; /* Align name, surname, and login vertically */
 }
-.edit-profile {
+.edit-buttons {
   font-size: 20px;
   cursor: pointer;
   margin-left: auto; /* Push "edit profile" to the right */
 }
 
 /* Styling the edit and delete buttons */
-.edit-profile,
+.edit-buttons,
 .delete-profile {
   display: block;
   padding: 8px 16px;
@@ -1057,7 +1124,7 @@ textarea {
 
 
 /* Button hover effect */
-.edit-profile:hover,
+.edit-buttons:hover,
 .delete-profile:hover {
   background-color: #cccccc; /* Slightly darker on hover */
 }
@@ -1122,7 +1189,6 @@ textarea {
 }
 
 .butt-my-viewers,
-.button2,
 .add-viewer-button {
   font-size: 30px; /* Increase font size */
   font-weight: bold; /* Make text bold */
@@ -1136,8 +1202,7 @@ textarea {
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
 }
-.butt-my-viewers,
-.button2{
+.butt-my-viewers{
   background-color: #ebebeb
 }
 .butt-my-viewers:hover,
@@ -1408,4 +1473,55 @@ input[type="text"] {
 
 .user.last-visible .line {
   display: none; /* Hide line for last visible user */
+}
+
+/* ---------------------------- BANNED PAGE STYLE ---------------------------- */
+/* Apply full height to the body and set up Flexbox for centering */
+body.banned-page-body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0; /* Optional, for background color */
+}
+
+/* Styling the banned page content */
+.banned-page {
+  text-align: center;
+  padding: 50px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 10px;
+  width: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the h1 tag */
+.banned-page h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+/* Styling for the paragraph tag */
+.banned-page p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+/* Styling the logout button */
+.logout-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+}
+
+/* Hover effect for the logout button */
+.logout-link:hover {
+  background-color: #0056b3;
 }

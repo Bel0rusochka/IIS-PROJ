@@ -1,3 +1,22 @@
+ // Show the flash message container and fade out the messages after a few seconds
+ window.onload = function() {
+  const flashMessages = document.querySelectorAll('.flash-message');
+  if (flashMessages.length > 0) {
+      const flashContainer = document.getElementById('flashMessages');
+      flashContainer.style.display = 'flex';  // Show flash messages
+
+      setTimeout(() => {
+          flashMessages.forEach(message => {
+              message.style.opacity = '0';  // Fade out the message
+          });
+
+          // Optionally, hide the container after all messages fade out
+          setTimeout(() => {
+              flashContainer.style.display = 'none';
+          }, 1000);
+      }, 3000);  // Keep the messages visible for 3 seconds
+  }
+};
 //sidebar func
 function toggleNav() {
     const sidebar = document.getElementById("mySidebar");

@@ -8,13 +8,13 @@
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
         <div class="all-users">
-
-            <a href="{{ url_for('admin_panel_users')}}"  id="usersButton" class = 'butt-my-viewers passive'>Users</a>
-			<a href="{{ url_for('admin_panel_groups')}}" id="groupsButton" class = 'butt-my-viewers passive'>Groups</a>
-            <a href="{{ url_for('admin_panel_posts')}}"  id="postsButton" class = 'butt-my-viewers passive'>Posts</a>
-			<a href="{{ url_for('admin_panel_comments')}}" id="commentsButton" class = 'butt-my-viewers passive'>Comments</a>
-            <a href="{{ url_for('admin_panel_tags')}}"  id="tagsButton" class = 'butt-my-viewers passive'>Tags</a>
-
+            <div class="button-container">
+            <a href="{{ url_for('admin_panel_users') }}" id="usersButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_users' %}active{% else %}passive{% endif %}">Users</a>
+            <a href="{{ url_for('admin_panel_groups') }}" id="groupsButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_groups' %}active{% else %}passive{% endif %}">Groups</a>
+            <a href="{{ url_for('admin_panel_posts') }}" id="postsButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_posts' %}active{% else %}passive{% endif %}">Posts</a>
+            <a href="{{ url_for('admin_panel_comments') }}" id="commentsButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_comments' %}active{% else %}passive{% endif %}">Comments</a>
+            <a href="{{ url_for('admin_panel_tags') }}" id="tagsButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_tags' %}active{% else %}passive{% endif %}">Tags</a>
+        </div>
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
                 {% for element in elements %}
@@ -30,36 +30,41 @@
                                 </div>
                             </div>
                         </a>
+                        <div class="button-container">
                         {% if user.role == 'admin' and element.role != 'admin' %}
                             <div class="button-group">
-                                <a class="edit-profile" id="editProfileButton" href="{{ url_for('setting', login=element.login) }}">Edit Profile</a>
+                                <a class="edit-buttons" id="editProfileButton" href="{{ url_for('setting', login=element.login) }}">Edit Profile</a>
                             </div>
                         {% endif %}
 
                         <form method="POST" action="{{ url_for('admin_panel_users') }}">
                             <input type="hidden" name="user_login" value="{{ element.login }}">
+                        <div class="button-container">
+                            
                             {% if user.role == 'admin' %}
                                 {% if element.role == 'user' and not element.is_banned %}
-                                    <button type="submit" name="action" value="make_moderator" class="moderate">Make Moderator</button>
-                                    <button type="submit" name="action" value="make_admin" class="admin">Make Admin</button>
-                                    <button type="submit" name="action" value="delete" class="delete">Delete</button>
+                                    <button type="submit" name="action" class="edit-buttons" value="make_moderator" class="moderate">Make Moderator</button>
+                                    <button type="submit" name="action"class="edit-buttons"  value="make_admin" class="admin">Make Admin</button>
+                                    <button type="submit" name="action" class="edit-buttons" value="delete" class="delete">Delete</button>
                                 {% elif element.role == 'moderator' %}
-                                    <button type="submit" name="action" value="make_user" class="user">Make User</button>
-                                    <button type="submit" name="action" value="make_admin" class="admin">Make Admin</button>
-                                    <button type="submit" name="action" value="delete" class="delete">Delete</button>
+                                    <button type="submit" name="action" class="edit-buttons" value="make_user" class="user">Make User</button>
+                                    <button type="submit" name="action" class="edit-buttons" value="make_admin" class="admin">Make Admin</button>
+                                    <button type="submit" name="action"class="edit-buttons"  value="delete" class="delete">Delete</button>
                                 {% endif %}
                             {% endif %}
 
                             {% if element.role != 'admin' and ((user.role == 'moderator' and element.role != 'moderator') or user.role == 'admin') %}
                                 {% if element.is_banned %}
-                                    <button type="submit" name="action" value="unban" class="unban">Unban</button>
+                                    <button type="submit" name="action" class="edit-buttons" value="unban" class="unban">Unban</button>
                                 {% else %}
-                                    <button type="submit" name="action" value="ban" class="ban">Ban</button>
+                                    <button type="submit" name="action" class="edit-buttons" value="ban" class="ban">Ban</button>
                                 {% endif %}
-                                <button type="submit" name="action" value="delete" class="delete">Delete</button>
+                                <button type="submit" name="action"class="edit-buttons"  value="delete" class="delete">Delete</button>
                             {% endif %}
+                        </div>
 
                         </form>
+                        </div>
                         <div class="line"></div>
                     {% elif panel_type == 'groups' %}
                         <a href="{{ url_for('group', id=element.id) }}" class="user">

@@ -8,9 +8,10 @@
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
         <div class="all-users">
-            <a href="{{ url_for('shares')}}"  id="myGroupsButton" class = 'butt-my-viewers passive'>Received Shares</a>
-			<a href="{{ url_for('shares_sent')}}" id="allGroupsButton" class = 'butt-my-viewers passive'>Sent Shares</a>
-
+            <div class="button-container">
+                <a href="{{ url_for('shares') }}" id="myGroupsButton" class="butt-my-viewers {% if request.endpoint == 'shares' %}active{% else %}passive{% endif %}">Received Shares</a>
+                <a href="{{ url_for('shares_sent') }}" id="allGroupsButton" class="butt-my-viewers {% if request.endpoint == 'shares_sent' %}active{% else %}passive{% endif %}">Sent Shares</a>
+            </div>
 
             <!-- Loop through users from the database -->
             <div class="users" id="usersList">
