@@ -14,11 +14,11 @@
           <div class="add-viewer-text">Create a Group</div>
 				<div class="window-name">
 					<div class="group-name">Group Name</div>
-					<input type="text" name="group-name" placeholder="Enter a name" required>
+					<input type="text" name="group-name" placeholder="Enter a name" {% if previous_values.group_name %}value="{{ previous_values.group_name }}"{% endif %}>
 				</div>
 				<div class="window-name">
 					<div class="group-name">Group Description</div>
-					<input type="text" name="group-description" placeholder="Enter a description">
+					<input type="text" name="group-description" placeholder="Enter a description" {% if previous_values.group_description %}value="{{ previous_values.group_description }}"{% endif %}>
 				</div>
 				<div class="button-add">
 					<button type="submit" class="create">Create</button>

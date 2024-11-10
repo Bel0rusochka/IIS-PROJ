@@ -356,7 +356,6 @@ class Posts(db.Model):
 
     def edit_post(self, text, status, tags, selected_groups):
         self.text = text
-        self.status = status
         associated_tags = []
         for tag in tags:
             if tag == '' or tag == ' ': continue
@@ -365,6 +364,12 @@ class Posts(db.Model):
                 tag_db = Tags(name=tag)
             associated_tags.append(tag_db)
         self.associated_tags = associated_tags
+
+        if self.status == 'group' and status != 'group':
+            groups = db.session.query(PostsGroups).filter_by(post_id=self.id).all()
+            for group in groups:
+                Groups.unbind_post_group(group.groups_id, self.id)
+        self.status = status
 
         if status == 'group':
             groups = db.session.query(PostsGroups).filter_by(post_id=self.id).all()

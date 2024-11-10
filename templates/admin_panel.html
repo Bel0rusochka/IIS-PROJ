@@ -3,10 +3,20 @@
 {% block title %}Users{% endblock %}
 
 {% block content %}
+    <div class="projekt-search1">
+        <div class="projekt-group1">
+        <img alt="search" src="../static/images/search.svg" class="projekt-search2">
+        <form method="GET" action="{{ url_for(request.endpoint) }}">
+            <input type="text" name="query" placeholder="Search ..." {% if  request.args.get('query') %}value="{{  request.args.get('query') }}"{% endif %}>
+            <button type="submit">Search</button>
+        </form>
+        </div>
+    </div>
     <div class="viewers">
         <a href="{{ url_for('index') }}">
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
         </a>
+
         <div class="all-users">
             <div class="button-container">
             <a href="{{ url_for('admin_panel_users') }}" id="usersButton" class="butt-my-viewers {% if request.endpoint == 'admin_panel_users' %}active{% else %}passive{% endif %}">Users</a>
@@ -87,7 +97,7 @@
                             <div class="user">
                                 <img class="avatar" alt="" src="{{ url_for('image', id=element.id) }}">
                                 <div class="name-user">
-                                    <div class="user-name">Author: {{ element.author_login }}</div>
+                                    <div class="user-name">Author: @{{ element.author_login }}</div>
                                     <div class="user-name">Date: {{ element.date.strftime("%d %B %Y") }}</div>
                                     <div class="user-name">Likes: {{ element.like_count() }}</div>
                                     <div class="user-name">Shares: {{ element.shares_count() }}</div>
@@ -106,7 +116,7 @@
                             <div class="user">
                                 <img class="avatar" alt="" src="{{ url_for('image', id=element.post_id) }}">
                                 <div class="name-user">
-                                    <div class="user-name">Author: {{ element.author_login }}</div>
+                                    <div class="user-name">Author: @{{ element.author_login }}</div>
                                     <div class="user-name">Date: {{ element.date.strftime("%d %B %Y") }}</div>
                                     <div class="user-name">Text: {{ element.text }}</div>
                                 </div>

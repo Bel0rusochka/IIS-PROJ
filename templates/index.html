@@ -8,18 +8,18 @@
     <div class="projekt-group1">
       <img alt="search" src="../static/images/search.svg" class="projekt-search2">
       <form method="GET" action="{{ url_for('index') }}">
-        <input type="text" name="query" placeholder="Search by tags...">
+        <input type="text" name="query" placeholder="Search by tags..." {% if  request.args.get('query') %}value="{{  request.args.get('query') }}"{% endif %}>
         <select name="sort_by">
-          <option value="date">Date</option>
-          <option value="comments">Comments</option>
-          <option value="likes">Likes</option>
-          <option value="shares">Shares</option>
+          <option value="date" {% if request.args.get('sort_by') == 'date' %}selected{% endif %}>Date</option>
+          <option value="comments" {% if request.args.get('sort_by') == 'comments' %}selected{% endif %}>Comments</option>
+          <option value="likes" {% if request.args.get('sort_by') == 'likes' %}selected{% endif %}>Likes</option>
+          <option value="shares" {% if request.args.get('sort_by') == 'shares' %}selected{% endif %}>Shares</option>
         </select>
         {% if session.get('user') %}
            <select name="filter">
-            <option value="all">All</option>
-            <option value="following">By Following</option>
-            <option value="followers">By Followers</option>
+            <option value="all" {% if request.args.get('filter') == 'all' %}selected{% endif %}>All</option>
+            <option value="following" {% if request.args.get('filter') == 'following' %}selected{% endif %}>Following</option>
+            <option value="followers" {% if request.args.get('filter') == 'followers' %}selected{% endif %}>Followers</option>
           </select>
         {% endif %}
         <button type="submit">Search</button>
@@ -35,13 +35,13 @@
       </a>
     {% endfor %}
   </div>
-  <div class="addPost">
-    <a href="{{ url_for('create_post') }}">
-      <div class="ellipse">
-        <span class="projekt-text5">+</span>
+    {% if session.user %}
+      <div class="addPost">
+        <a href="{{ url_for('create_post') }}">
+          <div class="ellipse">
+            <span class="projekt-text5">+</span>
+          </div>
+        </a>
       </div>
-    </a>
-  </div>
-  {% if session.user %}
-  {% endif %}
+    {% endif %}
 {% endblock %}

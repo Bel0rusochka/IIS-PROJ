@@ -138,7 +138,7 @@ def registrate_routes(app, db):
                 password_db = hashlib.md5(password.encode()).hexdigest()
                 Users.add_user(login, email, password_db, name, surname,role)
                 return redirect(url_for('index'))
-            return render_template("signup.html", previos_values=request_data)
+            return render_template("signup.html", previous_values=request_data)
         return render_template("signup.html")
 
     @app.route('/login', methods=['GET', 'POST'])
@@ -163,7 +163,7 @@ def registrate_routes(app, db):
                 session['user'] = user.login
                 flash("You are logged in", "success")
                 return redirect(url_for('index'))
-            return render_template("login.html", previos_values=request_data)
+            return render_template("login.html", previous_values=request_data)
         return render_template("login.html")
 
     @app.route('/profile/<login>')
@@ -343,7 +343,9 @@ def registrate_routes(app, db):
     def users():
         add_previous_page()
         active_user = Users.get_user_or_404(session['user'])
-        users = Users.query.all()
+
+        query = request.args.get('query', '')
+        users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
         return render_template('users.html', users=users, user = active_user)
 
     @app.route('/users/followers')
@@ -353,7 +355,10 @@ def registrate_routes(app, db):
     def users_followers():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        return render_template('users.html', users=active_user.get_followers_list(), user = active_user)
+
+        query = request.args.get('query', '')
+        users = [user for user in active_user.get_followers_list() if query in user.login or query in user.name or query in user.surname] if query else active_user.get_followers_list()
+        return render_template('users.html', users=users, user = active_user)
 
     @app.route('/users/following')
     @user_exists
@@ -362,7 +367,10 @@ def registrate_routes(app, db):
     def users_following():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        return render_template('users.html', users=active_user.get_following_list(), user = active_user)
+
+        query = request.args.get('query', '')
+        users = [user for user in active_user.get_following_list() if query in user.login or query in user.name or query in user.surname] if query else active_user.get_following_list()
+        return render_template('users.html', users=users, user = active_user)
 
     @app.route('/groups')
     @user_exists
@@ -371,7 +379,9 @@ def registrate_routes(app, db):
     def groups():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        groups = Groups.query.all()
+        query = request.args.get('query', '')
+        groups = [group for group in Groups.query.all() if query in group.name] if query else Groups.query.all()
+
         return render_template('groups.html',groups=groups, user = active_user)
 
     @app.route('/groups/following_groups')
@@ -381,7 +391,10 @@ def registrate_routes(app, db):
     def following_groups():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        return render_template('groups.html', groups=active_user.groups, user = active_user)
+
+        query = request.args.get('query', '')
+        groups = [group for group in active_user.groups if query in group.name] if query else active_user.groups
+        return render_template('groups.html', groups=groups, user = active_user)
 
     @app.route('/groups/managed_groups')
     @user_exists
@@ -390,42 +403,52 @@ def registrate_routes(app, db):
     def managed_groups():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        return render_template('groups.html', groups=active_user.managed_groups(), user = active_user)
+
+        query = request.args.get('query', '')
+        groups = [group for group in active_user.managed_groups() if query in group.name] if query else active_user.managed_groups()
+
+        return render_template('groups.html', groups=groups, user = active_user)
 
     @app.route('/groups/create_group', methods=['POST','GET'])
     @user_exists
     @require_login
     @require_not_banned
     def create_group():
+        active_user = Users.get_user_or_404(session['user'])
         if request.method == 'POST':
             group_name = request.form['group-name'].strip()
             group_description = request.form['group-description'].strip()
             bad_data = False
+            previous_values = {'group_name': group_name, 'group_description': group_description}
 
             if group_name == '':
                 flash("Group name is empty", "error")
                 bad_data = True
+                previous_values.pop('group_name')
             elif "@" in group_name:
                 flash("Group name is invalid", "error")
                 bad_data = True
+                previous_values.pop('group_name')
             elif len(group_name) > 60:
                 flash("Group name is too long", "error")
                 bad_data = True
+                previous_values.pop('group_name')
 
             if len(group_description) > 60:
                 flash("Group description is too long", "error")
                 bad_data = True
+                previous_values.pop('group_description')
 
             if not bad_data:
-                user = Users.get_user_or_404(session['user'])
-                group = Groups.create_group(group_name, group_description, user)
+
+                group = Groups.create_group(group_name, group_description, active_user)
                 flash("Group created", "success")
                 return redirect(url_for('group', id=group.id))
-            return redirect(url_for('groups'))
+            return render_template('create_group.html', user=active_user, previous_values=previous_values)
         else:
-            active_user = Users.get_user_or_404(session['user'])
+
             add_previous_page()
-            return render_template('create_group.html', groups=active_user.managed_groups(), user=active_user)
+            return render_template('create_group.html', user=active_user, previous_values={})
 
     @app.route('/groups/<int:id>')
     @user_exists
@@ -676,29 +699,28 @@ def registrate_routes(app, db):
     @require_not_banned
     def index():
         add_previous_page()
-        if request.method == 'GET':
-            session['index_params'] = request.args.to_dict()
-            query = request.args.get('query', '').strip().replace(' ', '#')
-            sort_by = request.args.get('sort_by', 'date')
-            filter_by = request.args.get('filter', 'all')
-            tag_list = [tag.strip() for tag in query.split("#") if tag]
 
-            user_login = session.get('user')
-            if user_login:
-                user = Users.get_user_or_404(user_login)
-                results = user.get_posts_for_user_feed()
-            else:
-                user = None
-                results = Posts.get_all_posts_by_privacy('public')
+        query = request.args.get('query', '').strip().replace(' ', '#')
+        sort_by = request.args.get('sort_by', 'date')
+        filter_by = request.args.get('filter', 'all')
+        tag_list = [tag.strip() for tag in query.split("#") if tag]
 
-            for tag in tag_list:
-                results = results.filter(Posts.associated_tags.any(Tags.name == tag))
-            results = results.all()
+        user_login = session.get('user')
+        if user_login:
+            user = Users.get_user_or_404(user_login)
+            results = user.get_posts_for_user_feed()
+        else:
+            user = None
+            results = Posts.get_all_posts_by_privacy('public')
 
-            if user:
-                results = filter_posts(results, filter_by, user)
-            results = sort_posts(results, sort_by)
-            return render_template("index.html", posts=results, user=user)
+        for tag in tag_list:
+            results = results.filter(Posts.associated_tags.any(Tags.name == tag))
+        results = results.all()
+
+        if user:
+            results = filter_posts(results, filter_by, user)
+        results = sort_posts(results, sort_by)
+        return render_template("index.html", posts=results, user=user)
 
     @app.route('/admin/users', methods=['GET', 'POST'])
     @user_exists
@@ -729,7 +751,10 @@ def registrate_routes(app, db):
             elif action == "unban":
                 user = Users.get_user_or_404(user_login)
                 user.change_user_data(is_banned=False)
-        return render_template("admin_panel.html", elements=Users.query.all(), panel_type = 'users', user = active_user)
+
+        query = request.args.get('query', '')
+        users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
+        return render_template("admin_panel.html", elements=users, panel_type = 'users', user = active_user)
 
     @app.route('/admin/groups', methods=['POST', 'GET'])
     @user_exists
@@ -743,7 +768,10 @@ def registrate_routes(app, db):
             group_id = request.form['group_id']
             Groups.delete_group(group_id)
             flash("Group deleted", "success")
-        return render_template("admin_panel.html", elements=Groups.query.all(), panel_type = 'groups', user = active_user)
+
+        query = request.args.get('query', '')
+        groups = [group for group in Groups.query.all() if query in group.name] if query else Groups.query.all()
+        return render_template("admin_panel.html", elements=groups, panel_type = 'groups', user = active_user)
 
     @app.route('/admin/posts', methods=['POST', 'GET'])
     @user_exists
@@ -757,7 +785,10 @@ def registrate_routes(app, db):
             post_id = request.form['post_id']
             Posts.delete_post(post_id)
             flash("Post deleted", "success")
-        return render_template("admin_panel.html", elements=Posts.query.all(), panel_type = 'posts', user = active_user)
+
+        query = request.args.get('query', '').replace('@', '')
+        posts = [post for post in Posts.query.all() if query in post.author_login] if query else Posts.query.all()
+        return render_template("admin_panel.html", elements=posts, panel_type = 'posts', user = active_user)
 
     @app.route('/admin/tags', methods=['POST', 'GET'])
     @user_exists
@@ -771,7 +802,10 @@ def registrate_routes(app, db):
             tag_name = request.form['tag_name'].strip()
             Tags.delete_tag(tag_name)
             flash("Tag deleted", "success")
-        return render_template("admin_panel.html", elements=Tags.query.all(), panel_type = 'tags', user = active_user)
+
+        query = request.args.get('query', '').replace('#', '')
+        tags = [tag for tag in Tags.query.all() if query in tag.name] if query else Tags.query.all()
+        return render_template("admin_panel.html", elements=tags, panel_type = 'tags', user = active_user)
 
     @app.route('/admin/comments', methods=['POST', 'GET'])
     @user_exists
@@ -785,42 +819,49 @@ def registrate_routes(app, db):
             comment_id = request.form['comment_id']
             Comments.delete_comment(comment_id)
             flash("Comment deleted", "success")
-        return render_template("admin_panel.html", elements=Comments.query.all(), panel_type = 'comments', user = active_user)
+
+        query = request.args.get('query', '').replace('@', '')
+        comments = [comment for comment in Comments.query.all() if query in comment.author_login] if query else Comments.query.all()
+        return render_template("admin_panel.html", elements=comments, panel_type = 'comments', user = active_user)
 
     @app.route('/create_post', methods=['POST', 'GET'])
     @user_exists
     @require_login
     @require_not_banned
     def create_post():
+        active_user = Users.get_user_or_404(session['user'])
         if request.method == 'POST':
-            selected_group = request.form.getlist('groups')
+            selected_group = list(map(int, request.form.getlist('groups')))
             text = request.form['text'].strip()
             status = request.form['privacy']
             image = request.files.get('image')
             tags_input = request.form['tags'].strip()
             tags = [tag for tag in tags_input.split('#') if tag]
             bad_data = False
+            previous_values = {'text': text, 'tags':  request.form['tags'], 'groups': selected_group, 'privacy': status}
 
             if tags_input and not tags_input.startswith('#'):
                 flash("Tags should start with # and be separated by #", "error")
                 bad_data = True
+                previous_values.pop('tags')
             elif tags_input and len(tags) != tags_input.count('#'):
                 flash("Tags should be separated by #", "error")
                 bad_data = True
+                previous_values.pop('tags')
             if len(text) > 1000:
                 flash("Text is too long", "error")
                 bad_data = True
+                previous_values.pop('text')
 
             if not bad_data:
                 flash("Post created", "success")
-                Posts.create_post(session['user'], status, text, transform_images(image),tags, selected_group)
+                Posts.create_post(active_user.login, status, text, transform_images(image),tags, selected_group)
 
                 return redirect(url_for('index'))
-            return redirect(url_for('index'))
+            return render_template('create_post.html', user=active_user, previous_values=previous_values)
         else:
-            active_user = Users.get_user_or_404(session['user'])
             add_previous_page()
-            return render_template('create_post.html',groups=active_user.groups, user=active_user)
+            return render_template('create_post.html', user=active_user, previous_values={})
 
     @app.route('/banned')
     def banned():
