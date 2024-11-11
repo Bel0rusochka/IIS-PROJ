@@ -1483,7 +1483,7 @@ body.banned-page-body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0; /* Optional, for background color */
+  background-color: #cde1f9;
 }
 
 /* Styling the banned page content */

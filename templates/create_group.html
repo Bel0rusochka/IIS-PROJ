@@ -4,29 +4,30 @@
 
 {% block content %}
 <div class="projekt-content">
-  <div class="pagesignup-container">
-  	<div class="create-group-container">
-      <a href="{{ url_for('go_back') }}">
-        <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
-      </a>
-			<form method="POST" class="pagesignup-signup" action="{{ url_for('create_group') }}">
-        <div class="create-group-form">
-          <div class="add-viewer-text">Create a Group</div>
-				<div class="window-name">
-					<div class="group-name">Group Name</div>
-					<input type="text" name="group-name" placeholder="Enter a name" {% if previous_values.group_name %}value="{{ previous_values.group_name }}"{% endif %}>
-				</div>
-				<div class="window-name">
-					<div class="group-name">Group Description</div>
-					<input type="text" name="group-description" placeholder="Enter a description" {% if previous_values.group_description %}value="{{ previous_values.group_description }}"{% endif %}>
-				</div>
-				<div class="button-add">
-					<button type="submit" class="create">Create</button>
-				</div>
-			</form>
-		</div>
-  	</div>
-  </div>
+    <div class="pagesignup-container">
+        <div class="create-group-container">
+          <a href="{{ url_for('go_back') }}">
+            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+          </a>
+            <form method="POST" class="pagesignup-signup" action="{{ url_for('create_group') }}">
+            <div class="create-group-form">
+              <div class="add-viewer-text">Create a Group</div>
+                <div class="window-name">
+                    <div class="group-name">Group Name</div>
+                    <input type="text" name="group-name" placeholder="Enter a name" {% if previous_values.group_name %}value="{{ previous_values.group_name }}"{% endif %}>
+                </div>
+                <div class="window-name">
+                    <div class="group-name">Group Description</div>
+                    <input type="text" name="group-description" placeholder="Enter a description" {% if previous_values.group_description %}value="{{ previous_values.group_description }}"{% endif %}>
+                </div>
+                <div class="button-add">
+                    <button type="submit" class="create">Create</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
 </div>
+
 
 {% endblock %}
