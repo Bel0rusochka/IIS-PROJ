@@ -3,7 +3,7 @@
 <head>
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  	<title>profile</title>
+  	<title>Group</title>
 
   	<link rel="stylesheet"  href="../static/css/style.css" />
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" />
@@ -30,7 +30,7 @@
 					<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
 				</a>
 
-				<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
+				<a href="{{ url_for('index') }}" class="header_text">FITstagram</a>
 		  	</div>
 			<div class="white">
 			<div class="usernameedit">
@@ -39,11 +39,11 @@
 			  	<div class="user-info">
 					<div class="group-name" style="font-weight: bold;">{{group.name}}</div>
 					<div class="group-date">Created: {{group.date.strftime("%d %B %Y")}}</div>
-					<div class="group-description">Description: {{group.description}}</div>
-					<div class="group-members">Members: {{group.members_count()}}</div>
-					<div class="group-posts">Posts: {{group.posts_count()}}</div>
-
+				<div class="group-description">Description: {{group.description}}</div>
+					
 				</div>
+				<div class="group-members">Members: {{group.members_count()}}</div>
+				<div class="group-posts">Posts: {{group.posts_count()}}</div>
 				{% if is_admin %}
 					<a class="edit-buttons" id="editProfileButton" href="{{url_for('edit_group', id = group.id)}}">Edit Group</a>
 				{% endif %}

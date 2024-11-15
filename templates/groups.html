@@ -40,7 +40,7 @@
 									<input type="hidden" name="group_id" value="{{group.id}}">
 									<input type="hidden" name="user_login" value="{{session.user}}">
 									{% if group.is_subscribed(session.user) %}
-										<button type="submit" class="edit-buttons" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
+										<button type="submit" class="delete-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
 									{% else %}
 										<button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
 									{% endif %}

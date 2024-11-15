@@ -18,7 +18,7 @@
 				<a href="{{ url_for('go_back') }}">
 					<img class="arrow-icon" alt="Back" src="../static/images/arrow.svg" id="arrowIcon">
 				</a>
-				<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
+				<a href="{{ url_for('index') }}" class="header_text">FITstagram</a>
 			</div>
 			<div class="white">
 				<div class="usernameedit">
@@ -34,7 +34,7 @@
 						<div class="user-posts">Posts: {{ user.get_posts_count() }}</div>
 						{% if session.user == user.login %}
 							<div class="button-group">
-								<a class="edit-profile" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
+								<a class="edit-buttons" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
 								<form method="POST" action="{{ url_for('delete_user') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
 									<button type="submit" class="delete-profile">Delete profile</button>
@@ -44,7 +44,7 @@
 							{% if is_following %}
 								<form method="POST" action="{{ url_for('unfollow') }}">
 									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="edit-buttons" class="unfollow">Unfollow</button>
+									<button type="submit" class="delete-profile" class="unfollow">Unfollow</button>
 								</form>
 							{% else %}
 								<form method="POST" action="{{ url_for('follow') }}">

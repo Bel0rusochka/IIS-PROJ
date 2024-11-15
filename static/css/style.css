@@ -129,13 +129,13 @@ img {
 }
 
 /* Title text styles */
-.pagesignup-text10, .pagesignup-text22, .projekt-text2 {
+.header_text, .pagesignup-text22, .projekt-text2 {
   font-size: 32px;
   font-family: 'JetBrains Mono', monospace;
 
   color: rgba(0, 0, 0, 1);
 }
-.pagesignup-text10 {
+.header_text {
   background-color: #83b4e9; /* A nice blue shade */
   padding: 10px 20px; /* Padding to make it look like a button */
   border-radius: 8px; /* Rounded corners */
@@ -143,12 +143,15 @@ img {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
 }
 
-.pagesignup-text10:hover {
+.header_text:hover {
+  color: white;
   background-color: #457bb4; /* Darker shade on hover */
   transform: translateY(-2px); /* Slight lift on hover */
   text-decoration: none; /* Keep no underline */
+  transition:  0.5s ease
+
 }
-.pagesignup-text10:active {
+.header_text:active {
   transform: translateY(1px); /* Press effect */
 }
 /* Signup form container */
@@ -1213,32 +1216,35 @@ textarea {
 .edit-buttons {
   font-size: 20px;
   cursor: pointer;
-  margin-left: auto; /* Push "edit profile" to the right */
+  margin: 10px; /* Push "edit profile" to the right */
 }
 
 /* Styling the edit and delete buttons */
 .edit-buttons,
 .delete-profile {
-  display: block;
-  padding: 8px 16px;
-  margin-bottom: 8px; /* Space between the buttons */
-  font-size: 16px;
-  background-color: #e0e0e0; /* Light gray for a neutral look */
-  color: #444444;
+  background-color: #ecf0f1; /* Light background for better visibility */
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
-  text-align: center;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 20px; /* Larger font for better readability */
+  padding: 5px 8px;
+  margin-left: 10px;
+  transition: all 0.3s ease; /* Smooth hover effect */
+  display: inline-flex; /* Align icon and text better */
+  align-items: center;
+  justify-content: center;
 }
 
 
 /* Button hover effect */
 .edit-buttons:hover,
 .delete-profile:hover {
-  background-color: #cccccc; /* Slightly darker on hover */
+  color: white; /* More distinct hover effect */
+  background-color: #457bb4;
 }
-
+.delete-profile:hover {
+background-color: #e74c3c;
+}
 .fit-arrow {
   display: flex;
   justify-content: space-between;
