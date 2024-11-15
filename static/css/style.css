@@ -190,7 +190,74 @@ img {
 /* Container for input and label */
 .input-container {
   position: relative;
+  border: 1px solid rgba(195, 193, 193, 1);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
   width: 100%;
+  background-color: rgba(240, 240, 240, 1);
+  border-radius: 10px;
+}
+.toggle-password {
+  position: absolute;
+  right: 5%;
+  bottom: 0;
+  transform: translateY(-100%);
+  cursor: pointer; /* Changes mouse pointer to hand on hover */
+  color: #888; /* Default icon color */
+  font-size: 1.2rem;
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Hover effect for the password toggle */
+.toggle-password:hover {
+  color: #000; /* Change color to black on hover */
+}
+/* Information icon styling */
+.info-icon {
+  font-size: 1rem;
+  color: #888;
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 5px;
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip styling */
+.tooltip {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Tooltip above the icon */
+  left: 50%;
+  margin-left: -100px; /* Center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show tooltip on hover */
+.info-icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Tooltip arrow */
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%; /* Bottom of tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
 }
 
 /* Floating label styles */
@@ -213,30 +280,10 @@ img {
   color: #333;
 }
 
-/* Wrapper for input fields */
-.pagesignup-username, 
-.pagesignup-password, 
-.pagesignup-emailormbph {
-  position: relative;
-  border: 1px solid rgba(195, 193, 193, 1);
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  background-color: rgba(240, 240, 240, 1);
-  border-radius: 10px;
-}
 /* Style for pagesignup-fullname wrapper */
 .pagesignup-fullname {
   display: flex; /* Align inputs side by side */
   gap: 20px; /* Space between the inputs */
-}
-
-/* Style for individual input fields */
-.pagesignup-fullname input[type="text"] {
-  border: 1px solid rgba(195, 193, 193, 1);
-  border-radius: 10px; /* Simplified border-radius */
-  background-color: rgba(240, 240, 240, 1);
 }
 
 /* Label styles for input fields */
@@ -1420,14 +1467,6 @@ textarea {
 .group-name {
   margin-bottom: 10px; /* Space between label and input */
   font-size: 20px;     /* Label font size */
-}
-
-input[type="text"] {
-  width: 100%; /* Full width of the input */
-  height: 40px; /* Set height for the input */
-  border-radius: 10px; /* Rounded corners */
-  border: 1px solid #9d9a9a; /* Border style */
-  padding: 0 10px; /* Padding inside input */
 }
 
 .window-search {

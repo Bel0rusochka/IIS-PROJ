@@ -55,9 +55,37 @@ function toggleNav() {
       header.style.backgroundColor = 'rgba(205, 226, 250, 1)';
     }
   }
-  
+  function togglePassword() {
+    var passwordField = document.getElementById("password");
+    var passwordIcon = document.getElementById("togglePasswordIcon");
+    
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        passwordIcon.classList.remove("fa-eye-slash");
+        passwordIcon.classList.add("fa-eye");
+    } else {
+        passwordField.type = "password";
+        passwordIcon.classList.remove("fa-eye");
+        passwordIcon.classList.add("fa-eye-slash");
+    }
+}
 
-  
+function toggleConfirmPassword() {
+    var confirmPasswordField = document.getElementById("confirm_password");
+    var confirmPasswordIcon = document.getElementById("toggleConfirmPasswordIcon");
+    
+    if (confirmPasswordField.type === "password") {
+        confirmPasswordField.type = "text";
+        confirmPasswordIcon.classList.remove("fa-eye-slash");
+        confirmPasswordIcon.classList.add("fa-eye");
+    } else {
+        confirmPasswordField.type = "password";
+        confirmPasswordIcon.classList.remove("fa-eye");
+        confirmPasswordIcon.classList.add("fa-eye-slash");
+    }
+}
+
+
 // Toggle the popup modal
 function togglePopup() {
     var popup = document.getElementById('popupModal');

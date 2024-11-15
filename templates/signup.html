@@ -9,44 +9,60 @@
             <form class="pagesignup-signup" method="POST" action="/signup">
                 <span class="pagesignup-text12"><a>Sign up</a></span>
                 
-                <div class="pagesignup-emailormbph">
-                    <div class="input-container">
-                        <label for="email" class="floating-label">Email</label>
-                        <input type="email" id="email" name="email" class="pagesignup-input" placeholder="" value= "{{ previous_values.email if previous_values else '' }}" required>
-                    </div>
+                <div class="input-container">
+                    <label for="email" class="floating-label">Email</label>
+                    <input type="email" id="email" name="email" class="pagesignup-input" placeholder="" value= "{{ previous_values.email if previous_values else '' }}" required>
+                    <span class="info-icon">ℹ
+                        <span class="tooltip">Please enter a valid email address.</span>
+                    </span>
                 </div>
-                
-                <div class="pagesignup-username">
-                    <div class="input-container">
-                        <label for="login" class="floating-label">Login</label>
-                        <input type="text" id="login" name="login" class="pagesignup-input" placeholder="" value= "{{ previous_values.login if previous_values else '' }}" required>
-                    </div>
+            
+                <div class="input-container">
+                    <label for="login" class="floating-label">Login</label>
+                    <input type="text" id="login" name="login" class="pagesignup-input" placeholder="" value= "{{ previous_values.login if previous_values else '' }}" required>
+                    <span class="info-icon">ℹ
+                        <span class="tooltip">Login must be at least 5 characters long.</span>
+                    </span>
                 </div>
-                
+            
                 <div class="pagesignup-fullname">
                     <div class="input-container">
                         <label for="name" class="floating-label">Name</label>
                         <input type="text" id="name" name="name" class="pagesignup-input" placeholder="" value= "{{ previous_values.name if previous_values else '' }}" >
+                        <span class="info-icon">ℹ
+                            <span class="tooltip">Enter your first name.</span>
+                        </span>
                     </div>
 
                     <div class="input-container">
                         <label for="surname" class="floating-label">Surname</label>
                         <input type="text" id="surname" name="surname" class="pagesignup-input" placeholder="" value= "{{ previous_values.surname if previous_values else '' }}" >
+                        <span class="info-icon">ℹ
+                            <span class="tooltip">Enter your last name.</span>
+                        </span>
                     </div>
                 </div>
                 
-                <div class="pagesignup-password">
-                    <div class="input-container">
-                        <label for="password" class="floating-label">Password</label>
-                        <input type="password" id="password" name="password" class="pagesignup-input" placeholder="" value="{{ previous_values.password if previous_values else '' }}" required>
-                    </div>
+                <div class="input-container">
+                    <label for="password" class="floating-label">Password</label>
+                    <input type="password" id="password" name="password" class="pagesignup-input"autocomplete="current-password"  value="{{ previous_values.password if previous_values else '' }}" required>
+                    <span class="toggle-password" onclick="togglePassword()">
+                        <i class="fas fa-eye-slash" id="togglePasswordIcon"></i> 
+                    </span>
+                    <span class="info-icon">ℹ
+                        <span class="tooltip">Password must be at least 8 characters and contain letters and numbers.</span>
+                    </span>
                 </div>
-                
-                <div class="pagesignup-password">
-                    <div class="input-container">
-                        <label for="confirm_password" class="floating-label">Confirm Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" class="pagesignup-input" placeholder="" value="{{ previous_values.confirm_password if previous_values else '' }}" required>
-                    </div>
+            
+                <div class="input-container">
+                    <label for="confirm_password" class="floating-label">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="pagesignup-input" placeholder="" value="{{ previous_values.confirm_password if previous_values else '' }}" required>
+                    <span class="toggle-password" onclick="toggleConfirmPassword()">
+                        <i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon"></i> 
+                    </span>
+                    <span class="info-icon">ℹ
+                        <span class="tooltip">Please re-enter your password for confirmation.</span>
+                    </span>
                 </div>
 
                 <button type="submit" class="pagesignup-buttonsingupbig">
