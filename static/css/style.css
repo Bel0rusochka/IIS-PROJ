@@ -417,17 +417,18 @@ img {
   width: 40px;
   height: 40px;
 }
-
 .projekt-sidebar {
   right: 0;
+  top: 0;                      /* Stick to the top of the viewport */
+  height: calc(100vh - 150px);
+  margin-top: 150px;    
   background-color: rgba(205, 226, 250, 1);
-  overflow-y: auto; 
+  overflow-y: auto;            /* Allow scrolling when content exceeds the viewport height */
   visibility: hidden;
-  transition: 0.5s;
+  transition:  0.5s;
   padding-top: 60px;
-  gap: 30px;
+  gap: 20px;
   width: 228px;
-  height: 100%; /* Sidebar height grows based on its content */
   display: flex;
   position: fixed;
   flex-direction: column;
@@ -435,10 +436,9 @@ img {
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  top: 50%; /* Center the sidebar vertically */
-  transform: translateY(-35%); /* Adjust it to start from the center */
   z-index: 100;
 }
+
 .projekt-sidebar .avatar{
   height: 200px;
   width: 200px;
