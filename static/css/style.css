@@ -313,8 +313,14 @@ img {
   font-size: 20px;
   text-decoration: none;
   color: inherit;
-}
+  cursor: pointer;
+  transition: all 0.3s ease;
 
+}
+.pagesignup-buttonsingupbig:hover,.pagesignup-buttlogin:hover{
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); /* Drop shadow for effect */
+
+}
 /* Section for account options */
 .pagesignup-haveacc {
   display: flex;
@@ -1334,7 +1340,7 @@ background-color: #e74c3c;
 }
 
 .passive {
-  background-color: transparent;
+  background-color: #f3f3f3;
   border: 1px solid transparent;
   color: #747272;
   cursor: pointer;

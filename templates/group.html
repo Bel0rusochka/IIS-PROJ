@@ -35,7 +35,7 @@
 			<div class="white">
 			<div class="usernameedit">
 				<img class="generic-avatar-icon" alt="" src="../static/images/no_avatar.svg">
-				
+				<div class="user-info-gap">
 			  	<div class="user-info">
 					<div class="group-name" style="font-weight: bold;">{{group.name}}</div>
 					<div class="group-date">Created: {{group.date.strftime("%d %B %Y")}}</div>
@@ -48,15 +48,16 @@
 					<a class="edit-buttons" id="editProfileButton" href="{{url_for('edit_group', id = group.id)}}">Edit Group</a>
 				{% endif %}
 
-					<form method="POST" action="{{url_for('manage_users_group')}}">
-						<input type="hidden" name="group_id" value="{{group.id}}">
-						<input type="hidden" name="user_login" value="{{session.user}}">
-						{% if group.is_subscribed(session.user) %}
-							<button type="submit" class="edit-buttons" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
-						{% else %}
-							<button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
-						{% endif %}
-					</form>
+				<form method="POST" action="{{url_for('manage_users_group')}}">
+					<input type="hidden" name="group_id" value="{{group.id}}">
+					<input type="hidden" name="user_login" value="{{session.user}}">
+					{% if group.is_subscribed(session.user) %}
+						<button type="submit" class="edit-buttons" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
+					{% else %}
+						<button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
+					{% endif %}
+				</form>
+			</div>
 
 
 			</div>
