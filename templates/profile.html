@@ -11,7 +11,18 @@
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap">
 </head>
 <body>
-  	
+	<div id="flashMessages" class="flash-container">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<div class="flash-message {{ category }}">
+						{{ message }}
+					</div>
+	
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+	</div>
   	<div class="profile">
 		<div class="my-profile">
 			<div class="fit-arrow">
@@ -83,5 +94,6 @@
 			</div>
 		</div>
 	</div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
