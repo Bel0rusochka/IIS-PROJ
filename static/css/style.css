@@ -172,7 +172,7 @@ img {
 
 /* Signup form large heading */
 .pagesignup-text12 {
-  font-size: 48px;
+  font-size: 38px;
   word-break: break-word;     /* Break words if they're too long */
   overflow-wrap: break-word;  /* Ensures long words wrap properly */
   white-space: normal;
