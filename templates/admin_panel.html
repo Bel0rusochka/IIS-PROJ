@@ -128,7 +128,7 @@
 
                         <div class="line"></div>
                     {% elif panel_type == 'tags' %}
-                        <a href="{{ url_for('index', query=element.name) }}" class="user">
+                        <a href="{{ url_for('index', query="#"+element.name) }}" class="user">
                             <div class="user">
                                 <div class="name-user">
                                     <div class="user-name">Tag: #{{ element.name }}</div>

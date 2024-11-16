@@ -71,7 +71,7 @@
         <div id="imageTags">
             <span id="tagsList">Tags:</span>
             {% for tag in post.associated_tags %}
-                <span class="tag">#{{ tag.name }}</span>
+                  <a href="{{ url_for("index", query="#"+tag.name)}}"><span class="tag">#{{ tag.name }}</span></a>
             {% endfor %}
         </div>
 
