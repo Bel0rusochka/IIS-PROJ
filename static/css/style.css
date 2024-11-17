@@ -1292,7 +1292,7 @@ background-color: #e74c3c;
   top: 20px; /* Adjust top spacing for responsiveness */
   left: auto; /* Center align */
   width: 90%; /* Make width responsive */
-  max-width: 1198px; /* Maintain max width */
+  max-width: 1208px; /* Maintain max width */
   height: 815px;
   overflow-y: auto;
   margin-top: 100px;
