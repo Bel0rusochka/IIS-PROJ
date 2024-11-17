@@ -31,7 +31,7 @@
 				{% for group in groups %}
 				<a href="{{ url_for('group', id=group.id) }}" class="user">
 					<div class="user">
-						<img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/no_avatar.svg' }}">
+						<img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/avatar_group.svg' }}">
 						<div class="name-user">
 							<div class="user-name">{{ group.name }}</div>
 							<div class="subscribers">Members: {{ group.members_count() }}</div>
