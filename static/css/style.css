@@ -541,6 +541,7 @@ img {
 }
 
 .gallery-image {
+  flex-grow: 1;
   margin: 10px; /* Adjust the margin between images */
   width: calc(100% / 4 - 20px); /* Each image takes up 1/4th of the container, subtracting the margin */
   border-radius: 1vw;
@@ -735,24 +736,28 @@ img {
 #groupTag a:hover {
   background-color: #e0e0e0;   /* Slightly darker background on hover */
 }
-
 #imageDescription {
-  text-align: left;       /* Ensure text is left-aligned */
-  margin: 0;              /* Reset any margin that might be causing centering */
-  padding: 0 15px;        /* Add padding to space the content from the edges if needed */
+  display: block;               /* Ensure it behaves like a block element */
+  margin: 15px 0;               /* Space around the tags section */
+  text-align: left;             /* Ensure text is left-aligned */
+  padding: 0 15px;              /* Add padding to space the content from the edges if needed */
+  word-wrap: break-word;        /* Ensures long words break and wrap onto a new line */
+  overflow-wrap: break-word;    /* Provides compatibility for handling word breaks in older browsers */
 }
+
 #imageDescription h3 {
-  font-size: 20px;             /* Larger font for the heading */
-  color: #333;                 /* Darker text color for better readability */
-  margin-bottom: 10px;         /* Space below the heading */
+  font-size: 20px;              /* Larger font for the heading */
+  color: #333;                  /* Darker text color for better readability */
+  margin-bottom: 10px;          /* Space below the heading */
 }
 
 #imageDescription p {
-  font-size: 16px;             /* Consistent font size */
-  line-height: 1.5;            /* Improve readability with line spacing */
-  color: #555;                 /* Slightly lighter text color for paragraphs */
-  margin-bottom: 20px;         /* Add space below the description */
+  font-size: 16px;              /* Consistent font size */
+  margin-bottom: 20px;          /* Add space below the description */
+  word-wrap: break-word;        /* Ensure the paragraph text wraps correctly */
+  overflow-wrap: break-word;    /* Compatibility for different browsers */
 }
+
 
 #tagsList {
   font-weight: bold;

@@ -76,8 +76,12 @@
         </div>
 
         {% if post.status == 'group' %}
-            <span>Group:</span>
-            {%  for group in post.get_connected_groups() %}<div id="groupTag"><a href="{{ url_for('group', id=group.id) }}"><span>{{ group.name }}</span></a></div>{% endfor %}
+        <div id="imageDescription">
+
+            <h3>Group:</h3>
+            {%  for group in post.get_connected_groups() %}<p id="groupTag"><a href="{{ url_for('group', id=group.id) }}"><span>{{ group.name }}</span></a></p>{% endfor %}
+        </div>
+
         {% endif %}
 
         <div id="imageDescription">
