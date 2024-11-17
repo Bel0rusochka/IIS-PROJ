@@ -307,7 +307,8 @@ class Posts(db.Model):
     @staticmethod
     def create_post(author_login, status, text, image_binary, tags, groups_id):
         post = Posts(author_login=author_login, status=status, text=text, image_binary=image_binary)
-        for tag in tags:
+        for tag in set(tags):
+            tag = tag.strip()
             if tag == '' or tag == ' ': continue
             tag_db = Tags.query.get(tag)
             if tag_db is None:
@@ -354,24 +355,29 @@ class Posts(db.Model):
         db.session.add(comment)
         db.session.commit()
 
-    def edit_post(self, text, status, tags, selected_groups):
-        self.text = text
-        associated_tags = []
-        for tag in tags:
-            if tag == '' or tag == ' ': continue
-            tag_db = Tags.query.get(tag)
-            if tag_db is None:
-                tag_db = Tags(name=tag)
-            associated_tags.append(tag_db)
-        self.associated_tags = associated_tags
+    def edit_post(self, text=None, status=None, tags=None, selected_groups=None):
+        if text is not None:
+            self.text = text
 
-        if self.status == 'group' and status != 'group':
-            groups = db.session.query(PostsGroups).filter_by(post_id=self.id).all()
-            for group in groups:
-                Groups.unbind_post_group(group.groups_id, self.id)
-        self.status = status
+        if tags is not None:
+            associated_tags = []
+            for tag in set(tags):
+                tag = tag.strip()
+                if tag == '' or tag == ' ': continue
+                tag_db = Tags.query.get(tag)
+                if tag_db is None:
+                    tag_db = Tags(name=tag)
+                associated_tags.append(tag_db)
+            self.associated_tags = associated_tags
 
-        if status == 'group':
+        if status is not None:
+            if self.status == 'group' and status != 'group':
+                groups = db.session.query(PostsGroups).filter_by(post_id=self.id).all()
+                for group in groups:
+                    Groups.unbind_post_group(group.groups_id, self.id)
+            self.status = status
+
+        if self.status == 'group' and selected_groups is not None:
             groups = db.session.query(PostsGroups).filter_by(post_id=self.id).all()
             for group in groups:
                 Groups.unbind_post_group(group.groups_id, self.id)

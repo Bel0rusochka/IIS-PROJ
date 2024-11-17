@@ -258,7 +258,7 @@ def registrate_routes(app, db):
                 group.edit_group(group.name, request.form['description'])
                 flash("Group description updated", "success")
 
-        return render_template("edit_group.html", group=group, users=users_with_roles, posts=group.posts)
+        return render_template("edit_group.html", group=group, users=users_with_roles, posts=group.posts, user = Users.get_user_or_404(session['user']))
 
     @app.route('/groups/manage/users', methods=['POST'])
     @user_exists
@@ -548,10 +548,14 @@ def registrate_routes(app, db):
 
         if request.method == 'POST':
             text = request.form['text']
-
-            post = Posts.get_post_or_404(post_id)
-            post.add_comment(text, session['user'])
-            flash("Comment added", "success")
+            if (text == ""):
+                flash("Comment is empty", "error")
+            elif len(text) > 1000:
+                flash("Comment is too long", "error")
+            else:
+                post = Posts.get_post_or_404(post_id)
+                post.add_comment(text, session['user'])
+                flash("Comment added", "success")
             return redirect(url_for('post', post_id=post_id))
         abort(404)
 
@@ -613,18 +617,31 @@ def registrate_routes(app, db):
         if request.method == 'POST':
             tags_input = request.form['tags'].strip()
             tags = [tag for tag in tags_input.split('#') if tag]
+            text = request.form['text']
+            status = request.form['privacy']
+            selected_group = request.form.getlist('groups')
+            bad_data = False
 
             if tags_input and not tags_input.startswith('#'):
                 flash("Tags should start with #", "error")
+                bad_data = True
             elif len(tags) != tags_input.count('#'):
+                bad_data = True
                 flash("Tags should be separated by #", "error")
             else:
-                text = request.form['text']
-                status = request.form['privacy']
-                selected_group = request.form.getlist('groups')
-                post.edit_post(text, status, tags, selected_group)
+                post.edit_post(tags=tags)
+
+            if len(text) > 1000:
+                bad_data = True
+                flash("Text is too long", "error")
+            else:
+                post.edit_post(text=text)
+
+            post.edit_post(status=status, selected_groups=selected_group)
+            if not bad_data:
                 flash("Post updated", "success")
                 return redirect(url_for('post', post_id=post.id))
+
         return render_template("edit_post.html", post = post, user = active_user)
 
     @app.route('/share_post', methods=['POST'])
