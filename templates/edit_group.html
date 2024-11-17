@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-  	<meta charset="utf-8">
-  	<meta name="viewport" content="initial-scale=1, width=device-width">
-  	
-  	<link rel="stylesheet"  href="../static/css/style.css"/>
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap" />
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@700&display=swap" />
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Post Details{% endblock %}
+
+{% block content %}
 <div class="projekt-content">
     <div class="pagesignup-container">
         <div class="pagesignup-pagesignup">
@@ -87,6 +81,4 @@
 			{% endfor %}
 		</div>
 </div>
-		
-</body>
-</html>
+{% endblock %}
