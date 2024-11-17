@@ -4,9 +4,13 @@ import hashlib
 from PIL import Image as PILImage
 import io
 from functools import wraps
+import re
 
 
 def registrate_routes(app, db):
+    def validate_name(login):
+        pattern = r'^[a-zA-Z0-9._]{2,60}$'
+        return re.match(pattern, login) is not None
 
     def transform_images(image):
         img = PILImage.open(image)
@@ -113,7 +117,7 @@ def registrate_routes(app, db):
                 request_data.pop('confirm_password')
                 bad_data = True
 
-            if Users.get_user(login) is not None or login == "" or '@' in login or " " in login or len(login) > 60:
+            if not validate_name(login):
                 flash("Login is invalid", "error")
                 request_data.pop('login')
                 bad_data = True
@@ -123,12 +127,12 @@ def registrate_routes(app, db):
                 request_data.pop('email')
                 bad_data = True
 
-            if len(name) > 60 or " " in name or "@" in name:
+            if not validate_name(name):
                 flash("Name is invalid", "error")
                 request_data.pop('name')
                 bad_data = True
 
-            if len(surname) > 60 or " " in surname or "@" in surname:
+            if not validate_name(surname):
                 flash("Surname is invalid", "error")
                 request_data.pop('surname')
                 bad_data = True
@@ -246,7 +250,7 @@ def registrate_routes(app, db):
             group_name = request.form['name'].strip()
             group_description = request.form['description'].strip()
 
-            if group_name == '' or "@" in group_name or len(group_name) > 60:
+            if not validate_name(group_name):
                 flash("Group name is invalid", "error")
             elif group_name != group.name:
                 group.edit_group( request.form['name'], group.description)
@@ -421,16 +425,8 @@ def registrate_routes(app, db):
             bad_data = False
             previous_values = {'group_name': group_name, 'group_description': group_description}
 
-            if group_name == '':
-                flash("Group name is empty", "error")
-                bad_data = True
-                previous_values.pop('group_name')
-            elif "@" in group_name:
+            if not validate_name(group_name):
                 flash("Group name is invalid", "error")
-                bad_data = True
-                previous_values.pop('group_name')
-            elif len(group_name) > 60:
-                flash("Group name is too long", "error")
                 bad_data = True
                 previous_values.pop('group_name')
 
@@ -440,7 +436,6 @@ def registrate_routes(app, db):
                 previous_values.pop('group_description')
 
             if not bad_data:
-
                 group = Groups.create_group(group_name, group_description, active_user)
                 flash("Group created", "success")
                 return redirect(url_for('group', id=group.id))
@@ -492,14 +487,14 @@ def registrate_routes(app, db):
         if request.method == 'POST':
 
             user_name = request.form['name'].strip()
-            if "@" in user_name or " " in user_name or len(user_name) > 60:
+            if not validate_name(user_name):
                 flash("Name is invalid", "error")
             elif user_name != user.name:
                 flash("Name updated", "success")
                 user.change_user_data(name=user_name)
 
             user_surname = request.form['surname'].strip()
-            if "@" in user_surname or " " in user_surname or len(user_surname) > 60:
+            if not validate_name(user_surname):
                 flash("Surname is invalid", "error")
             elif user_surname != user.surname:
                 flash("Surname updated", "success")

@@ -1,3 +1,4 @@
+"""In this script we initialize data for our database."""
 from PIL import Image as PILImage
 from app import db, create_app
 from models import Users, Groups, Tags, Posts, Comments, Shares, Followers, GroupsUsers, UsersLikePosts, PostsGroups
@@ -14,8 +15,12 @@ app = create_app()
 with app.app_context():
     db.drop_all()
     db.create_all()
+
+
     def code_password(password):
         return  hashlib.md5(password.encode()).hexdigest()
+
+
     def create_users(count=10):
         users = []
         for _ in range(count):
@@ -88,6 +93,7 @@ with app.app_context():
                     photo_data = photo_file
                     photo_files.append(transform_images(photo_data))
         return photo_files
+
 
     def create_posts(users, groups, tags, count=20):
         posts = []
@@ -178,6 +184,8 @@ with app.app_context():
         shares = create_shares(users, posts, 15)
         create_followers(users)
         create_likes(users, posts)
+
+        """Add known users for testing."""
         Users.add_user('admin', 'admin@admin.com', code_password('adminadmin'), 'admin', 'admin', 'admin')
         Users.add_user('moderator','moderator@moderator.com', code_password('moderatormoderator'), 'moderator', 'moderator', 'moderator')
         Users.add_user('user', 'user@user.com', code_password('useruser'), 'user', 'user', 'user')
