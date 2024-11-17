@@ -9,69 +9,84 @@
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@700&display=swap" />
 </head>
 <body>
-  	
-  	<div class="edit-profile2">
-		<div class="pagesignup-bluefit">
-			<a href="{{ url_for('index') }}" class="pagesignup-text10">FITstagram</a>
-		</div>
-		<a href="{{ url_for('go_back') }}">
-			<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
-		</a>
-		<div class="edit_information">
+<div class="projekt-content">
+    <div class="pagesignup-container">
+        <div class="pagesignup-pagesignup">
 
-			<form method="POST" action="{{ url_for('edit_group', id = group.id) }}">
-				<div class="name">
-					<input type="text" name="name" class="name" value="{{ group.name }}">
+			<form method="POST" class="pagesignup-signup" action="{{ url_for('edit_group', id = group.id) }}">
+				<a href="{{ url_for('go_back') }}">
+					<img class="back-button" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
+				</a>
+			
+				<div class="input-container">
+					<label for="name" class="floating-label">Group Name</label>
+					<input type="text" id="name" name="name" class="pagesignup-input" value="{{ group.name }}">
 				</div>
-
-				<div class="description">
-					<input type="text" name="description" class="description" value="{{ group.description }}">
+			
+				<div class="input-container">
+					<label for="description" class="floating-label">Description</label>
+					<input type="text" id="description" name="description" class="pagesignup-input" value="{{ group.description }}">
 				</div>
-
-				<button type="submit" class="save-changes">Save changes</button>
-
+			
+				<button type="submit" class="pagesignup-buttonsingupbig">Save changes</button>
 			</form>
-
-				<form method="POST" action="{{ url_for('delete_group') }}">
+			
+				<form class="pagesignup-signup"  method="POST" action="{{ url_for('delete_group') }}">
 					<input type="hidden" name="group_id" value="{{ group.id }}">
-					<button type="submit" class="save-changes">Delete group</button>
+					<button type="submit" class="pagesignup-buttonsingupbig">Delete group</button>
 				</form>
-
-				<h2>Members</h2>
-				{% for login,role in users.items() %}
-					<div class="user">
-						<a href="{{ url_for('profile', login=login ) }}" class="user-name">{{ login }} {{role}}</a>
-						<form method="POST" action="{{ url_for('manage_users_group') }}">
-							<input type="hidden" name="user_login" value="{{ login }}">
-							<input type="hidden" name="group_id" value="{{ group.id }}">
+			</div>
+		</div>
+	</div>
+	<div class="my-members">Members
+		<div class="line"></div>
+	
+		<div class="members-list">
+			{% for login,role in users.items() %}
+				<div class="member-item">
+					<a href="{{ url_for('profile', login=login ) }}" class="member-name">{{ login }} ({{role}})</a>
+					<form method="POST" action="{{ url_for('manage_users_group') }}" class="member-actions">
+						<input type="hidden" name="user_login" value="{{ login }}">
+						<input type="hidden" name="group_id" value="{{ group.id }}">
+	
 						{% if role != 'admin' %}
 							<button type="submit" name="action" value="delete" class="butt-my-viewers">Delete</button>
 						{% endif %}
+	
 						{% if role == 'member' %}
-							<button type="submit" name="action" value="make_admin" class="butt-my-viewers">Make admin</button>
+							<button type="submit" name="action" value="make_admin" class="butt-my-viewers">Make Admin</button>
 						{% endif %}
+	
 						{% if role == 'pending' %}
 							<button type="submit" name="action" value="accept_pending" class="butt-my-viewers">Accept</button>
 						{% endif %}
-
-						</form>
-					</div>
-				{% endfor %}
-				<h2> Posts</h2>
-				{% for post in posts %}
-					<div class="post">
-						<a href="{{ url_for('profile', login=post.author_login) }}" class="post-author">{{ post.author_login }}</a>
-						<a href="{{ url_for('post', post_id=post.id) }}" class="post-name">
-							<img class="avatar" alt="" src="{{ url_for('image', id=post.id) }}">
-							<form method="POST" action="{{ url_for('manage_posts_group') }}">
-								<input type="hidden" name="group_id" value="{{ group.id }}">
-								<input type="hidden" name="post_id" value="{{ post.id }}">
-								<button type="submit" name="action" value="delete" class="butt-my-viewers">Delete</button>
-							</form>
-						</a>
-					</div>
-				{% endfor %}
+					</form>
+				</div>
+			{% endfor %}
 		</div>
 	</div>
+<div class="projekt-foto">
+
+	<div class="my-posts">Posts
+		<div class="line"></div>
+	
+			{% for post in posts %}
+				<div class="post-item">
+					<a href="{{ url_for('profile', login=post.author_login) }}" class="post-author">{{ post.author_login }}</a>
+					
+					<a href="{{ url_for('post', post_id=post.id) }}" class="img gallery-image">
+						<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="img gallery-image">
+					</a>
+	
+					<form method="POST" action="{{ url_for('manage_posts_group') }}" class="post-actions">
+						<input type="hidden" name="group_id" value="{{ group.id }}">
+						<input type="hidden" name="post_id" value="{{ post.id }}">
+						<button type="submit" name="action" value="delete" class="delete-profile">Delete</button>
+					</form>
+				</div>
+			{% endfor %}
+		</div>
+</div>
+		
 </body>
 </html>
