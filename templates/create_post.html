@@ -18,7 +18,7 @@
           <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
             <p>Drag & Drop image here</p>
             <span class="image-upload-label">Click to Upload Image</span>
-            <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image" {% if previous_values.get('image') %}value="{{ previous_values.get('image') }}"{% endif %}>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image" required>
           </div>
           <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text">{% if previous_values.get('text') %}{{ previous_values.get('text') }}{% endif %}</textarea>
           <textarea id="tags" placeholder="Add tags starting with # and separated by #" name="tags">{% if previous_values.get('tags') %}{{ previous_values.get('tags') }}{% endif %}</textarea>

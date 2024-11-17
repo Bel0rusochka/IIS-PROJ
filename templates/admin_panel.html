@@ -79,7 +79,7 @@
                     {% elif panel_type == 'groups' %}
                         <a href="{{ url_for('group', id=element.id) }}" class="user">
                             <div class="user">
-                                <img class="avatar" alt="" src="{{ element.avatar_url or '../static/images/no_avatar.svg' }}">
+                                <img class="avatar" alt="" src="{{ element.avatar_url or '../static/images/avatar_group.svg' }}">
                                 <div class="name-user">
                                     <div class="usser-name">Name: {{ element.name }}</div>
                                     <div class="user-name">Members: {{ element.members_count() }}</div>
