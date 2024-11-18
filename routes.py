@@ -8,10 +8,13 @@ import re
 
 
 def registrate_routes(app, db):
+
+    #This function is used to validate the login, name, surname of the user and the group name
     def validate_name(login):
         pattern = r'^[a-zA-Z0-9._]{2,60}$'
         return re.match(pattern, login) is not None
 
+    #This function is used to transform the image to the format that can be saved in the database
     def transform_images(image):
         img = PILImage.open(image)
         img = img.convert('RGB')
@@ -22,6 +25,7 @@ def registrate_routes(app, db):
         img_io.seek(0)
         return img_io.read()
 
+    #This function is used to check if the user exists in database
     def user_exists(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -34,6 +38,7 @@ def registrate_routes(app, db):
             return f(*args, **kwargs)
         return decorated_function
 
+    #This wrapper is used to check if the user is logged in
     def require_login(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -43,6 +48,7 @@ def registrate_routes(app, db):
             return f(*args, **kwargs)
         return decorated_function
     
+    #This wrapper is used to check if the user is banned
     def require_not_banned(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -54,6 +60,7 @@ def registrate_routes(app, db):
             return f(*args, **kwargs)
         return decorated_function
     
+    #This wrapper is used to check if the user is an admin or a moderator
     def require_admin_or_moder(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
@@ -65,6 +72,7 @@ def registrate_routes(app, db):
         
         return decorated_function
 
+    #This function is used to save the previous page in the session
     def add_previous_page():
         if request.url == request.host_url:
             session['previous_pages'] = []
@@ -76,12 +84,14 @@ def registrate_routes(app, db):
             session['previous_pages'].append(request.url)
             session.modified = True
 
+    #This function is used to initialize the previous_pages variables in session
     @app.before_request
     def before_request():
         session.permanent = True
         if session.get('previous_pages') is None:
             session['previous_pages'] = []
 
+    #This function is used to redirect the user to the previous page
     @app.route('/go_back')
     @user_exists
     def go_back():
@@ -93,6 +103,7 @@ def registrate_routes(app, db):
             return redirect( session['previous_pages'].pop())
         return redirect(url_for('index'))
 
+    #This function is used to register a new user in the database
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         if session.get('user') is not None:
@@ -108,9 +119,10 @@ def registrate_routes(app, db):
             confirm_password = request.form['confirm_password'].strip()
             role = 'user'
 
-            request_data = {'login': login, 'name': name, 'surname': surname, 'email': email, 'password': password, 'confirm_password': confirm_password}
+            request_data = {'login': login, 'name': name, 'surname': surname, 'email': email, 'password': password, 'confirm_password': confirm_password} #
             bad_data = False
 
+            #Validation of the user data
             if password != confirm_password or len(password) < 8:
                 flash("Passwords do not match or are less than 8 characters", "error")
                 request_data.pop('password')
@@ -127,24 +139,25 @@ def registrate_routes(app, db):
                 request_data.pop('email')
                 bad_data = True
 
-            if not validate_name(name):
+            if not validate_name(name) and name != "":
                 flash("Name is invalid", "error")
                 request_data.pop('name')
                 bad_data = True
 
-            if not validate_name(surname):
+            if not validate_name(surname) and surname != "":
                 flash("Surname is invalid", "error")
                 request_data.pop('surname')
                 bad_data = True
 
             if not bad_data:
-                session['user'] = login
-                password_db = hashlib.md5(password.encode()).hexdigest()
+                session['user'] = login #Saving the user in the session
+                password_db = hashlib.md5(password.encode()).hexdigest() #Hashing the password
                 Users.add_user(login, email, password_db, name, surname,role)
                 return redirect(url_for('index'))
-            return render_template("signup.html", previous_values=request_data)
+            return render_template("signup.html", previous_values=request_data) #Returning the signup page with the previous values, if some of the data is invalid
         return render_template("signup.html")
 
+    #This function is used to login the user
     @app.route('/login', methods=['GET', 'POST'])
     def login():
         if session.get('user') is not None:
@@ -170,6 +183,7 @@ def registrate_routes(app, db):
             return render_template("login.html", previous_values=request_data)
         return render_template("login.html")
 
+    #This function is used to display the profile of the user
     @app.route('/profile/<login>')
     @user_exists
     @require_login
@@ -179,6 +193,7 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
 
         if request.method == 'GET' and login == active_user.login:
+            #Implementing the selection of the posts type. The user can select the show all his posts or only the posts that are bound to the groups
             add_previous_page()
             post_type = request.args.get('posts_type', 'not_group')
             posts = user.get_user_posts_by_privacy(post_type)
@@ -189,7 +204,8 @@ def registrate_routes(app, db):
             is_following = active_user in user.get_followers_list()
             return  render_template("profile.html", user=user, posts=posts, is_following=is_following)
 
-    @app.route('/follow', methods=['GET', 'POST'])
+    #This function is used to follow the user
+    @app.route('/follow', methods=['POST'])
     @user_exists
     @require_login
     @require_not_banned
@@ -211,7 +227,8 @@ def registrate_routes(app, db):
             return redirect(request.referrer or url_for('index'))
         abort(404)
 
-    @app.route('/unfollow', methods=['GET', 'POST'])
+    #This function is used to unfollow the user
+    @app.route('/unfollow', methods=['POST'])
     @user_exists
     @require_login
     @require_not_banned
@@ -233,6 +250,7 @@ def registrate_routes(app, db):
             return redirect(request.referrer or url_for('index'))
         abort(404)
 
+    #This function is used to edit the group
     @app.route('/groups_setting/<int:id>', methods=['GET', 'POST'])
     @user_exists
     @require_login
@@ -250,6 +268,7 @@ def registrate_routes(app, db):
             group_name = request.form['name'].strip()
             group_description = request.form['description'].strip()
 
+            #Validation of the group name and description. Changing only valid data
             if not validate_name(group_name):
                 flash("Group name is invalid", "error")
             elif group_name != group.name:
@@ -264,6 +283,7 @@ def registrate_routes(app, db):
 
         return render_template("edit_group.html", group=group, users=users_with_roles, posts=group.posts, user = Users.get_user_or_404(session['user']))
 
+    #This function is used to processing various actions with the users in the group
     @app.route('/groups/manage/users', methods=['POST'])
     @user_exists
     @require_login
@@ -291,6 +311,7 @@ def registrate_routes(app, db):
             return redirect(request.referrer or url_for('edit_group', id=group_id))
         abort(404)
 
+    #This function is used to processing various actions with the posts that bound to the group
     @app.route('/groups/manage/posts', methods=['POST'])
     @user_exists
     @require_login
@@ -308,6 +329,7 @@ def registrate_routes(app, db):
             return redirect(url_for('edit_group', id=group_id))
         abort(404)
 
+    #This function is used to delete the group
     @app.route('/groups/delete', methods=['POST'])
     @user_exists
     @require_login
@@ -320,6 +342,7 @@ def registrate_routes(app, db):
             return redirect(url_for('groups'))
         abort(404)
 
+    #This function is used to show received shares
     @app.route('/shares')
     @user_exists
     @require_login
@@ -330,6 +353,7 @@ def registrate_routes(app, db):
         shares_received = Shares.query.filter_by(recipient_login=active_user.login).all()
         return render_template('shares.html', shares=shares_received, user = active_user)
 
+    #This function is used to show sent shares
     @app.route('/shares/sent')
     @user_exists
     @require_login
@@ -340,6 +364,7 @@ def registrate_routes(app, db):
         shares = Shares.query.filter_by(sender_login=active_user.login).all()
         return render_template('shares.html', shares=shares, user = active_user)
 
+    #This function is used to show all users
     @app.route('/users')
     @user_exists
     @require_login
@@ -352,6 +377,7 @@ def registrate_routes(app, db):
         users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
         return render_template('users.html', users=users, user = active_user)
 
+    #This function is used to show followers of the active user
     @app.route('/users/followers')
     @user_exists
     @require_login
@@ -364,6 +390,7 @@ def registrate_routes(app, db):
         users = [user for user in active_user.get_followers_list() if query in user.login or query in user.name or query in user.surname] if query else active_user.get_followers_list()
         return render_template('users.html', users=users, user = active_user)
 
+    #This function is used to show following of the active user
     @app.route('/users/following')
     @user_exists
     @require_login
@@ -376,6 +403,7 @@ def registrate_routes(app, db):
         users = [user for user in active_user.get_following_list() if query in user.login or query in user.name or query in user.surname] if query else active_user.get_following_list()
         return render_template('users.html', users=users, user = active_user)
 
+    #This function is used to show all groups
     @app.route('/groups')
     @user_exists
     @require_login
@@ -388,6 +416,7 @@ def registrate_routes(app, db):
 
         return render_template('groups.html',groups=groups, user = active_user)
 
+    #This function is used to show groups that the active user is following
     @app.route('/groups/following_groups')
     @user_exists
     @require_login
@@ -400,6 +429,7 @@ def registrate_routes(app, db):
         groups = [group for group in active_user.groups if query in group.name] if query else active_user.groups
         return render_template('groups.html', groups=groups, user = active_user)
 
+    #This function is used to show groups that the active user is managing
     @app.route('/groups/managed_groups')
     @user_exists
     @require_login
@@ -413,6 +443,7 @@ def registrate_routes(app, db):
 
         return render_template('groups.html', groups=groups, user = active_user)
 
+    #This function is used to create a new group
     @app.route('/groups/create_group', methods=['POST','GET'])
     @user_exists
     @require_login
@@ -425,6 +456,7 @@ def registrate_routes(app, db):
             bad_data = False
             previous_values = {'group_name': group_name, 'group_description': group_description}
 
+            #Validation of the group name and description. Creating the group if the data is valid
             if not validate_name(group_name):
                 flash("Group name is invalid", "error")
                 bad_data = True
@@ -445,6 +477,7 @@ def registrate_routes(app, db):
             add_previous_page()
             return render_template('create_group.html', user=active_user, previous_values={})
 
+    #This function is used to show specific group
     @app.route('/groups/<int:id>')
     @user_exists
     @require_login
@@ -457,7 +490,8 @@ def registrate_routes(app, db):
         is_admin =  subscribers_dict.get(active_user.login) == 'admin'
         return render_template("group.html", group=group, posts = group.posts, is_admin=is_admin, subscribers=subscribers_dict.keys())
 
-    @app.route('/delete_user', methods=['GET', 'POST'])
+    #This function is used to delete user from the database
+    @app.route('/delete_user', methods=['POST'])
     @user_exists
     @require_login
     @require_not_banned
@@ -470,6 +504,7 @@ def registrate_routes(app, db):
             return redirect(url_for('index'))
         abort(404)
 
+    #This function is used to edit user data
     @app.route('/setting/<login>', methods=['GET', 'POST'])
     @user_exists
     @require_login
@@ -487,19 +522,22 @@ def registrate_routes(app, db):
         if request.method == 'POST':
 
             user_name = request.form['name'].strip()
+            user_surname = request.form['surname'].strip()
+
+            #Validation of the user name and surname. Changing only valid data
             if not validate_name(user_name):
                 flash("Name is invalid", "error")
             elif user_name != user.name:
                 flash("Name updated", "success")
                 user.change_user_data(name=user_name)
 
-            user_surname = request.form['surname'].strip()
             if not validate_name(user_surname):
                 flash("Surname is invalid", "error")
             elif user_surname != user.surname:
                 flash("Surname updated", "success")
                 user.change_user_data(surname=user_surname)
 
+            #If user is the owner of the profile, he can change the password(not allowed for the admin)
             if login == active_user.login:
                 password = request.form['password'].strip()
                 confirm_password = request.form['confirm_password'].strip()
@@ -511,6 +549,7 @@ def registrate_routes(app, db):
                         flash("Passwords do not match and should be at least 8 characters", "error")
         return render_template("edit_profile.html", user=user)
 
+    #This function is used to show the specific post
     @app.route('/posts/<int:post_id>')
     @user_exists
     @require_not_banned
@@ -521,11 +560,13 @@ def registrate_routes(app, db):
             post = Posts.get_all_posts_by_privacy('public').filter_by(id=post_id).first()
         else:
             active_user = Users.get_user_or_404(user_login)
+            #If the user is an admin or a moderator, he can see all the posts
             if active_user.role == 'admin' or active_user.role == 'moderator':
                 post = Posts.query.filter_by(id=post_id).first()
             else:
                 post = active_user.get_posts_for_user().filter_by(id=post_id).first()
 
+        #If the post is not found, the user is redirected to the previous page
         if post is None:
            return redirect(url_for('go_back'))
 
@@ -533,14 +574,12 @@ def registrate_routes(app, db):
         comments = post.comments.all()
         return render_template("post.html", post=post, comments=comments, user=active_user if user_login else None)
 
+    #This function is used to add a new comment to the post
     @app.route('/add_comment/<int:post_id>', methods=['POST'])
     @user_exists
     @require_not_banned
+    @require_login
     def add_comment(post_id):
-        if session.get('user') is None or request.method == 'GET':
-            flash("You are not logged in", "error")
-            return redirect(url_for('post', post_id=post_id))
-
         if request.method == 'POST':
             text = request.form['text']
             if (text == ""):
@@ -554,6 +593,7 @@ def registrate_routes(app, db):
             return redirect(url_for('post', post_id=post_id))
         abort(404)
 
+    #This function is used to delete the comment from the post
     @app.route('/delete_comment', methods=['POST'])
     @user_exists
     @require_not_banned
@@ -566,16 +606,14 @@ def registrate_routes(app, db):
                 return redirect(url_for('post', post_id=comment.post_id))
         abort(404)
 
+    #This function is used to like the post
     @app.route('/like', methods=['POST'])
     @user_exists
     @require_not_banned
+    @require_login
     def like_post():
         if request.method == 'POST':
             post_id = request.form['post_id']
-
-            if session.get('user') is None:
-                flash("You are not logged in", "error")
-                return redirect(url_for('post', post_id=post_id))
 
             post = Posts.get_post_or_404(post_id)
             user_login = session.get('user')
@@ -584,9 +622,11 @@ def registrate_routes(app, db):
             return redirect(url_for('post', post_id=post.id))
         abort(404)
 
+    #This function is used to delete the post
     @app.route('/delete_post', methods=['POST'])
     @user_exists
     @require_not_banned
+    @require_login
     def delete_post():
         if request.method == 'POST':
             post_id = request.form['post_id']
@@ -597,6 +637,7 @@ def registrate_routes(app, db):
             return redirect(url_for('go_back'))
         abort(404)
 
+    #This function is used to edit the post
     @app.route('/edit_post/<int:post_id>', methods=['POST', 'GET'])
     @user_exists
     @require_login
@@ -617,6 +658,7 @@ def registrate_routes(app, db):
             selected_group = request.form.getlist('groups')
             bad_data = False
 
+            #Validation of the post data. Changing only valid data
             if tags_input and not tags_input.startswith('#'):
                 flash("Tags should start with #", "error")
                 bad_data = True
@@ -639,6 +681,7 @@ def registrate_routes(app, db):
 
         return render_template("edit_post.html", post = post, user = active_user)
 
+    #This function is used to share the post with the users
     @app.route('/share_post', methods=['POST'])
     @user_exists
     @require_not_banned
@@ -651,6 +694,7 @@ def registrate_routes(app, db):
             post = Posts.get_post_or_404(post_id)
             sender = Users.get_user_or_404(session.get('user'))
 
+            #Validation of the recipient. Sharing the post if the recipient is valid
             if recipient == sender:
                 flash("You can't share the post with yourself", "error")
                 return redirect(url_for('post', post_id=post.id))
@@ -658,6 +702,7 @@ def registrate_routes(app, db):
                 flash("User not found", "error")
                 return redirect(url_for('post', post_id=post.id))
 
+            #Private posts can be shared only with the followers of the author
             if post.status == 'private':
                 author = post.author
                 if not recipient in author.get_followers_list():
@@ -669,6 +714,7 @@ def registrate_routes(app, db):
             return redirect(url_for('post', post_id=post.id))
         abort(404)
 
+    #This function is used to logout the user from the session
     @app.route('/logout')
     def logout():
         if session.get('user') is not None:
@@ -676,6 +722,7 @@ def registrate_routes(app, db):
             flash("You are logged out", "success")
         return redirect(url_for('login'))
 
+    #This function is used to download the image for the post and create the url for the image
     @app.route('/image/<int:id>')
     def image(id):
         if session.get('user') is None:
@@ -686,6 +733,7 @@ def registrate_routes(app, db):
             return send_file(io.BytesIO(img.image_binary), mimetype='image/jpeg')
         abort(404)
 
+    #Helper functions for the index page. These functions are used to filter posts
     def filter_posts(results, filter_by, user):
         if filter_by == 'followers':
             return [post for post in results if
@@ -695,6 +743,7 @@ def registrate_routes(app, db):
                     post.author in user.get_following_list() and post.author_login != user.login]
         return results
 
+    #Helper functions for the index page. These functions are used to sort posts
     def sort_posts(results, sort_by):
         if sort_by == 'shares':
             return sorted(results, key=lambda post: post.shares_count(), reverse=True)
@@ -706,6 +755,7 @@ def registrate_routes(app, db):
             return sorted(results, key=lambda post: post.comments_count(), reverse=True)
         return results
 
+    #This function is used to show the index page with posts feed
     @app.route('/')
     @user_exists
     @require_not_banned
@@ -725,6 +775,7 @@ def registrate_routes(app, db):
             user = None
             results = Posts.get_all_posts_by_privacy('public')
 
+        #Filtering the posts by the tags
         for tag in tag_list:
             results = results.filter(Posts.associated_tags.any(Tags.name == tag))
         results = results.all()
@@ -734,6 +785,7 @@ def registrate_routes(app, db):
         results = sort_posts(results, sort_by)
         return render_template("index.html", posts=results, user=user)
 
+    #This function is used to show the admin panel with the administration of the users
     @app.route('/admin/users', methods=['GET', 'POST'])
     @user_exists
     @require_login
@@ -743,6 +795,7 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
         if request.method == 'POST':
+            #Processing various actions with the users
             user_login = request.form['user_login']
             action = request.form['action']
             if action == "delete":
@@ -765,10 +818,12 @@ def registrate_routes(app, db):
                 user.change_user_data(is_banned=False)
             return redirect(request.referrer or url_for('admin_panel_users'))
 
+        #Filtering the users by the login, name, and surname
         query = request.args.get('query', '')
         users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
         return render_template("admin_panel.html", elements=users, panel_type = 'users', user = active_user)
 
+    #This function is used to show the admin panel with the administration of the groups
     @app.route('/admin/groups', methods=['POST', 'GET'])
     @user_exists
     @require_login
@@ -778,15 +833,18 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
         if request.method == 'POST':
+            #Processing delete group action
             group_id = request.form['group_id']
             Groups.delete_group(group_id)
             flash("Group deleted", "success")
             return redirect(url_for('admin_panel_groups'))
 
+        #Filtering the groups by the name
         query = request.args.get('query', '')
         groups = [group for group in Groups.query.all() if query in group.name] if query else Groups.query.all()
         return render_template("admin_panel.html", elements=groups, panel_type = 'groups', user = active_user)
 
+    #This function is used to show the admin panel with the administration of the posts
     @app.route('/admin/posts', methods=['POST', 'GET'])
     @user_exists
     @require_login
@@ -796,15 +854,18 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
         if request.method == 'POST':
+            #Processing delete post action
             post_id = request.form['post_id']
             Posts.delete_post(post_id)
             flash("Post deleted", "success")
             return redirect(url_for('admin_panel_posts'))
 
+        #Filtering the posts by the author login
         query = request.args.get('query', '').replace('@', '')
         posts = [post for post in Posts.query.all() if query in post.author_login] if query else Posts.query.all()
         return render_template("admin_panel.html", elements=posts, panel_type = 'posts', user = active_user)
 
+    #This function is used to show the admin panel with the administration of the tags
     @app.route('/admin/tags', methods=['POST', 'GET'])
     @user_exists
     @require_login
@@ -814,15 +875,18 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
         if request.method == 'POST':
+            #Processing delete tag action
             tag_name = request.form['tag_name'].strip()
             Tags.delete_tag(tag_name)
             flash("Tag deleted", "success")
             return redirect(url_for('admin_panel_tags'))
 
+        #Filtering the tags by the tag name
         query = request.args.get('query', '').replace('#', '')
         tags = [tag for tag in Tags.query.all() if query in tag.name] if query else Tags.query.all()
         return render_template("admin_panel.html", elements=tags, panel_type = 'tags', user = active_user)
 
+    #This function is used to show the admin panel with the administration of the comments
     @app.route('/admin/comments', methods=['POST', 'GET'])
     @user_exists
     @require_login
@@ -837,10 +901,12 @@ def registrate_routes(app, db):
             flash("Comment deleted", "success")
             return redirect(url_for('admin_panel_comments'))
 
+        #Filtering the comments by the author login
         query = request.args.get('query', '').replace('@', '')
         comments = [comment for comment in Comments.query.all() if query in comment.author_login] if query else Comments.query.all()
         return render_template("admin_panel.html", elements=comments, panel_type = 'comments', user = active_user)
 
+    #This function is used to create a new post
     @app.route('/create_post', methods=['POST', 'GET'])
     @user_exists
     @require_login
@@ -857,6 +923,7 @@ def registrate_routes(app, db):
             bad_data = False
             previous_values = {'text': text, 'tags':  request.form['tags'], 'groups': selected_group, 'privacy': status}
 
+            #Validation of the post data. Creating the post if the data is valid
             if tags_input and not tags_input.startswith('#'):
                 flash("Tags should start with # and be separated by #", "error")
                 bad_data = True
@@ -873,13 +940,14 @@ def registrate_routes(app, db):
             if not bad_data:
                 flash("Post created", "success")
                 Posts.create_post(active_user.login, status, text, transform_images(image),tags, selected_group)
-
                 return redirect(url_for('index'))
+
             return render_template('create_post.html', user=active_user, previous_values=previous_values)
         else:
             add_previous_page()
             return render_template('create_post.html', user=active_user, previous_values={})
 
+    #This function is used to navigate to the banned page for the banned users
     @app.route('/banned')
     def banned():
         if  session.get('user') is not None:
