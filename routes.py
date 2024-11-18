@@ -763,6 +763,7 @@ def registrate_routes(app, db):
             elif action == "unban":
                 user = Users.get_user_or_404(user_login)
                 user.change_user_data(is_banned=False)
+            return redirect(request.referrer or url_for('admin_panel_users'))
 
         query = request.args.get('query', '')
         users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
@@ -780,6 +781,7 @@ def registrate_routes(app, db):
             group_id = request.form['group_id']
             Groups.delete_group(group_id)
             flash("Group deleted", "success")
+            return redirect(url_for('admin_panel_groups'))
 
         query = request.args.get('query', '')
         groups = [group for group in Groups.query.all() if query in group.name] if query else Groups.query.all()
@@ -797,6 +799,7 @@ def registrate_routes(app, db):
             post_id = request.form['post_id']
             Posts.delete_post(post_id)
             flash("Post deleted", "success")
+            return redirect(url_for('admin_panel_posts'))
 
         query = request.args.get('query', '').replace('@', '')
         posts = [post for post in Posts.query.all() if query in post.author_login] if query else Posts.query.all()
@@ -814,6 +817,7 @@ def registrate_routes(app, db):
             tag_name = request.form['tag_name'].strip()
             Tags.delete_tag(tag_name)
             flash("Tag deleted", "success")
+            return redirect(url_for('admin_panel_tags'))
 
         query = request.args.get('query', '').replace('#', '')
         tags = [tag for tag in Tags.query.all() if query in tag.name] if query else Tags.query.all()
@@ -831,6 +835,7 @@ def registrate_routes(app, db):
             comment_id = request.form['comment_id']
             Comments.delete_comment(comment_id)
             flash("Comment deleted", "success")
+            return redirect(url_for('admin_panel_comments'))
 
         query = request.args.get('query', '').replace('@', '')
         comments = [comment for comment in Comments.query.all() if query in comment.author_login] if query else Comments.query.all()
@@ -877,4 +882,8 @@ def registrate_routes(app, db):
 
     @app.route('/banned')
     def banned():
-        return render_template('banned.html')
+        if  session.get('user') is not None:
+            active_user = Users.get_user_or_404(session['user'])
+            if active_user.is_banned:
+                return render_template('banned.html')
+        return redirect(url_for('index'))
