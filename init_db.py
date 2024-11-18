@@ -1,4 +1,6 @@
-"""In this script we initialize data for our database."""
+"""
+In this script we initialize data for our database.
+"""
 from PIL import Image as PILImage
 from app import db, create_app
 from models import Users, Groups, Tags, Posts, Comments, Shares, Followers, GroupsUsers, UsersLikePosts, PostsGroups
@@ -185,7 +187,9 @@ with app.app_context():
         create_followers(users)
         create_likes(users, posts)
 
-        """Add known users for testing."""
+        """
+        Add known users for testing.
+        """
         Users.add_user('admin', 'admin@admin.com', code_password('adminadmin'), 'admin', 'admin', 'admin')
         Users.add_user('moderator','moderator@moderator.com', code_password('moderatormoderator'), 'moderator', 'moderator', 'moderator')
         Users.add_user('user', 'user@user.com', code_password('useruser'), 'user', 'user', 'user')
