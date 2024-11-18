@@ -4,13 +4,15 @@ services:
   flask_app:
     build: .
     ports:
-      - "5000:5000"
+      - "80:5000"
     environment:
       FLASK_APP: app.py
       FLASK_ENV: development
     command: flask run --host=0.0.0.0
     volumes:
       - .:/app
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     depends_on:
       - db
 
@@ -38,6 +40,8 @@ services:
       POSTGRES_DB: flask_db
     volumes:
       - db_data:/var/lib/postgresql/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 
   adminer:
         image: adminer
