@@ -118,14 +118,14 @@
                                     <div class="user-name">Date: {{ element.date.strftime("%d %B %Y") }}</div>
                                     <div class="user-name comment-text ">Text: {{ element.text }}</div>
                                 </div>
+                                <form method="POST" action="{{ url_for('admin_panel_comments') }}">
+                                    <input type="hidden" name="comment_id" value="{{ element.id }}">
+                                    <button type="submit" class="edit-buttons">Delete</button>
+                                </form>
+                                <div class="line"></div>
                             </div>
                         </a>
-                        <form method="POST" action="{{ url_for('admin_panel_comments') }}">
-                            <input type="hidden" name="comment_id" value="{{ element.id }}">
-                            <button type="submit" class="edit-buttons">Delete</button>
-                        </form>
-
-                        <div class="line"></div>
+                      
                     {% elif panel_type == 'tags' %}
                         <a href="{{ url_for('index', query="#"+element.name) }}" class="user">
                             <div class="user">

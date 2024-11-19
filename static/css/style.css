@@ -723,7 +723,23 @@ img {
 .comment-text {
   margin-top: 5px;
   word-wrap: break-word;
+  word-break: break-word; /* Add this */
+  white-space: normal; /* Ensure text can wrap properly */
 }
+.user {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap; /* Ensure the content wraps when it's long */
+}
+
+.name-user {
+  flex: 1; /* Allow the content to expand */
+  min-width: 0; /* Prevents overflow for long text */
+  overflow: hidden;
+}
+
 /* Style for image stats with icons */
 #imageStats {
   display: flex;
@@ -1808,7 +1824,6 @@ body.banned-page-body {
 
 .delete-button {
   background-color: #ff6666;
-  color: #fff;
   border: none;
 }
 

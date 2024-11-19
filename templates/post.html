@@ -52,9 +52,8 @@
                 <div class="popup-content">
                     <div class="popup-header">
                         <span class="close-popup" onclick="toggleSharePopup()">×</span>
-                        <h2 class="popup-title">Share</h2>
                     </div>
-                  
+                    <h2 class="popup-title">Share</h2>
                   <!-- Input field for entering user names to share with -->
                   <form id="shareForm" action="{{ url_for('share_post')}}" method="POST">
                       <input type="hidden" name="post_id" value="{{ post.id }}">
@@ -69,6 +68,7 @@
         </div>
         <div id="imageDescription">
             <p> <span id="tagsList">Description:</span> {{ post.text }}</p>
+            <p> <span id="tagsList">Date:</span> {{ post.date.strftime("%d %B %Y") }}</p>
           </div>
           
           <div id="imageTags">
@@ -95,13 +95,12 @@
             {% endfor %}
           </div>
         {% endif %}
-       
 
         <!-- Comment Section -->
         <div id="commentSection">
             <h3>Comments:</h3>
             <form id="commentForm" action="{{ url_for('add_comment', post_id=post.id) }}" method="POST">
-                <textarea id="commentInput" placeholder="Write a comment..." rows="3" cols="50" name="text" required></textarea>
+                <textarea id="commentInput" placeholder="Write a comment (max 1000 symbols)..." rows="3" cols="50" name="text" required></textarea>
                 <button id="submitComment">Submit</button>
             </form>
             <div id="commentsList">
