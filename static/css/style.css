@@ -227,7 +227,7 @@ img {
 }
 .mandatory {
   position: absolute;
-  top: -20px;
+  bottom: -20px;
   right: 0;
   color: gray;
   font-style: italic;
@@ -719,6 +719,10 @@ img {
 .post-header{
   display: flex;
   padding: 20px;
+}
+.comment-text {
+  margin-top: 5px;
+  word-wrap: break-word;
 }
 /* Style for image stats with icons */
 #imageStats {

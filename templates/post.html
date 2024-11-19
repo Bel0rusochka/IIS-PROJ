@@ -80,11 +80,11 @@
           <div id="imageGroup">
             <span id="tagsList">Post Privacy:</span>
             {% if post.status == "public" %}
-                <span>Public - Visible to everyone</span>
+                <span>Public</span>
             {% elif post.status == "private" %}
-                <span>Friends - Visible to friends</span>
+                <span>Friends</span>
             {% elif post.status == "group" %}
-                <span>Groups - Visible only in groups</span>
+                <span>Groups</span>
             {% endif %}
         </div>
           {% if post.status == 'group' %}
@@ -119,7 +119,7 @@
                                 </form>
                             {% endif %}
                         </div>
-                        <div style="margin-top: 5px;">
+                        <div class="comment-text">
                             {{ comment.text }}
                         </div>
                     </div>

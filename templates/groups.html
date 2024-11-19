@@ -20,8 +20,8 @@
 		<div class="all-users">
 			<div class="button-container">
 				<a href="{{ url_for('groups') }}" id="allGroupsButton" class="butt-my-viewers {% if request.endpoint == 'groups' %}active{% else %}passive{% endif %}">All Groups</a>
-				<a href="{{ url_for('following_groups') }}" id="followingGroupsButton" class="butt-my-viewers {% if request.endpoint == 'following_groups' %}active{% else %}passive{% endif %}">Followed Groups</a>
-				<a href="{{ url_for('managed_groups') }}" id="managedGroupsButton" class="butt-my-viewers {% if request.endpoint == 'managed_groups' %}active{% else %}passive{% endif %}">Managed Groups</a>
+				<a href="{{ url_for('following_groups') }}" id="followingGroupsButton" class="butt-my-viewers {% if request.endpoint == 'following_groups' %}active{% else %}passive{% endif %}">Followed</a>
+				<a href="{{ url_for('managed_groups') }}" id="managedGroupsButton" class="butt-my-viewers {% if request.endpoint == 'managed_groups' %}active{% else %}passive{% endif %}">Managed</a>
 				<a class="add-viewer-button" href="{{ url_for('create_group') }}">Create Group</a>
 			</div>
 			
