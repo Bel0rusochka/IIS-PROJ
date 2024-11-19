@@ -99,10 +99,13 @@
         <!-- Comment Section -->
         <div id="commentSection">
             <h3>Comments:</h3>
+            {% if session.user %}
             <form id="commentForm" action="{{ url_for('add_comment', post_id=post.id) }}" method="POST">
                 <textarea id="commentInput" placeholder="Write a comment (max 1000 symbols)..." rows="3" cols="50" name="text" required></textarea>
                 <button id="submitComment">Submit</button>
             </form>
+            {% endif %}
+
             <div id="commentsList">
                 {% for comment in comments %}
                     <div class="comment" style="border-bottom: 1px solid #ccc; padding: 10px;">
