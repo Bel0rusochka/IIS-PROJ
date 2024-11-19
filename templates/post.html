@@ -67,27 +67,35 @@
                 <i class="fa fa-comment"></i> {{ post.comments_count() }}
             </span>
         </div>
-
-        <div id="imageTags">
+        <div id="imageDescription">
+            <p> <span id="tagsList">Description:</span> {{ post.text }}</p>
+          </div>
+          
+          <div id="imageTags">
             <span id="tagsList">Tags:</span>
             {% for tag in post.associated_tags %}
-                  <a href="{{ url_for("index", query="#"+tag.name)}}"><span class="tag">#{{ tag.name }}</span></a>
+              <a href="{{ url_for("index", query="#"+tag.name)}}"><span class="tag">#{{ tag.name }}</span></a>
             {% endfor %}
+          </div>
+          <div id="imageGroup">
+            <span id="tagsList">Post Privacy:</span>
+            {% if post.status == "public" %}
+                <span>Public - Visible to everyone</span>
+            {% elif post.status == "private" %}
+                <span>Friends - Visible to friends</span>
+            {% elif post.status == "group" %}
+                <span>Groups - Visible only in groups</span>
+            {% endif %}
         </div>
-
-        {% if post.status == 'group' %}
-        <div id="imageDescription">
-
-            <h3>Group:</h3>
-            {%  for group in post.get_connected_groups() %}<p id="groupTag"><a href="{{ url_for('group', id=group.id) }}"><span>{{ group.name }}</span></a></p>{% endfor %}
-        </div>
-
+          {% if post.status == 'group' %}
+          <div id="imageGroup">
+            <span id="tagsList">Group:</span>
+            {%  for group in post.get_connected_groups() %}
+              <span class="groupTag"><a href="{{ url_for('group', id=group.id) }}">{{ group.name }}</a></span>
+            {% endfor %}
+          </div>
         {% endif %}
-
-        <div id="imageDescription">
-            <h3>Description:</h3>
-            <p>{{ post.text }}</p>
-        </div>
+       
 
         <!-- Comment Section -->
         <div id="commentSection">

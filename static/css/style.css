@@ -732,76 +732,94 @@ img {
 #imageStats i {
   margin-right: 8px; /* Space between icon and number */
 }
-#imageTags {
-  display: flex;               /* Use flexbox for layout */
-  flex-wrap: wrap;             /* Wrap tags to the next line if necessary */
-  align-items: center;         /* Center items vertically */
-  margin: 15px 0;              /* Space around the tags section */
-}
- 
 
-.tag {
-  background-color: #f0f0f0;   /* Light gray background for tags */
-  color: #333;                 /* Dark text color for readability */
-  border-radius: 20px;         /* Rounded corners for tags */
-  padding: 5px 10px;           /* Internal padding for each tag */
-  margin: 5px;                 /* Space between each tag */
-  font-size: 14px;             /* Consistent font size */
-  cursor: pointer;             /* Change cursor on hover */
-  transition: background-color 0.3s ease;  /* Smooth hover effect */
-}
+/* Image Description Styles */
 
-.tag:hover {
-  background-color: #ddd;      /* Darker background on hover */
-}
-#groupTag {
-  display: inline-block;       /* Keep the group tag inline */
-  margin: 10px 0;              /* Add space above and below group tag */
-}
-
-#groupTag a {
-  color: #007bff;              /* Blue link color */
-  text-decoration: none;       /* Remove underline */
-  padding: 5px 10px;           /* Add padding inside the link */
-  border-radius: 5px;          /* Rounded corners */
-  background-color: #f8f8f8;   /* Light background */
-  transition: background-color 0.3s ease;  /* Smooth hover effect */
-}
-
-#groupTag a:hover {
-  background-color: #e0e0e0;   /* Slightly darker background on hover */
-}
 #imageDescription {
-  display: block;               /* Ensure it behaves like a block element */
-  margin: 15px 0;               /* Space around the tags section */
-  text-align: left;             /* Ensure text is left-aligned */
-  padding: 0 15px;              /* Add padding to space the content from the edges if needed */
-  word-wrap: break-word;        /* Ensures long words break and wrap onto a new line */
-  overflow-wrap: break-word;    /* Provides compatibility for handling word breaks in older browsers */
-}
-
-#imageDescription h3 {
-  font-size: 20px;              /* Larger font for the heading */
-  color: #333;                  /* Darker text color for better readability */
-  margin-bottom: 10px;          /* Space below the heading */
+  display: block;
+  margin: 15px 0;
+  text-align: left;
+  padding: 0 15px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 #imageDescription p {
-  font-size: 16px;              /* Consistent font size */
-  margin-bottom: 20px;          /* Add space below the description */
-  word-wrap: break-word;        /* Ensure the paragraph text wraps correctly */
-  overflow-wrap: break-word;    /* Compatibility for different browsers */
+  font-size: 16px;
+  margin-bottom: 20px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
+/* Image Tags Styles */
+
+#imageTags {
+  margin: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
 
 #tagsList {
   font-weight: bold;
-  font-size: 20px; /* Font size */
-  display: inline-flex;       /* Keep tags in a single line */
-  gap: 5px;                  /* Space between multiple tags */
-  padding: 15px;
+  font-size: 20px;
 }
 
+/* Tag Styles */
+
+.tag {
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tag:hover {
+  background-color: #ddd;
+}
+
+/* Image Group Styles */
+
+#imageGroup {
+  display: block;
+  margin: 15px 0;
+  text-align: left;
+  padding: 0 15px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+#imageGroup span {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 10px;
+  
+}
+
+.groupTag {
+  display: inline-block;
+  margin: 10px 0;
+  
+}
+
+.groupTag a {
+  color: #73b3f8;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+
+  transition: background-color 0.3s ease;
+}
+
+.groupTag a:hover {
+  background-color: #e0e0e0;
+}
 .send-button {
   background-color: #4CAF50; /* Green background */
   color: white; /* White text */
