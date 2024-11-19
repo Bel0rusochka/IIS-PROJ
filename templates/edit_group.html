@@ -64,12 +64,11 @@
 </div>
 </div>
 </div>
-<div class="galery-foto">
-	<div class="my-posts">Posts
+</div>
+<div class="my-posts">Posts
 		<div class="line"></div>
-	
 			{% for post in posts %}
-				<div class="post-item">
+				<div class="galery-foto">
 					<a href="{{ url_for('profile', login=post.author_login) }}" class="post-author">{{ post.author_login }}</a>
 					
 					<a href="{{ url_for('post', post_id=post.id) }}" class="img gallery-image">
@@ -84,7 +83,6 @@
 				</div>
 			{% endfor %}
 		</div>
-</div>
 </div>
 
 {% endblock %}
