@@ -15,11 +15,17 @@
 				<div class="input-container">
 					<label for="name" class="floating-label">Group Name</label>
 					<input type="text" id="name" name="name" class="pagesignup-input" value="{{ group.name }}">
+					<span class="info-icon">ℹ
+						<span class="tooltip">Name of your group.</span>
+					</span>
 				</div>
 			
 				<div class="input-container">
 					<label for="description" class="floating-label">Description</label>
 					<input type="text" id="description" name="description" class="pagesignup-input" value="{{ group.description }}">
+					<span class="info-icon">ℹ
+						<span class="tooltip">Description of your group.</span>
+					</span>
 				</div>
 			
 				<button type="submit" class="pagesignup-buttonsingupbig">Save changes</button>
@@ -29,9 +35,6 @@
 					<input type="hidden" name="group_id" value="{{ group.id }}">
 					<button type="submit" class="pagesignup-buttonsingupbig">Delete group</button>
 				</form>
-			</div>
-		</div>
-	</div>
 	<div class="my-members">Members
 		<div class="line"></div>
 	
@@ -57,10 +60,11 @@
 					</form>
 				</div>
 			{% endfor %}
-		</div>
 	</div>
-<div class="projekt-foto">
-
+</div>
+</div>
+</div>
+<div class="galery-foto">
 	<div class="my-posts">Posts
 		<div class="line"></div>
 	
@@ -81,4 +85,6 @@
 			{% endfor %}
 		</div>
 </div>
+</div>
+
 {% endblock %}

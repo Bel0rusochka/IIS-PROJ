@@ -101,8 +101,7 @@ img {
 .projekt-content{
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
+  margin-top: 200px;
 }
 /* General container for the signup page */
 .pagesignup-container {
@@ -567,18 +566,15 @@ img {
   width: 1874px;
   height: 77px;
 }
-.projekt-foto {
+
+.gallery-foto ,.projekt-foto {
   display: flex;
   flex-wrap: wrap; /* Ensures images wrap to the next line if necessary */
   justify-content: space-between; /* Spreads the images evenly across the row */
   margin: 0;
-  padding-top: 100px;
 }
-.gallery-foto {
-  display: flex;
-  flex-wrap: wrap; /* Ensures images wrap to the next line if necessary */
-  justify-content: space-between; /* Spreads the images evenly across the row */
-  margin: 0;
+.projekt-foto {
+  padding-top: 100px;
 }
 .gallery-image {
   flex-grow: 1;
@@ -1742,4 +1738,96 @@ body.banned-page-body {
 /* Hover effect for the logout button */
 .logout-link:hover {
   background-color: #0056b3;
+}
+.my-members {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.my-members h2 {
+  margin-top: 0;
+}
+
+.line {
+  height: 1px;
+  background-color: #ccc;
+  margin: 10px 0;
+}
+
+.members-list {
+  margin-top: 20px;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+
+.member-name:hover {
+  color: #666;
+}
+
+.member-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #f0f0f0;
+}
+
+.delete-button {
+  background-color: #ff6666;
+  color: #fff;
+  border: none;
+}
+
+.delete-button:hover {
+  background-color: #ff3333;
+}
+
+.make-admin-button {
+  background-color: #66ccff;
+  color: #fff;
+  border: none;
+}
+
+.make-admin-button:hover {
+  background-color: #33ccff;
+}
+
+.accept-button {
+  background-color: #66ff66;
+  color: #fff;
+  border: none;
+}
+
+.accept-button:hover {
+  background-color: #33ff33;
 }
