@@ -11,7 +11,7 @@ def registrate_routes(app, db):
 
     #This function is used to validate the login, name, surname of the user and the group name
     def validate_name(login, min_size=2):
-        pattern = r'^[a-zA-Z0-9._]{' + str(min_size) + r',60}$'
+        pattern = r'^[a-zA-Z0-9]{' + str(min_size) + r',60}$'
         return re.match(pattern, login) is not None
 
     #This function is used to transform the image to the format that can be saved in the database
@@ -652,7 +652,7 @@ def registrate_routes(app, db):
 
         if request.method == 'POST':
             tags_input = request.form['tags'].strip()
-            tags = [tag for tag in tags_input.split('#') if tag]
+            tags = [part for tag in tags_input.split('#') if tag for part in tag.split(" ") if part]
             text = request.form['text']
             status = request.form['privacy']
             selected_group = request.form.getlist('groups')
@@ -667,6 +667,11 @@ def registrate_routes(app, db):
                 flash("Tags should be separated by #", "error")
             else:
                 post.edit_post(tags=tags)
+
+            for tag in tags:
+                if len(tag) > 60:
+                    bad_data = True
+                    flash("Tag is too long", "error")
 
             if len(text) > 1000:
                 bad_data = True
@@ -689,7 +694,7 @@ def registrate_routes(app, db):
     def share_post():
         if request.method == 'POST':
             post_id = request.form['post_id']
-            recipient = Users.get_user(request.form['recipient_login'].strip())
+            recipient = Users.get_user(request.form['recipient_login'].strip().replace('@', ''))
 
             post = Posts.get_post_or_404(post_id)
             sender = Users.get_user_or_404(session.get('user'))
@@ -919,7 +924,7 @@ def registrate_routes(app, db):
             status = request.form['privacy']
             image = request.files.get('image')
             tags_input = request.form['tags'].strip()
-            tags = [tag for tag in tags_input.split('#') if tag]
+            tags = [part for tag in tags_input.split('#') if tag for part in tag.split(" ") if part]
             bad_data = False
             previous_values = {'text': text, 'tags':  request.form['tags'], 'groups': selected_group, 'privacy': status}
 
@@ -936,6 +941,11 @@ def registrate_routes(app, db):
                 flash("Text is too long", "error")
                 bad_data = True
                 previous_values.pop('text')
+
+            for tag in tags:
+                if len(tag) > 60:
+                    bad_data = True
+                    flash("Tag is too long", "error")
 
             if not bad_data:
                 flash("Post created", "success")

@@ -379,6 +379,8 @@ class Posts(db.Model):
         for tag in set(tags):
             tag = tag.strip()
             if tag == '' or tag == ' ': continue
+            if len(tag) > 60:
+                continue
             tag_db = Tags.query.get(tag)
             if tag_db is None:
                 tag_db = Tags(name=tag)
@@ -441,6 +443,8 @@ class Posts(db.Model):
             for tag in set(tags):
                 tag = tag.strip()
                 if tag == '' or tag == ' ': continue
+                if len(tag) > 60:
+                    continue
                 tag_db = Tags.query.get(tag)
                 if tag_db is None:
                     tag_db = Tags(name=tag)
