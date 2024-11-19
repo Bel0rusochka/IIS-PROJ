@@ -34,37 +34,39 @@
 			<div class="white">
 				<div class="usernameedit">
 					<img class="generic-avatar-icon" alt="User avatar" src="../static/images/no_avatar.svg"> <!-- Added alt text for accessibility -->
+					<div class="user-info">
+						<div class="user-name">{{ user.name }} {{ user.surname }}</div>
+						<div class="user-login">@{{ user.login }}</div>
+					</div>	
 					<div class="user-info-gap">
-						<div class="user-info">
-							<div class="user-name">{{ user.name }} {{ user.surname }}</div>
-							<div class="user-login">@{{ user.login }}</div>
-						
+					
+						<div class="user-stats">
+						  <div class="user-followers">Followers: {{ user.get_followers_count() }}</div>
+						  <div class="user-following">Following: {{ user.get_following_count() }}</div>
+						  <div class="user-posts">Posts: {{ user.get_posts_count() }}</div>
 						</div>
-						<div class="user-followers">Followers: {{ user.get_followers_count() }}</div>
-						<div class="user-following">Following: {{ user.get_following_count() }}</div>
-						<div class="user-posts">Posts: {{ user.get_posts_count() }}</div>
-						{% if session.user == user.login %}
-							<div class="button-group">
-								<a class="edit-buttons" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
-								<form method="POST" action="{{ url_for('delete_user') }}">
-									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="delete-profile">Delete profile</button>
-								</form>
-							</div>
-						{% else %}
+						<div class="button-group">
+						  {% if session.user == user.login %}
+							<a class="edit-buttons" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
+							<form method="POST" action="{{ url_for('delete_user') }}">
+							  <input type="hidden" name="user_login" value="{{ user.login }}">
+							  <button type="submit" class="delete-profile">Delete profile</button>
+							</form>
+						  {% else %}
 							{% if is_following %}
-								<form method="POST" action="{{ url_for('unfollow') }}">
-									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="delete-profile" class="unfollow">Unfollow</button>
-								</form>
+							  <form method="POST" action="{{ url_for('unfollow') }}">
+								<input type="hidden" name="user_login" value="{{ user.login }}">
+								<button type="submit" class="delete-profile" class="unfollow">Unfollow</button>
+							  </form>
 							{% else %}
-								<form method="POST" action="{{ url_for('follow') }}">
-									<input type="hidden" name="user_login" value="{{ user.login }}">
-									<button type="submit" class="edit-buttons" class="follow">Follow</button>
-								</form>
+							  <form method="POST" action="{{ url_for('follow') }}">
+								<input type="hidden" name="user_login" value="{{ user.login }}">
+								<button type="submit" class="edit-buttons" class="follow">Follow</button>
+							  </form>
 							{% endif %}
-						{% endif %}
-					</div>
+						  {% endif %}
+						</div>
+					  </div>
 				</div>
 			</div>
 		</div>
@@ -84,7 +86,7 @@
 			{% endif %}
 			<div class="line"></div>
 			<div class="posts-and-new">
-				<div class="projekt-foto">
+				<div class="gallery-foto">
 					{% for post in posts %}
 						<a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
 							<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="gallery-image" data-id="{{ post.id }}"> <!-- Corrected syntax -->

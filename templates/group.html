@@ -32,39 +32,42 @@
 		<a href="{{ url_for('index') }}" class="header_text">FITstagram</a>
 		</div>
 		<div class="white">
-		<div class="usernameedit">
-			<img class="generic-avatar-icon" alt="" src="../static/images/avatar_group.svg">
-			<div class="user-info-gap">
-			<div class="user-info">
-				<div class="group-name" style="font-weight: bold;">{{ group.name }}</div>
-				<div class="group-date">Created: {{ group.date.strftime("%d %B %Y") }}</div>
-				<div class="group-description">Description: {{ group.description }}</div>
-			</div>
-			<div class="group-members">Members: {{ group.members_count() }}</div>
-			<div class="group-posts">Posts: {{ group.posts_count() }}</div>
-			<div class="button-group">
-				{% if is_admin %}
-				<a class="edit-buttons" id="editProfileButton" href="{{ url_for('edit_group', id = group.id) }}">Edit Group</a>
-				{% endif %}
-				<form method="POST" action="{{ url_for('manage_users_group') }}">
-				<input type="hidden" name="group_id" value="{{ group.id }}">
-				<input type="hidden" name="user_login" value="{{ session.user }}">
-				{% if group.is_subscribed(session.user) %}
-					<button type="submit" class="edit-buttons" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
-				{% else %}
+			<div class="usernameedit">
+			  <img class="generic-avatar-icon" alt="" src="../static/images/avatar_group.svg">
+			  <div class="user-info">
+				<div class="user-name">{{ group.name }}</div>
+				<div class="user-login">Created: {{ group.date.strftime("%d %B %Y") }}</div>
+				<div class="user-description">Description: {{ group.description }}</div>
+			  </div>
+			  <div class="user-info-gap">
+				
+				<div class="user-stats">
+				  <div class="user-followers">Members: {{ group.members_count() }}</div>
+				  <div class="user-following">Posts: {{ group.posts_count() }}</div>
+				</div>
+				<div class="button-group">
+				  {% if is_admin %}
+				  <a class="edit-buttons" id="editProfileButton" href="{{ url_for('edit_group', id = group.id) }}">Edit Group</a>
+				  {% endif %}
+				  <form method="POST" action="{{ url_for('manage_users_group') }}">
+				  <input type="hidden" name="group_id" value="{{ group.id }}">
+				  <input type="hidden" name="user_login" value="{{ session.user }}">
+				  {% if group.is_subscribed(session.user) %}
+					<button type="submit" class="delete-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
+				  {% else %}
 					<button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
-				{% endif %}
-				</form>
+				  {% endif %}
+				  </form>
+				</div>
+			  </div>
 			</div>
-			</div>
-		</div>
-		</div>
+		  </div>
 	</div>
-	  <div class="my-posts">Posts
+	  <div class="my-posts">Posts</div>
 	  <div class="line">
 	  </div>
     		<div class="posts-and-new">
-      			<div class="my-posts">
+      			<div class="gallery-foto">
 					{%for post in posts%}
 						 <a href="{{ url_for('post', post_id=post.id) }}"  class="img gallery-image">
 							<img
@@ -78,7 +81,6 @@
       			</div>
 			</div>
     	
-  	</div>
 	</div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </body>
