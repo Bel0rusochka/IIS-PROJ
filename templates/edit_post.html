@@ -23,41 +23,55 @@
 
         <div class="post-privacy">
             <label for="privacyOptions">Post Privacy:</label>
-            <select id="privacyOptions" name="privacy" onchange="toggleGroupSelect()">
+            <select id="privacyOptions" name="privacy" onchange="toggleGroupList()">
                 <option value="public" {% if post.status == "public" %}selected{% endif %}>Public - Visible to everyone</option>
                 <option value="private" {% if post.status == "private" %}selected{% endif %}>Friends - Visible to friends</option>
                 <option value="group" {% if post.status == "group" %}selected{% endif %}>Groups - Visible only in groups</option>
             </select>
         </div>
+        <form id="postForm" class="pagesignup-signup" method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
 
-        <div id="groupSelect" style="display: none;">
-            <label for="groupOptions">Select Group:</label>
-            {% for group in user.get_approved_groups() %}
-                <input type="checkbox" id="group{{ group.id }}" name="groups" value="{{ group.id }}" {% if group in post.get_connected_groups() %}checked{% endif %}>
-                <label for="group{{ group.id }}">{{ group.name }}</label>
-            {% endfor %}
+      <!-- Group Selection (Initially hidden) -->
+      <div id="groupList" class="group-list" style="display: {% if privacy == 'group' %}flex{% else %}none{% endif %};">
+            <label>Select Groups:</label>
+            <div>
+                {% for group in user.get_approved_groups() %}
+                    <label>
+                        <label for="group{{ group.id }}">{{ group.name }}</label>
+                    <input type="checkbox" id="group{{ group.id }}" name="groups" value="{{ group.id }}" {% if group in post.get_connected_groups() %}checked{% endif %}>
+                        
+                    </label><br>
+                {% endfor %}
+            </div>
         </div>
-
-    
         <button type="submit" class="post-button">Update</button>
+    </form>
 
     </form>
     </div>
 
  <script>
-    function toggleGroupSelect() {
-      const privacyOptions = document.getElementById('privacyOptions');
-      const groupSelect = document.getElementById('groupSelect');
-      groupSelect.style.display = privacyOptions.value === 'group' ? 'block' : 'none';
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleGroupList();
+    });
+    function toggleGroupList() {
+    const privacySelect = document.getElementById('privacyOptions');
+    const groupList = document.getElementById('groupList');
 
-    function togglePopup() {
-      const popupModal = document.getElementById('popupModal');
-      popupModal.style.display = popupModal.style.display === 'none' || popupModal.style.display === '' ? 'block' : 'none';
+    // Show the group list only when "Groups" is selected in privacy settings
+    if (privacySelect.value === 'group') {
+        groupList.style.display = 'block';
+        window.scrollTo({
+            top: groupList.offsetTop, // Scroll to the group list
+            behavior: 'smooth' // Smooth scroll effect
+        });
+    } else {
+        groupList.style.display = 'none';
     }
+}
 
     window.onload = function() {
-      toggleGroupSelect();
+        toggleGroupList();
     };
 </script>
 {% endblock %}
