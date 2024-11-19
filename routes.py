@@ -10,8 +10,8 @@ import re
 def registrate_routes(app, db):
 
     #This function is used to validate the login, name, surname of the user and the group name
-    def validate_name(login):
-        pattern = r'^[a-zA-Z0-9._]{2,60}$'
+    def validate_name(login, min_size=2):
+        pattern = r'^[a-zA-Z0-9._]{' + str(min_size) + r',60}$'
         return re.match(pattern, login) is not None
 
     #This function is used to transform the image to the format that can be saved in the database
@@ -139,12 +139,12 @@ def registrate_routes(app, db):
                 request_data.pop('email')
                 bad_data = True
 
-            if not validate_name(name) and name != "":
+            if not validate_name(name,min_size=0):
                 flash("Name is invalid", "error")
                 request_data.pop('name')
                 bad_data = True
 
-            if not validate_name(surname) and surname != "":
+            if not validate_name(surname,min_size=0):
                 flash("Surname is invalid", "error")
                 request_data.pop('surname')
                 bad_data = True
@@ -525,13 +525,13 @@ def registrate_routes(app, db):
             user_surname = request.form['surname'].strip()
 
             #Validation of the user name and surname. Changing only valid data
-            if not validate_name(user_name):
+            if not validate_name(user_name, min_size=0):
                 flash("Name is invalid", "error")
             elif user_name != user.name:
                 flash("Name updated", "success")
                 user.change_user_data(name=user_name)
 
-            if not validate_name(user_surname):
+            if not validate_name(user_surname, min_size=0):
                 flash("Surname is invalid", "error")
             elif user_surname != user.surname:
                 flash("Surname updated", "success")
