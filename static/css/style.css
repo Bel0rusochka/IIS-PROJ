@@ -105,9 +105,8 @@ img {
 }
 /* General container for the signup page */
 .pagesignup-container {
-
   display: flex;
-  padding: 50px; 
+  padding: 30px; 
   align-items: center;
   justify-content: center;
 }
