@@ -131,8 +131,6 @@ img {
 /* Title text styles */
 .header_text, .pagesignup-text22, .projekt-text2 {
   font-size: 32px;
-  font-family: 'JetBrains Mono', monospace;
-
   color: rgba(0, 0, 0, 1);
 }
 .header_text {
@@ -200,6 +198,19 @@ img {
   width: 100%;
   background-color: rgba(240, 240, 240, 1);
   border-radius: 10px;
+}
+.required-field {
+  color: red;
+  font-weight: bold;
+  margin-left: 3px; /* Small spacing between label and asterisk */
+}
+.mandatory {
+  position: absolute;
+  top: -20px;
+  right: 0;
+  color: gray;
+  font-style: italic;
+  font-size: 14px;
 }
 .toggle-password {
   position: absolute;
@@ -342,6 +353,8 @@ img {
   border: 1px solid rgba(35, 84, 143, 1);
   border-radius: 5px;
   background-color: rgba(205, 225, 248, 1);
+  transition: all 0.3s ease;
+
 }
 
 /* Small text inside buttons */
