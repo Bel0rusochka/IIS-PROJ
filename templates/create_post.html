@@ -15,16 +15,21 @@
           </div>
 
           <!-- Image Upload & Details -->
-          <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
-            <p>Drag & Drop image here</p>
-            <span class="image-upload-label">Click to Upload Image</span>
-            <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image" required>
-          </div>
-          <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text">{% if previous_values.get('text') %}{{ previous_values.get('text') }}{% endif %}</textarea>
-          <textarea id="tags" placeholder="Add tags starting with # and separated by #" name="tags">{% if previous_values.get('tags') %}{{ previous_values.get('tags') }}{% endif %}</textarea>
-
-           <!-- Post Privacy Settings -->
-           <div class="post-privacy">
+        <div id="dropZone" class="drop-zone" onclick="document.getElementById('imageUpload').click();">
+        <p>Drag & Drop image here</p>
+        <span class="image-upload-label">Click to Upload Image</span>
+        <input type="file" id="imageUpload" accept="image/*" style="display: none;" name="image" required>
+        </div>
+        <div class="post-privacy">
+            <label for="tags">Enter post description:</label>
+            <textarea id="caption" rows="8" cols="50" placeholder="Write a text..." name="text">{% if previous_values.get('text') %}{{ previous_values.get('text') }}{% endif %}</textarea>
+        </div>
+        <div class="post-privacy">
+            <label for="tags">Enter post tags:</label>
+            <textarea id="tags" placeholder="Add tags starting with # and separated by #" name="tags">{% if previous_values.get('tags') %}{{ previous_values.get('tags') }}{% endif %}</textarea>
+        </div>
+        <!-- Post Privacy Settings -->
+        <div class="post-privacy">
             <label for="privacyOptions">Post Privacy:</label>
             <select id="privacyOptions" name="privacy" onchange="toggleGroupList()">
                 <option value="public" {%  if previous_values.get('privacy') == 'public' %}selected{% endif %}>Public - Visible to everyone</option>

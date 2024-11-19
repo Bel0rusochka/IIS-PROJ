@@ -10,24 +10,24 @@
 				<a href="{{ url_for('go_back') }}">
 					<img class="back-button" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
 				</a>
-				<div class="pagesignup-text12">
-      			<div class="pagesignup-text12">Login: @{{ user.login }}</div>
-      			<div class="pagesignup-text12">Email: {{ user.mail }}</div>
+				<div class="add-viewer-text">Edit profile</div>
+				<div class="cred">
+					<label>Login: @{{ user.login }}</label>
+					<label>Email: {{ user.mail }}</label>
 				</div>
-
 					<div class="pagesignup-fullname">
 						<div class="input-container">
 							<label for="name" class="floating-label">Name</label>
 							<input type="text" id="name" name="name" class="pagesignup-input" value="{{ user.name }}">
 							<span class="info-icon">ℹ
-                            	<span class="tooltip">Enter your first name.</span>
+                            	<span class="tooltip">Enter first name.</span>
                         	</span>
 						</div>
 						<div class="input-container">
 							<label for="surname" class="floating-label">Surname</label>
 							<input type="text" id="surname" name="surname" class="pagesignup-input"  value="{{ user.surname }}">
 							<span class="info-icon">ℹ
-                            	<span class="tooltip">Enter your last name.</span>
+                            	<span class="tooltip">Enter last name.</span>
                         	</span>
 						</div>
 					</div>
@@ -40,7 +40,7 @@
                         	<i class="fas fa-eye-slash" id="togglePasswordIcon"></i>
                     	</span>
                     	<span class="info-icon">ℹ
-                        	<span class="tooltip">Password must be at least 8 characters and contain letters and numbers.</span>
+                        	<span class="tooltip">Password must be at least 8 characters.</span>
                     	</span>
                 	</div>
 					

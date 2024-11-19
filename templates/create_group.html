@@ -12,14 +12,24 @@
             <form method="POST" class="pagesignup-signup" action="{{ url_for('create_group') }}">
               <div class="add-viewer-text">Create a Group</div>
                 <div class="input-container">
-                  <label for="group-name" class="floating-label">Enter a Group Name</label>
+                  <div class="mandatory">
+                    *Indicates mandatory fields
+                  </div>
+                  <label for="group-name" class="floating-label">Enter a Group Name<span class="required-field">*</span></label>
                   <input type="text" id="group-name" name="group-name" class="pagesignup-input"{% if previous_values.group_name %}value="{{ previous_values.group_name }}"{% endif %}>
+                  <span class="info-icon">ℹ
+                    <span class="tooltip">Come up with a group name.</span>
+                  </span>
                 </div>
                 <div class="input-container">
                   <label for="group-name" class="floating-label">Enter a Group Description</label>
                     <input type="text" id="group-description" name="group-description" class="pagesignup-input" {% if previous_values.group_description %}value="{{ previous_values.group_description }}"{% endif %}>
+                    <span class="info-icon">ℹ
+                      <span class="tooltip">Enter a cool description.</span>
+                    </span>
                   </div>
-                  <button type="submit" class="pagesignup-buttonsingupbig">
+                  
+                <button type="submit" class="pagesignup-buttonsingupbig">
                     <span class="pagesignup-text22"><span>Create</span></span>
                 </button>
     
