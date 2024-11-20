@@ -29,7 +29,7 @@
             <textarea id="tags" placeholder="Add tags starting with # and separated by # (max 60 symbols per tag)" name="tags">{% if previous_values.get('tags') %}{{ previous_values.get('tags') }}{% endif %}</textarea>
         </div>
         <!-- Post Privacy Settings -->
-        <div class="post-privacy">
+        <div class="post-privacy post-privacy2">
             <label for="privacyOptions">Post Privacy:</label>
             <select id="privacyOptions" name="privacy" onchange="toggleGroupList()">
                 <option value="public" {%  if previous_values.get('privacy') == 'public' %}selected{% endif %}>Public - Visible to everyone</option>
