@@ -937,7 +937,7 @@ img {
 
 #commentsList {
   margin-top: 15px; /* Space above the comments list */
-  max-height: 200px; /* Max height for the list */
+ /*r max-height: 200px; /* Max height for the list */
   overflow-y: auto; /* Scrollable if too long */
   border-top: 1px solid #ccc; /* Top border */
   padding-top: 10px; /* Space above comments */
