@@ -6,13 +6,17 @@
     <a href="{{ url_for('post', post_id=post.id) }}">
         <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
     </a>
-    <div id="imageDetail">
+    <div class="projekt-content">
+        <div class="pagesignup-container">
 
-    <form action="{{ url_for('edit_post', post_id=post.id) }}" method="POST">
-        <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}">
-
-
+    <form action="{{ url_for('edit_post', post_id=post.id) }}"class="pagesignup-signup"  method="POST">
         <div id="imageDescription">
+            <div class="popup-header">
+                <h2 class="popup-title">Update Post</h2>
+                <button type="submit" class="post-button">Update</button>
+              </div>
+    
+            <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}">
             <h3>Description:</h3>
             <textarea id="caption" rows="8" cols="50" placeholder="Write a text (max 1000 symbols)..." name="text">{{ post.text }}</textarea>
         </div>
@@ -31,24 +35,25 @@
         </div>
         <form id="postForm" class="pagesignup-signup" method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
 
-      <!-- Group Selection (Initially hidden) -->
-      <div id="groupList" class="group-list" style="display: {% if privacy == 'group' %}flex{% else %}none{% endif %};">
-            <label>Select Groups:</label>
-            <div>
-                {% for group in user.get_approved_groups() %}
-                    <label>
-                        <label for="group{{ group.id }}">{{ group.name }}</label>
-                    <input type="checkbox" id="group{{ group.id }}" name="groups" value="{{ group.id }}" {% if group in post.get_connected_groups() %}checked{% endif %}>
-                        
-                    </label><br>
-                {% endfor %}
+            <div id="groupList" class="group-list" style="display: {% if privacy == 'group' %}block{% else %}none{% endif %};">
+                <label>Select Groups:</label>
+                <div>
+                    {% for group in user.get_approved_groups() %}
+                        <label>
+                            <label for="group{{ group.id }}">{{ group.name }}</label>
+                            <input type="checkbox" name="groups" value="{{ group.id }}" id="group{{ group.id }}" 
+                            {% if group in post.get_connected_groups() %}checked{% endif %}>
+                        </label><br>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        <button type="submit" class="post-button">Update</button>
+            
     </form>
 
     </form>
-    </div>
+</div>
+</div>
+</div>
 
  <script>
     document.addEventListener('DOMContentLoaded', function() {

@@ -152,7 +152,7 @@ img {
 }
 /* Signup form container */
 .pagesignup-signup {
-  width: 500px;
+  width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -756,7 +756,6 @@ img {
   display: block;
   margin: 15px 0;
   text-align: left;
-  padding: 0 15px;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -771,10 +770,11 @@ img {
 /* Image Tags Styles */
 
 #imageTags {
-  margin: 15px;
+  margin: 15px 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  width: 100%;
 }
 
 #tagsList {
