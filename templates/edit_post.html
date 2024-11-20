@@ -25,7 +25,7 @@
             <textarea id="tags" placeholder="Add tags starting with # and separated by # (max 60 symbols per tag)" name="tags">{% if post.associated_tags %}#{{ post.associated_tags | map(attribute='name') | join('#') }}{% endif %}</textarea>
         </div>
 
-        <div class="post-privacy post-privacy1">
+        <div class="post-privacy post-privacy2">
             <label for="privacyOptions">Post Privacy:</label>
             <select id="privacyOptions" name="privacy" onchange="toggleGroupList()">
                 <option value="public" {% if post.status == "public" %}selected{% endif %}>Public - Visible to everyone</option>
