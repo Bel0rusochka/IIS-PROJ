@@ -775,7 +775,6 @@ img {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 20px;
 }
 
 #tagsList {
@@ -1175,10 +1174,11 @@ img {
 }
 
 .post-privacy label {
-  font-size: 14px;
-  color: #333;
   display: block;
-  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: left;
+  margin: 15px;
 }
 
 .post-privacy select {
