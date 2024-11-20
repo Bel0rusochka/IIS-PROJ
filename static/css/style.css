@@ -1165,6 +1165,7 @@ img {
   padding: 8px 12px; /* Button padding */
   cursor: pointer; /* Pointer cursor on hover */
   margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .post-button:hover {
@@ -1183,7 +1184,7 @@ img {
 }
 
 .post-privacy select {
-  width: 100%;
+  width: 96%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
