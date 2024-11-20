@@ -1501,7 +1501,7 @@ background-color: #e74c3c;
   flex-direction: row; /* Arrange items horizontally */
   align-items: center; /* Align items vertically centered */
   position: relative;
-  width: 1080;
+  width: 1080px;
 }
 .popup-overlay {
   position: fixed;               /* Fixed positioning */
