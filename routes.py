@@ -129,7 +129,7 @@ def registrate_routes(app, db):
                 request_data.pop('confirm_password')
                 bad_data = True
 
-            if not validate_name(login):
+            if not validate_name(login) or Users.get_user(login) is not None:
                 flash("Login is invalid", "error")
                 request_data.pop('login')
                 bad_data = True
