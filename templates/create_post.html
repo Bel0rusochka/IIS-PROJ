@@ -26,7 +26,7 @@
         </div>
         <div class="post-privacy">
             <label for="tags">Enter post tags:</label>
-            <textarea id="tags" placeholder="Add tags starting with # and separated by #" name="tags">{% if previous_values.get('tags') %}{{ previous_values.get('tags') }}{% endif %}</textarea>
+            <textarea id="tags" placeholder="Add tags starting with # and separated by # (max 60 symbols per tag)" name="tags">{% if previous_values.get('tags') %}{{ previous_values.get('tags') }}{% endif %}</textarea>
         </div>
         <!-- Post Privacy Settings -->
         <div class="post-privacy">
