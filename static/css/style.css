@@ -1501,7 +1501,7 @@ background-color: #e74c3c;
   flex-direction: row; /* Arrange items horizontally */
   align-items: center; /* Align items vertically centered */
   position: relative;
-  height: 154px;
+  width: 1080;
 }
 .popup-overlay {
   position: fixed;               /* Fixed positioning */
@@ -1654,7 +1654,6 @@ background-color: #e74c3c;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 40px;
 }
 
 /* ---------------------------- GROUP PAGE STYLE ---------------------------- */
