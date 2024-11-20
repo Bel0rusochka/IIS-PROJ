@@ -756,6 +756,7 @@ img {
   display: block;
   margin: 15px 0;
   text-align: left;
+  padding: 0 15px;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -771,6 +772,7 @@ img {
 
 #imageTags {
   margin: 15px 0;
+  padding: 0 15px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1231,6 +1233,7 @@ textarea {
 
 .post-privacy {
   margin-bottom: 15px;
+  padding: 0 15px;
 }
 
 /* ---------------------------- PROFILE PAGE STYLE ---------------------------- */
