@@ -1164,6 +1164,7 @@ img {
   border-radius: 5px; /* Rounded corners */
   padding: 8px 12px; /* Button padding */
   cursor: pointer; /* Pointer cursor on hover */
+  margin-bottom: 10px;
 }
 
 .post-button:hover {
