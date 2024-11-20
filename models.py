@@ -215,6 +215,10 @@ class Groups(db.Model):
     def get_group_or_404(id):
         return Groups.query.get_or_404(id)
 
+    #The following method is used to get a group from the database by its id.
+    @staticmethod
+    def get_group(id):
+        return Groups.query.get(id)
     #The following method is used to create a group in the database.
     @staticmethod
     def create_group(name, description, user):
@@ -261,7 +265,7 @@ class Groups(db.Model):
 
     #The following method is used to get the count of members that are part of the group. Used in the html templates.
     def members_count(self):
-        members = [user for user in self.users if user.role != 'pending']
+        members = [user for user in self.users if self.get_users_with_role_group().get(user.login) != 'pending']
         return len(members)
 
     #The following method is used to get all the users that are part of the group and their role in the group.
@@ -294,6 +298,11 @@ class Groups(db.Model):
             self.posts.remove(post)
         self.users.remove(user)
         db.session.commit()
+
+        #if the user is the last admin of the group, the group is deleted
+        admin_count = len([user for user in self.users if self.get_users_with_role_group().get(user.login) == 'admin'])
+        if admin_count == 0:
+            Groups.delete_group(self.id)
 
     #The following method is used to add a user to the group.
     def add_user_group(self, user_login):

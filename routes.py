@@ -223,7 +223,7 @@ def registrate_routes(app, db):
                 flash("You are already followers", "error")
             else:
                 user.add_follower(follower.login)
-                flash("You are now followers", "success")
+                flash("You are followed", "success")
             return redirect(request.referrer or url_for('index'))
         abort(404)
 
@@ -246,7 +246,7 @@ def registrate_routes(app, db):
                 flash("You are not followers", "error")
             else:
                 user.delete_follower(flower.login)
-                flash("You are not followers anymore", "success")
+                flash("You are unfollowed", "success")
             return redirect(request.referrer or url_for('index'))
         abort(404)
 
@@ -297,16 +297,16 @@ def registrate_routes(app, db):
 
             if action == "delete":
                 group.delete_user_group(user_login)
-                flash(f"User {user_login} is removed from the group", "success")
+                flash(f"User @{user_login} is removed from the group", "success")
             elif action == "make_admin":
                 group.make_admin_group(user_login)
-                flash(f"User {user_login} is an admin now", "success")
+                flash(f"User @{user_login} is an admin now", "success")
             elif action == "accept_pending":
                 group.approve_user_group(user_login)
-                flash(f"User {user_login} is a member now", "success")
+                flash(f"User @{user_login} is a member now", "success")
             elif action == "add":
                 group.add_user_group(user_login)
-                flash(f"User {user_login} is added to the group", "success")
+                flash(f"User @{user_login} is added to the group", "success")
 
             return redirect(request.referrer or url_for('edit_group', id=group_id))
         abort(404)
@@ -484,7 +484,9 @@ def registrate_routes(app, db):
     @require_not_banned
     def group(id):
         active_user = Users.get_user_or_404(session['user'])
-        group = Groups.get_group_or_404(id)
+        group = Groups.get_group(id)
+        if group is None:
+            return redirect(url_for('groups'))
         subscribers_dict = group.get_users_with_role_group()
         add_previous_page()
         is_admin =  subscribers_dict.get(active_user.login) == 'admin'
