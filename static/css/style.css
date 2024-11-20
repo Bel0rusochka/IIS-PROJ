@@ -1180,7 +1180,14 @@ img {
   font-weight: bold;
   font-size: 20px;
   text-align: left;
+}
+
+.post-privacy1 label {
   margin: 15px;
+}
+
+.post-privacy2 label {
+  margin-bottom: 15px;
 }
 
 .post-privacy select {
