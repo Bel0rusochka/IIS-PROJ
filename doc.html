@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0064)https://www.fit.vut.cz/study/course/IIS/private/projekt/doc.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2">
+    
+    <title>Projekt IIS</title>
+    <style type="text/css">
+    	table { border-collapse: collapse; }
+    	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+    	dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+</head>
+<body>
+
+<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu 
+     podle použitého editoru -->
+
+	<h1>FITstagram</h1> <!-- Nahradte názvem svého zadání -->
+
+<dl>
+	<dt>Autoři</dt>
+	<dd>
+		Andrei Kulinkovich <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+		<a href="mailto:xautor01@stud.fit.vutbr.cz">xkulin01@stud.fit.vutbr.cz</a> -
+		vedoucí týmu, architektura databáze, backend, frontend, testování, hosting
+	</dd>
+	<dd>
+		Vladimir Aleksandrov <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+		<a href="mailto:xautor02@stud.fit.vutbr.cz">xaleks03@stud.fit.vutbr.cz</a> -
+		frontend, backend, testování
+	</dd>
+	<dd>
+		Aleksandra Morozova <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+		<a href="mailto:xautor03@stud.fit.vutbr.cz">xmoroz03@stud.fit.vutbr.cz</a> -
+		design, frontend, backend, testování
+	</dd>
+	<dt>URL aplikace</dt>
+	<dd><a href="http://137.184.243.159/">http://137.184.243.159/</a></dd>
+</dl>
+
+<h2>Uživatelé systému pro testování</h2>
+<table>
+	<tbody>
+		<tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+		<tr><td>admin</td><td>adminadmin</td><td>Administrátor</td></tr>
+		<tr><td>moderator</td><td>moderatormoderator</td><td>Moderátor</td></tr>
+		<tr><td>user</td><td>useruser</td><td>Uživatel</td></tr>
+	</tbody></table>
+
+<h3>Video</h3>
+
+<p>Přiložte odkaz na komentované video demostrující použití informačního systému. Zaměřte se na případy užití definované zadáním (např. registrace uživatele, správa uživatelů a činnosti jednotlivých rolí). Video nahrajte například na VUT Google Drive, kde ho bude možné přímo spustit z odkazu.</p> 
+
+<h2>Implementace</h2>
+<p>
+
+</p>
+
+<h3>Databáze</h3>
+
+<img src="db_schema.png" alt="Databáze" >
+
+<h2>Instalace</h2>
+
+
+<h3>Instalace pomocí Docker</h3>
+
+Prerekvizity:
+<ul>
+	<li>Docker</li>
+</ul>
+
+Stručný popis:
+<ul>
+	<li>Přesun do složky s manage.py - cd IIS-PROJ/</li>
+	<li>Vytvoření docker build/kontejneru - docker-compose build</li>
+	<li>Spuštění kontejneru - docker-compose up</li>
+	<li>Stránka bude dostupná na adrese "localhost:80"</li>
+</ul>
+<!--Jsme používali Docker jenom pro učely testování IS. Program na serveru běží bez Docker.-->
+<!--Server pracuje na OS Debian, funguje pomocí Google Clouds s nginx + gunicorn.-->
+
+
+
+</body></html>
