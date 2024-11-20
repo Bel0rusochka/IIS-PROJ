@@ -33,7 +33,9 @@
                             <div class="user">
                                 <img class="avatar" alt="" src="{{ element.avatar_url or '../static/images/no_avatar.svg' }}">
                                 <div class="name-user">
-                                    <div class="user-login">Author: @{{ element.login }}</div>
+                                    <div class="user-email">Login: @{{ element.login }}</div>
+                                    <div class="user-email">Name: {{ element.name }}</div>
+                                    <div class="user-email">Surname: {{ element.surname }}</div
                                     <div class="user-email">Email: {{ element.mail }}</div>
                                     <div class="user-role">Role: {{ element.role }}</div>
                                     <div class="user-role">Banned: {{ element.is_banned }}</div>
