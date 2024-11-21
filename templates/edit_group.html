@@ -11,7 +11,6 @@
 				<a href="{{ url_for('go_back') }}">
 					<img class="back-button" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
 				</a>
-			
 				<div class="input-container">
 					<label for="name" class="floating-label">Group Name</label>
 					<input type="text" id="name" name="name" class="pagesignup-input" value="{{ group.name }}">
@@ -66,23 +65,31 @@
 </div>
 </div>
 <div class="my-posts">Posts
-		<div class="line"></div>
-			{% for post in posts %}
-				<div class="galery-foto">
-					<a href="{{ url_for('profile', login=post.author_login) }}" class="post-author">{{ post.author_login }}</a>
-					
-					<a href="{{ url_for('post', post_id=post.id) }}" class="img gallery-image">
-						<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="img gallery-image">
-					</a>
-	
-					<form method="POST" action="{{ url_for('manage_posts_group') }}" class="post-actions">
-						<input type="hidden" name="group_id" value="{{ group.id }}">
-						<input type="hidden" name="post_id" value="{{ post.id }}">
-						<button type="submit" name="action" value="delete" class="delete-profile">Delete</button>
-					</form>
+	<div class="line"></div>
+		{% for post in posts %}
+		<div class="gallery-image">
+			<div class="my-members">
+				<div class="post-header">
+					<div class="left-section">
+						<a href="{{ url_for('profile', login=post.author.login) }}" class="author">
+							<span>@{{ post.author.login }}</span>
+						</a>
+					</div>
+					<div class="right-section">
+						<form method="POST" action="{{ url_for('manage_posts_group') }}" class="post-actions">
+							<input type="hidden" name="group_id" value="{{ group.id }}">
+							<input type="hidden" name="post_id" value="{{ post.id }}">
+							<button type="submit" name="action" value="delete" class="delete-profile">Delete</button>
+						</form>
+					</div>
 				</div>
-			{% endfor %}
+				<a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
+					<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}"class="gallery-image" data-id="{{ post.id }}"> <!-- Corrected syntax -->
+				</a>
+			</div>
 		</div>
+		{% endfor %}
+	</div>
 </div>
 
 {% endblock %}
