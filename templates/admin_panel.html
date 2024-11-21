@@ -85,13 +85,14 @@
                                     <div class="usser-name">Name: {{ element.name }}</div>
                                     <div class="user-name">Members: {{ element.members_count() }}</div>
                                 </div>
+                                <form method="POST" action="{{ url_for('admin_panel_groups') }}">
+                                    <input type="hidden" name="group_id" value="{{ element.id }}">
+                                    <button type="submit" class="edit-buttons">Delete</button>
+                                </form>
+                                <div class="line"></div>
                             </div>
                         </a>
-                        <form method="POST" action="{{ url_for('admin_panel_groups') }}">
-                            <input type="hidden" name="group_id" value="{{ element.id }}">
-                            <button type="submit" class="edit-buttons">Delete</button>
-                        </form>
-                        <div class="line"></div>
+                      
                     {% elif panel_type == 'posts' %}
                         <a href="{{ url_for('post', post_id=element.id) }}" class="user">
                             <div class="user">
@@ -103,14 +104,15 @@
                                     <div class="user-name">Shares: {{ element.shares_count() }}</div>
                                     <div class="user-name">Comments: {{ element.comments_count() }}</div>
                                 </div>
+                                <form method="POST" action="{{ url_for('admin_panel_posts') }}">
+                                    <input type="hidden" name="post_id" value="{{ element.id }}">
+                                    <button type="submit" class="edit-buttons">Delete</button>
+                                </form>
+        
+                                <div class="line"></div>
                             </div>
                         </a>
-                        <form method="POST" action="{{ url_for('admin_panel_posts') }}">
-                            <input type="hidden" name="post_id" value="{{ element.id }}">
-                            <button type="submit" class="edit-buttons">Delete</button>
-                        </form>
-
-                        <div class="line"></div>
+                        
                     {% elif panel_type == 'comments' %}
                         <a href="{{ url_for('post', post_id=element.post_id) }}" class="user">
                             <div class="user">
@@ -136,14 +138,15 @@
                                     <div class="user-name">Tag: #{{ element.name }}</div>
                                     <div class="user-name">Posts: {{ element.posts_count() }}</div>
                                 </div>
+                                <form method="POST" action="{{ url_for('admin_panel_tags') }}">
+                                    <input type="hidden" name="tag_name" value="{{ element.name }}">
+                                    <button type="submit" class="edit-buttons">Delete</button>
+                                </form>
+        
+                                <div class="line"></div>
                             </div>
                         </a>
-                        <form method="POST" action="{{ url_for('admin_panel_tags') }}">
-                            <input type="hidden" name="tag_name" value="{{ element.name }}">
-                            <button type="submit" class="edit-buttons">Delete</button>
-                        </form>
-
-                        <div class="line"></div>
+                       
                     {% endif %}
                 {% endfor %}
             </div>
