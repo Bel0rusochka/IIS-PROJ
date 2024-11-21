@@ -221,13 +221,16 @@ img {
   font-weight: bold;
   margin-left: 3px; /* Small spacing between label and asterisk */
 }
-.mandatory {
+.mandatory,.mandatory2 {
   position: absolute;
   bottom: -20px;
   right: 0;
   color: gray;
   font-style: italic;
   font-size: 14px;
+}
+.mandatory2 {
+  bottom: -35px;
 }
 .toggle-password {
   position: absolute;
@@ -1770,6 +1773,7 @@ body.banned-page-body {
   border: 1px solid rgba(195, 193, 193, 1);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 }
 .my-members h2 {
   margin-top: 0;

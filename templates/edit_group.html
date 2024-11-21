@@ -8,6 +8,8 @@
         <div class="pagesignup-pagesignup">
 
 			<form method="POST" class="pagesignup-signup" action="{{ url_for('edit_group', id = group.id) }}">
+				<div class="add-viewer-text">Edit Group</div>
+			
 				<a href="{{ url_for('go_back') }}">
 					<img class="back-button" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
 				</a>
@@ -15,7 +17,7 @@
 					<label for="name" class="floating-label">Group Name</label>
 					<input type="text" id="name" name="name" class="pagesignup-input" value="{{ group.name }}">
 					<span class="info-icon">ℹ
-                    	<span class="tooltip">Group name must be 2-60 characters and contain only latin letters and numbers.</span>
+						<span class="tooltip">Group name must be 2-60 characters and contain only latin letters and numbers.</span>
 					</span>
 				</div>
 			
@@ -23,18 +25,14 @@
 					<label for="description" class="floating-label">Description</label>
 					<input type="text" id="description" name="description" class="pagesignup-input" value="{{ group.description }}">
 					<span class="info-icon">ℹ
-						<span class="tooltip">Group description must be no longer than 60 characters.
-					</span>
-				</div>
+						<span class="tooltip">Group description must be no longer than 60 characters.</span>
+					</div>
 			
-				<button type="submit" class="pagesignup-buttonsingupbig">Save changes</button>
+				<button type="submit" name="action" value="save" class="pagesignup-buttonsingupbig">Save changes</button>
+				<button type="submit" name="action" value="delete" class="pagesignup-buttonsingupbig" formaction="{{ url_for('delete_group') }}">Delete group</button>
+				<input type="hidden" name="group_id" value="{{ group.id }}">
 			</form>
-			
-				<form class="pagesignup-signup"  method="POST" action="{{ url_for('delete_group') }}">
-					<input type="hidden" name="group_id" value="{{ group.id }}">
-					<button type="submit" class="pagesignup-buttonsingupbig">Delete group</button>
-				</form>
-	<div class="my-members">Members
+	<div class="my-members">Users
 		<div class="line"></div>
 	
 		<div class="members-list">
@@ -46,15 +44,15 @@
 						<input type="hidden" name="group_id" value="{{ group.id }}">
 	
 						{% if role != 'admin' %}
-							<button type="submit" name="action" value="delete" class="butt-my-viewers">Delete</button>
+							<button type="submit" name="action" value="delete" class="edit-buttons">Delete</button>
 						{% endif %}
 	
 						{% if role == 'member' %}
-							<button type="submit" name="action" value="make_admin" class="butt-my-viewers">Make Admin</button>
+							<button type="submit" name="action" value="make_admin" class="edit-buttons">Make Admin</button>
 						{% endif %}
 	
 						{% if role == 'pending' %}
-							<button type="submit" name="action" value="accept_pending" class="butt-my-viewers">Accept</button>
+							<button type="submit" name="action" value="accept_pending" class="edit-buttons">Accept</button>
 						{% endif %}
 					</form>
 				</div>
