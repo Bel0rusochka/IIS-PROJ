@@ -22,7 +22,7 @@
                     <label for="login" class="floating-label">Login<span class="required-field">*</span></label>
                     <input type="text" id="login" name="login" class="pagesignup-input" placeholder="" value= "{{ previous_values.login if previous_values else '' }}" required>
                     <span class="info-icon">ℹ
-                        <span class="tooltip">Username must be 2-60 characters long and contain only letters, numbers.</span>
+                        <span class="tooltip">Login must be 2-60 characters long and contain only latin letters and numbers.</span>
                     </span>
                 </div>
             
@@ -31,7 +31,7 @@
                         <label for="name" class="floating-label">Name</label>
                         <input type="text" id="name" name="name" class="pagesignup-input" placeholder="" value= "{{ previous_values.name if previous_values else '' }}" >
                         <span class="info-icon">ℹ
-                            <span class="tooltip">Enter your first name, must be 2-60 characters long and contain only letters, numbers.</span>
+                            <span class="tooltip"> Name must be no longer than 60 characters and contain only latin letters and numbers. </span>
                         </span>
                     </div>
 
@@ -39,7 +39,7 @@
                         <label for="surname" class="floating-label">Surname</label>
                         <input type="text" id="surname" name="surname" class="pagesignup-input" placeholder="" value= "{{ previous_values.surname if previous_values else '' }}" >
                         <span class="info-icon">ℹ
-                            <span class="tooltip">Enter your last name, must be 2-60 characters long and contain only letters, numbers.</span>
+                            <span class="tooltip">Surname must be no longer than 60 characters and contain only latin letters and numbers. </span>
                         </span>
                     </div>
                 </div>

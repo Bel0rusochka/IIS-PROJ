@@ -103,6 +103,10 @@
                                     <div class="user-name">Likes: {{ element.like_count() }}</div>
                                     <div class="user-name">Shares: {{ element.shares_count() }}</div>
                                     <div class="user-name">Comments: {{ element.comments_count() }}</div>
+                                    <div class="user-name">Status: {{ element.status | title }}</div>
+                                    {% if element.status == 'group' %}
+                                        <div class="user-name">Groups:{% for group in element.get_connected_groups() %} {{ group.name }}{% if not loop.last %}, {% endif %}{% endfor %}</div>
+                                    {% endif %}
                                 </div>
                                 <form method="POST" action="{{ url_for('admin_panel_posts') }}">
                                     <input type="hidden" name="post_id" value="{{ element.id }}">

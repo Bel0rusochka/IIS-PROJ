@@ -15,14 +15,14 @@
                   <label for="group-name" class="floating-label">Enter a Group Name<span class="required-field">*</span></label>
                   <input type="text" id="group-name" name="group-name" class="pagesignup-input"{% if previous_values.group_name %}value="{{ previous_values.group_name }}"{% endif %}>
                   <span class="info-icon">ℹ
-                    <span class="tooltip">Create a group nam, must be 2-60 characters long and contain only letters, numbers.</span>
+                    <span class="tooltip">Group name must be 2-60 characters and contain only latin letters and numbers.</span>
                   </span>
                 </div>
                 <div class="input-container">
                   <label for="group-name" class="floating-label">Enter a Group Description</label>
                     <input type="text" id="group-description" name="group-description" class="pagesignup-input" {% if previous_values.group_description %}value="{{ previous_values.group_description }}"{% endif %}>
                     <span class="info-icon">ℹ
-                      <span class="tooltip">Enter a description of 60 characters max.</span>
+						<span class="tooltip">Group description must be no longer than 60 characters. </span>
                     </span>
                     <div class="mandatory">
                       *Indicates mandatory fields
