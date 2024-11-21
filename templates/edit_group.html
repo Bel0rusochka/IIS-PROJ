@@ -83,8 +83,8 @@
 						</form>
 					</div>
 				</div>
-				<a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
-					<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}"class="gallery-image" data-id="{{ post.id }}"> <!-- Corrected syntax -->
+				<a href="{{ url_for('post', post_id=post.id) }}" >
+					<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}"class="gallery-image" data-id="{{ post.id }}"> 
 				</a>
 			</div>
 		</div>

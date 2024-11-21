@@ -1770,7 +1770,6 @@ body.banned-page-body {
   border: 1px solid rgba(195, 193, 193, 1);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
- 
 }
 .my-members h2 {
   margin-top: 0;
@@ -1854,4 +1853,156 @@ body.banned-page-body {
 
 .accept-button:hover {
   background-color: #33ff33;
+}
+/* ---------------------------- MEDIA QUERIES ---------------------------- */
+@media only screen and (max-width: 768px) {
+  html, body {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 1200px) {
+  html, body {
+    font-size: 16px;
+    padding: 0 20px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .flash-message {
+    width: 90%; /* Make flash messages take more width on small screens */
+  }
+}
+@media only screen and (max-width: 768px) {
+  .pagesignup-signup {
+    width: 90%; /* Make the form take more width on small screens */
+    padding: 20px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .pagesignup-bluefit {
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .projekt-sidebar {
+    width: 100%; /* Sidebar full width on mobile */
+    padding: 0;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .projekt-sidebar {
+    width: 250px;
+  }
+}
+/* For devices with a maximum width of 1200px */
+@media screen and (max-width: 1200px) {
+  .projekt-search1, .popup-content {
+    max-width: 80%;
+  }
+
+  .addPost {
+    width: 60px;
+    height: 60px;
+  }
+
+  .popup-content {
+    max-height: 70vh;
+  }
+
+  .user-info-gap {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .edit-buttons, .delete-profile {
+    font-size: 18px;
+  }
+}
+
+/* For tablets and devices with a maximum width of 768px */
+@media screen and (max-width: 768px) {
+  .projekt-search1 {
+    width: 80%;
+    top: 50px;
+  }
+
+  #commentInput {
+    height: 40px;
+  }
+
+  .popup-content {
+    max-width: 90%;
+  }
+
+  .user-name {
+    font-size: 22px;
+  }
+
+  .user-stats .user-followers, .user-following, .user-posts {
+    font-size: 20px;
+  }
+
+  .projekt-search1 input[type="text"], .projekt-search1 select {
+    font-size: 14px;
+  }
+
+  .popup-modal {
+    padding: 20px;
+  }
+
+  .addPost {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* For mobile devices with a maximum width of 480px */
+@media screen and (max-width: 480px) {
+  .projekt-search1 {
+    width: 95%;
+    top: 60px;
+  }
+
+  .popup-content {
+    padding: 10px;
+  }
+
+  .user-name {
+    font-size: 20px;
+  }
+
+  .user-login, .user-stats .user-followers, .user-following, .user-posts {
+    font-size: 18px;
+  }
+
+  .addPost {
+    width: 40px;
+    height: 40px;
+  }
+
+  .generic-avatar-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .button-group {
+    align-items: center;
+  }
+
+  .edit-buttons, .delete-profile {
+    font-size: 16px;
+  }
+
+  .fit-arrow {
+    padding: 10px;
+  }
+
+  .arrow-icon {
+    width: 30px;
+    height: 30px;
+  }
 }
