@@ -33,7 +33,7 @@
             <label for="privacyOptions">Post Privacy:</label>
             <select id="privacyOptions" name="privacy" onchange="toggleGroupList()">
                 <option value="public" {%  if previous_values.get('privacy') == 'public' %}selected{% endif %}>Public - Visible to everyone</option>
-                <option value="private" {% if previous_values.get('privacy') == 'private' %}selected{% endif %}>Private - Visible to your followers</option>
+                <option value="private" {% if previous_values.get('privacy') == 'private' %}selected{% endif %}>Private - Visible to followers</option>
                 <option value="group" {% if previous_values.get('privacy') == 'group' %}selected{% endif %}>Groups - Visible to selected groups</option>
             </select>
         </div>
