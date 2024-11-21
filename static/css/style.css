@@ -575,6 +575,8 @@ img {
   padding-top: 100px;
 }
 .gallery-image {
+  display: flex;
+  align-items: center;
   flex-grow: 1;
   margin: 10px; /* Adjust the margin between images */
   width: calc(100% / 4 - 20px); /* Each image takes up 1/4th of the container, subtracting the margin */
@@ -1768,17 +1770,21 @@ body.banned-page-body {
   background-color: #0056b3;
 }
 .my-members {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   background-color: rgba(255, 251, 251, 1);
   padding: 20px;
   border: 1px solid rgba(195, 193, 193, 1);
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
+  margin: 30px;
 }
-.my-members h2 {
-  margin-top: 0;
+.my-members a {
+ width: 100%;
 }
-
 .line {
   height: 1px;
   background-color: #ccc;
