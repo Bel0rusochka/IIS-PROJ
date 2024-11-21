@@ -165,8 +165,8 @@ def registrate_routes(app, db):
             return redirect(url_for('profile', login=session['user']))
 
         if request.method == 'POST':
-            login_email = request.form['login_email']
-            password = request.form['password']
+            login_email = request.form['login_email'].strip()
+            password = request.form['password'].strip()
             request_data = {'login_email': login_email}
             password_db = hashlib.md5(password.encode()).hexdigest()
             user = Users.get_user(login_email)
@@ -583,7 +583,7 @@ def registrate_routes(app, db):
     @require_login
     def add_comment(post_id):
         if request.method == 'POST':
-            text = request.form['text']
+            text = request.form['text'].strip()
             if (text == ""):
                 flash("Comment is empty", "error")
             elif len(text) > 1000:
