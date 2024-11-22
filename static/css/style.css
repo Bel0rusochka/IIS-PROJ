@@ -316,6 +316,7 @@ img {
 
 /* Style for pagesignup-fullname wrapper */
 .pagesignup-fullname {
+  width: 100%;
   display: flex; /* Align inputs side by side */
   gap: 20px; /* Space between the inputs */
 }
@@ -1868,9 +1869,5 @@ body.banned-page-body {
 @media (max-width: 768px) {
   .gallery-image {
     width: calc(100% / 2 - 20px); /* When screen is smaller, each image takes up 1/2 of the container */
-    flex-grow: 0;
-  }
-  .gallery-image img {
-    width: 320px;
   }
 }
