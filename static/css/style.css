@@ -152,7 +152,7 @@ img {
 }
 /* Signup form container */
 .pagesignup-signup {
-  width: 600px;
+/*   width: 600px; */
   display: flex;
   flex-direction: column;
   align-items: center;
