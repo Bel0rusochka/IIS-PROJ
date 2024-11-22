@@ -907,6 +907,7 @@ img {
   height: 50px;                      /* Height of the button */
   cursor: pointer;                   /* Change cursor to pointer on hover */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+  z-index: 2;
 }
 
 /* Style for the comment section */
