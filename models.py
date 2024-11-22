@@ -183,10 +183,6 @@ class Users(db.Model):
     def get_following_count(self):
         return len(self.following.all())
 
-    #The following method is used to get the number of posts of the user. Used in the html templates.
-    def get_posts_count(self):
-        return len(self.posts)
-
     #The following method is used to get the number of groups where the user is an admin.
     def managed_groups(self):
         admin_groups = []

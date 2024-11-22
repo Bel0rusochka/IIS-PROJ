@@ -43,7 +43,6 @@
 						<div class="user-stats">
 						  <div class="user-followers">Followers: {{ user.get_followers_count() }}</div>
 						  <div class="user-following">Following: {{ user.get_following_count() }}</div>
-						  <div class="user-posts">Posts: {{ user.get_posts_count() }}</div>
 						</div>
 						<div class="button-group">
 						  {% if session.user == user.login %}
