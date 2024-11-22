@@ -129,13 +129,21 @@ def registrate_routes(app, db):
                 request_data.pop('confirm_password')
                 bad_data = True
 
-            if not validate_name(login) or Users.get_user(login) is not None:
+            if not validate_name(login):
                 flash("Login is invalid", "error")
                 request_data.pop('login')
                 bad_data = True
+            elif Users.get_user(login) is not None:
+                flash("Login is already taken", "error")
+                request_data.pop('login')
+                bad_data = True
 
-            if Users.get_user(email) is not None or email == "" or len(email) > 60 or " " in email:
+            if email == "" or len(email) > 60 or " " in email:
                 flash("Email is invalid", "error")
+                request_data.pop('email')
+                bad_data = True
+            elif  Users.get_user(email) is not None:
+                flash("Email is already taken", "error")
                 request_data.pop('email')
                 bad_data = True
 
@@ -300,10 +308,10 @@ def registrate_routes(app, db):
                 flash(f"User @{user_login} is removed from the group", "success")
             elif action == "make_admin":
                 group.make_admin_group(user_login)
-                flash(f"User @{user_login} is an admin now", "success")
+                flash(f"User @{user_login} is an admin", "success")
             elif action == "accept_pending":
                 group.approve_user_group(user_login)
-                flash(f"User @{user_login} is a member now", "success")
+                flash(f"User @{user_login} is a member", "success")
             elif action == "add":
                 group.add_user_group(user_login)
                 flash(f"User @{user_login} is added to the group", "success")
