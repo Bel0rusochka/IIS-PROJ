@@ -37,6 +37,20 @@ with app.app_context():
             )
             users.append(user)
             db.session.add(user)
+        """
+        Add known users for testing.
+        """
+
+        admin = Users.add_user('admin', 'admin@admin.com', code_password('adminadmin'), 'admin', 'admin', 'admin')
+        users.append(admin)
+
+        moderator = Users.add_user('moderator', 'moderator@moderator.com', code_password('moderatormoderator'), 'moderator',
+                       'moderator', 'moderator')
+        users.append(moderator)
+
+        user = Users.add_user('user', 'user@user.com', code_password('useruser'), 'user', 'user', 'user')
+        users.append(user)
+
         db.session.commit()
         return users
 
@@ -58,7 +72,7 @@ with app.app_context():
                     GroupsUsers.insert().values(
                         user_login=user.login,
                         group_id=group.id,
-                        role=random.choice(['member', 'admin'])
+                        role=random.choice(['member', 'admin','pending'])
                     )
                 )
         db.session.commit()
@@ -103,8 +117,9 @@ with app.app_context():
 
         for _ in range(count):
             post_status = random.choice(['public', 'private', 'group'])
+            user = random.choice(users)
             post = Posts(
-                author_login=random.choice(users).login,
+                author_login=user.login,
                 status=post_status,
                 text=fake.text(200),
                 image_binary=random.choice(images_lst),
@@ -114,14 +129,16 @@ with app.app_context():
             db.session.add(post)
             db.session.commit()
 
-            if post_status == 'group':
-                group = random.choice(groups)
+            if post_status == 'group' and len(user.get_approved_groups()) > 0:
+                group = random.choice(user.get_approved_groups())
                 db.session.execute(
                     PostsGroups.insert().values(
                         groups_id=group.id,
                         post_id=post.id
                     )
                 )
+            else:
+                post.status = 'public'
         db.session.commit()
         return posts
 
@@ -181,16 +198,10 @@ with app.app_context():
         users = create_users(10)
         groups = create_groups(users, 5)
         tags = create_tags(10)
-        posts = create_posts(users, groups, tags, 20)
+        posts = create_posts(users, groups, tags, 40)
         comments = create_comments(users, posts, 40)
         shares = create_shares(users, posts, 15)
         create_followers(users)
         create_likes(users, posts)
 
-        """
-        Add known users for testing.
-        """
-        Users.add_user('admin', 'admin@admin.com', code_password('adminadmin'), 'admin', 'admin', 'admin')
-        Users.add_user('moderator','moderator@moderator.com', code_password('moderatormoderator'), 'moderator', 'moderator', 'moderator')
-        Users.add_user('user', 'user@user.com', code_password('useruser'), 'user', 'user', 'user')
         print("Test data created successfully")
