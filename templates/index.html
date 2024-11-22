@@ -3,30 +3,31 @@
 {% block title %}FITstagram - Home{% endblock %}
 
 {% block content %}
-  <!-- Search Bar -->
-  <div class="projekt-search1">
-    <div class="projekt-group1">
-      <img alt="search" src="../static/images/search.svg" class="projekt-search2">
-      <form method="GET" action="{{ url_for('index') }}">
-        <input type="text" name="query" placeholder="Search by tags..." {% if  request.args.get('query') %}value="{{  request.args.get('query') }}"{% endif %}>
-        <select name="sort_by">
-          <option value="date" {% if request.args.get('sort_by') == 'date' %}selected{% endif %}>Date</option>
-          <option value="comments" {% if request.args.get('sort_by') == 'comments' %}selected{% endif %}>Comments</option>
-          <option value="likes" {% if request.args.get('sort_by') == 'likes' %}selected{% endif %}>Likes</option>
-          <option value="shares" {% if request.args.get('sort_by') == 'shares' %}selected{% endif %}>Shares</option>
+ <!-- Search Bar -->
+<div class="projekt-search1" id="searchBarContainer">
+  <div class="projekt-group1">
+    <img alt="search" src="../static/images/search.svg" class="projekt-search2" id="searchIcon" onclick="toggleSearchBar()">
+    <form method="GET" action="{{ url_for('index') }}" id="searchForm">
+      <input type="text" name="query" placeholder="Search by tags..." {% if request.args.get('query') %}value="{{ request.args.get('query') }}"{% endif %}>
+      <select name="sort_by">
+        <option value="date" {% if request.args.get('sort_by') == 'date' %}selected{% endif %}>Date</option>
+        <option value="comments" {% if request.args.get('sort_by') == 'comments' %}selected{% endif %}>Comments</option>
+        <option value="likes" {% if request.args.get('sort_by') == 'likes' %}selected{% endif %}>Likes</option>
+        <option value="shares" {% if request.args.get('sort_by') == 'shares' %}selected{% endif %}>Shares</option>
+      </select>
+      {% if session.get('user') %}
+        <select name="filter">
+          <option value="all" {% if request.args.get('filter') == 'all' %}selected{% endif %}>All</option>
+          <option value="following" {% if request.args.get('filter') == 'following' %}selected{% endif %}>Following</option>
+          <option value="followers" {% if request.args.get('filter') == 'followers' %}selected{% endif %}>Followers</option>
         </select>
-        {% if session.get('user') %}
-           <select name="filter">
-            <option value="all" {% if request.args.get('filter') == 'all' %}selected{% endif %}>All</option>
-            <option value="following" {% if request.args.get('filter') == 'following' %}selected{% endif %}>Following</option>
-            <option value="followers" {% if request.args.get('filter') == 'followers' %}selected{% endif %}>Followers</option>
-          </select>
-        {% endif %}
-        <button type="submit">Search</button>
-      </form>
-    </div>
+      {% endif %}
+      <button type="submit">Search</button>
+    </form>
   </div>
+</div>
 
+  
   <!-- Gallery of Posts -->
   <div class="projekt-foto">
     {% for post in posts %}

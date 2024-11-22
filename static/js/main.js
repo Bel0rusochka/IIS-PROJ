@@ -184,4 +184,10 @@ function displayImage(file) {
         })
         .catch(error => console.error('Error:', error));
     }
+    function toggleSearchBar() {
+      var searchForm = document.getElementById('searchBarContainer');
+      if (window.innerWidth < 1200) {
+        searchForm.classList.toggle('hidden');
+      }
+    }
   

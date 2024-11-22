@@ -3,15 +3,16 @@
 {% block title %}Users{% endblock %}
 
 {% block content %}
-    <div class="projekt-search1">
+    <div class="projekt-search1"id="searchBarContainer">
         <div class="projekt-group1">
-        <img alt="search" src="../static/images/search.svg" class="projekt-search2">
+        <img alt="search" src="../static/images/search.svg" class="projekt-search2" id="searchIcon" onclick="toggleSearchBar()">
         <form method="GET" action="{{ url_for(request.endpoint) }}">
             <input type="text" name="query" placeholder="Search ..." {% if  request.args.get('query') %}value="{{  request.args.get('query') }}"{% endif %}>
             <button type="submit">Search</button>
         </form>
         </div>
     </div>
+
     <div class="viewers">
         <a href="{{ url_for('index') }}">
             <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">

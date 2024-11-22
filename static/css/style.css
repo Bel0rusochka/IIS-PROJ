@@ -436,7 +436,7 @@ img {
   margin: 20px; /* Add margin around header */
   box-sizing: border-box; /* Include padding in width */
   z-index: 1000; /* Ensure the header stays above other content */
-  transition: margin-top 0.4s ease, background-color 0.4s ease; 
+  transition: all 0.4s ease;
 }
 
 .projekt-mail,
@@ -543,22 +543,6 @@ img {
   align-items: flex-start;
   flex-shrink: 0;
   flex-wrap: wrap; /* Allows items to wrap to the next line */
-}
-.projekt-rectangle1 {
-  position: absolute;
-  top:20px;
-  left: 20px;
-  width: 1874px;
-  height: 77px;
-  margin-top: 0px;
-}
-
-.projekt-rectangle1 {
-  position: fixed; /* Keeps rectangle1 in its original position */
-  top: 20px;
-  left: 20px;
-  width: 1874px;
-  height: 77px;
 }
 
 .gallery-foto ,.projekt-foto {
@@ -954,15 +938,26 @@ img {
   z-index: 1000;                 /* Ensure it's above other elements */
   width: 50%;                    /* Adjust width to fit the layout */
   max-width: 600px;              /* Ensure it doesn't stretch too much on large screens */
-  min-width: 400px;              /* Ensure it doesn't stretch too much on large screens */
-
-  background-color: white;       /* Match the background with the rest of the page */
+  background-color:rgba(255, 255, 255, 0.7);      /* Match the background with the rest of the page */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add a shadow for better visibility */
   padding: 10px;
   border-radius: 5px;
-  transition: top 0.4s ease, background-color 0.4s ease; 
+  transition: all 0.4s ease;
+
 }
 
+#searchBarContainer.hidden {
+  width: 45px;
+}
+#searchBarContainer.hidden 
+#searchForm{
+  display: none;
+}
+.projekt-search2 {
+  cursor: pointer;
+  background-color: #b8cce2;
+  border-radius: 20px;
+}
 /* Styling for the search input and sort_by dropdown */
 .projekt-group1 {
   display: flex;
@@ -1409,7 +1404,8 @@ background-color: #e74c3c;
 .viewers {
   width: 100%;
   position: relative;
-  height: 950px;
+  height: 100vh;
+
   overflow: hidden;
   text-align: left;
   font-size: 32px;
@@ -1423,7 +1419,7 @@ background-color: #e74c3c;
   width: 90%; /* Make width responsive */
   max-width: 1200px; /* Maintain max width */
   min-width: 800px; /* Maintain max width */
-  height: 815px;
+  height: 75vh;
   overflow-y: auto;
   margin-top: 100px;
   margin-left: auto; /* Center horizontally */
@@ -1840,5 +1836,33 @@ body.banned-page-body {
 @media (max-width: 768px) {
   .gallery-image {
     width: calc(100% / 2 - 20px); /* When screen is smaller, each image takes up 1/2 of the container */
+  }
+}
+
+@media (max-width: 1200px) {
+  .projekt-search1 {
+    left: auto;
+    transform: none;
+    width: 96%;
+    max-width: none;
+    min-width: none;
+    margin-top: 80px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .projekt-foto {
+    padding-top: 0;
+  }
+  .viewers
+  {
+    padding-top: 100px;
+  }
+  .back-button {
+    top: 220px;   }
+}
+@media (min-width: 1200px) {
+  .projekt-search2 {
+  cursor:auto;
+  background-color: transparent;
   }
 }
