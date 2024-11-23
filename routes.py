@@ -381,7 +381,7 @@ def registrate_routes(app, db):
         add_previous_page()
         active_user = Users.get_user_or_404(session['user'])
 
-        query = request.args.get('query', '')
+        query = request.args.get('query', '').strip().replace('@', '')
         users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
         return render_template('users.html', users=users, user = active_user)
 
@@ -394,7 +394,7 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
 
-        query = request.args.get('query', '')
+        query = request.args.get('query', '').strip().replace('@', '')
         users = [user for user in active_user.get_followers_list() if query in user.login or query in user.name or query in user.surname] if query else active_user.get_followers_list()
         return render_template('users.html', users=users, user = active_user)
 
@@ -407,7 +407,7 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
 
-        query = request.args.get('query', '')
+        query = request.args.get('query', '').strip().replace('@', '')
         users = [user for user in active_user.get_following_list() if query in user.login or query in user.name or query in user.surname] if query else active_user.get_following_list()
         return render_template('users.html', users=users, user = active_user)
 
@@ -419,7 +419,7 @@ def registrate_routes(app, db):
     def groups():
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
-        query = request.args.get('query', '')
+        query = request.args.get('query', '').strip()
         groups = [group for group in Groups.query.all() if query in group.name] if query else Groups.query.all()
 
         return render_template('groups.html',groups=groups, user = active_user)
@@ -433,7 +433,7 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
 
-        query = request.args.get('query', '')
+        query = request.args.get('query', '').strip()
         groups = [group for group in active_user.groups if query in group.name] if query else active_user.groups
         return render_template('groups.html', groups=groups, user = active_user)
 
@@ -446,7 +446,7 @@ def registrate_routes(app, db):
         active_user = Users.get_user_or_404(session['user'])
         add_previous_page()
 
-        query = request.args.get('query', '')
+        query = request.args.get('query', '').strip()
         groups = [group for group in active_user.managed_groups() if query in group.name] if query else active_user.managed_groups()
 
         return render_template('groups.html', groups=groups, user = active_user)
@@ -834,7 +834,7 @@ def registrate_routes(app, db):
             return redirect(request.referrer or url_for('admin_panel_users'))
 
         #Filtering the users by the login, name, and surname
-        query = request.args.get('query', '')
+        query = request.args.get('query', '').strip().replace('@', '')
         users = [user for user in Users.query.all() if query in user.login or query in user.name or query in user.surname] if query else Users.query.all()
         return render_template("admin_panel.html", elements=users, panel_type = 'users', user = active_user)
 
@@ -855,7 +855,7 @@ def registrate_routes(app, db):
             return redirect(url_for('admin_panel_groups'))
 
         #Filtering the groups by the name
-        query = request.args.get('query', '')
+        query = request.args.get('query', '').strip()
         groups = [group for group in Groups.query.all() if query in group.name] if query else Groups.query.all()
         return render_template("admin_panel.html", elements=groups, panel_type = 'groups', user = active_user)
 
@@ -876,7 +876,7 @@ def registrate_routes(app, db):
             return redirect(url_for('admin_panel_posts'))
 
         #Filtering the posts by the author login
-        query = request.args.get('query', '').replace('@', '')
+        query = request.args.get('query', '').strip().replace('@', '')
         posts = [post for post in Posts.query.all() if query in post.author_login] if query else Posts.query.all()
         return render_template("admin_panel.html", elements=posts, panel_type = 'posts', user = active_user)
 
@@ -897,7 +897,7 @@ def registrate_routes(app, db):
             return redirect(url_for('admin_panel_tags'))
 
         #Filtering the tags by the tag name
-        query = request.args.get('query', '').replace('#', '')
+        query = request.args.get('query', '').strip().replace('#', '')
         tags = [tag for tag in Tags.query.all() if query in tag.name] if query else Tags.query.all()
         return render_template("admin_panel.html", elements=tags, panel_type = 'tags', user = active_user)
 
@@ -917,7 +917,7 @@ def registrate_routes(app, db):
             return redirect(url_for('admin_panel_comments'))
 
         #Filtering the comments by the author login
-        query = request.args.get('query', '').replace('@', '')
+        query = request.args.get('query', '').strip().replace('@', '')
         comments = [comment for comment in Comments.query.all() if query in comment.author_login] if query else Comments.query.all()
         return render_template("admin_panel.html", elements=comments, panel_type = 'comments', user = active_user)
 
