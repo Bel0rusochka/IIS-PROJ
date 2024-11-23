@@ -3,12 +3,16 @@
 {% block title %}Post Details{% endblock %}
 
 {% block content %}
+    <!-- Back button to previous page -->
     <a href="{{ url_for('go_back') }}">
         <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
     </a>
+    
+    <!-- Post details container -->
     <div id="imageDetail">
         <div class="post-header">
             <div class="left-section">
+                <!-- Author information -->
                 <a href="{{ url_for('profile', login=post.author.login) }}" class="author">
                     <span>@{{ post.author.login }}</span>
                 </a>
@@ -16,6 +20,7 @@
     
             <div class="right-section">
                 {% if session.user and session.user == post.author_login %}
+                    <!-- Post actions (delete, edit) -->
                     <form action="{{ url_for('delete_post') }}" method="POST" class="post-actions">
                         <input type="hidden" name="post_id" value="{{ post.id }}">
                         <button type="submit" class="delete-button">
@@ -30,8 +35,10 @@
             </div>
         </div>
     
+        <!-- Post image -->
         <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}">
         
+        <!-- Post statistics (likes, shares, comments) -->
         <div id="imageStats">
             <form action="{{ url_for('like_post') }}" method="POST">
                 <input type="hidden" name="post_id" value="{{ post.id }}">

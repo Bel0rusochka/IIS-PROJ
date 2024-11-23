@@ -1,87 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-  	<meta charset="utf-8">
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  	<title>Group</title>
+  <!-- Character encoding and viewport settings -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group</title>
 
-  	<link rel="stylesheet"  href="../static/css/style.css" />
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" />
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap" />
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
-  	
+  <!-- CSS stylesheets -->
+  <link rel="stylesheet" href="../static/css/style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
 </head>
 <body>
-	<div id="flashMessages" class="flash-container">
-		{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-				{% for category, message in messages %}
-					<div class="flash-message {{ category }}">
-						{{ message }}
-					</div>
-				{% endfor %}
-			{% endif %}
-		{% endwith %}
-	</div>
-	<div class="profile">
-	<div class="my-profile">
-		<div class="fit-arrow">
-		<a href="{{ url_for('go_back') }}">
-			<img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
-		</a>
-		<a href="{{ url_for('index') }}" class="header-text">FITstagram</a>
-		</div>
-		<div class="white">
-			<div class="username-edit">
-			  <img class="generic-avatar-icon" alt="" src="../static/images/avatar_group.svg">
-			  <div class="user-info">
-				<div class="user-name">{{ group.name }}</div>
-				<div class="user-login">Created: {{ group.date.strftime("%d %B %Y") }}</div>
-				<div class="user-description">Description: {{ group.description }}</div>
-			  </div>
-			  <div class="user-info-gap">
-				
-				<div class="user-stats">
-				  <div class="user-followers">Members: {{ group.members_count() }}</div>
-				  <div class="user-following">Posts: {{ group.posts_count() }}</div>
-				</div>
-				<div class="button-group">
-				  {% if is_admin %}
-				  <a class="edit-buttons" id="editProfileButton" href="{{ url_for('edit_group', id = group.id) }}">Edit Group</a>
-				  {% endif %}
-				  <form method="POST" action="{{ url_for('manage_users_group') }}">
-				  <input type="hidden" name="group_id" value="{{ group.id }}">
-				  <input type="hidden" name="user_login" value="{{ session.user }}">
-				  {% if group.is_subscribed(session.user) %}
-					<button type="submit" class="delete-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
-				  {% else %}
-					<button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
-				  {% endif %}
-				  </form>
-				</div>
-			  </div>
-			</div>
-		  </div>
-	</div>
-	  <div class="my-posts">Posts</div>
-	  <div class="line">
-	  </div>
-    		<div class="posts-and-new">
-      			<div class="gallery-photo">
-					{%for post in posts%}
-						 <a href="{{ url_for('post', post_id=post.id) }}"  class="img gallery-image">
-							<img
-							  alt="Image {{ post.id }}"
-							  src="{{ url_for('image', id=post.id) }}"
-							  class="img gallery-image"
-							  data-id="{{ post.id }}"
-							/>
-						 </a>
-					{%endfor%}
-      			</div>
-			</div>
-    	
-	</div>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    </body>
+  <!-- Flash messages container -->
+  <div id="flashMessages" class="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Profile section -->
+  <div class="profile">
+    <div class="my-profile">
+      <div class="fit-arrow">
+        <a href="{{ url_for('go_back') }}">
+          <img class="arrow-icon" alt="" src="../static/images/arrow.svg" id="arrowIcon">
+        </a>
+        <a href="{{ url_for('index') }}" class="header-text">FITstagram</a>
+      </div>
+      <div class="white">
+        <div class="username-edit">
+          <img class="generic-avatar-icon" alt="" src="../static/images/avatar_group.svg">
+          <div class="user-info">
+            <div class="user-name">{{ group.name }}</div>
+            <div class="user-login">Created: {{ group.date.strftime("%d %B %Y") }}</div>
+            <div class="user-description">Description: {{ group.description }}</div>
+          </div>
+          <div class="user-info-gap">
+            <div class="user-stats">
+              <div class="user-followers">Members: {{ group.members_count() }}</div>
+              <div class="user-following">Posts: {{ group.posts_count() }}</div>
+            </div>
+            <div class="button-group">
+              {% if is_admin %}
+              <a class="edit-buttons" id="editProfileButton" href="{{ url_for('edit_group', id = group.id) }}">Edit Group</a>
+              {% endif %}
+              <form method="POST" action="{{ url_for('manage_users_group') }}">
+                <input type="hidden" name="group_id" value="{{ group.id }}">
+                <input type="hidden" name="user_login" value="{{ session.user }}">
+                {% if group.is_subscribed(session.user) %}
+                <button type="submit" class="delete-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
+                {% else %}
+                <button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Posts section -->
+    <div class="my-posts">Posts</div>
+    <div class="line"></div>
+    <div class="posts-and-new">
+      <div class="gallery-photo">
+        {% for post in posts %}
+        <a href="{{ url_for('post', post_id=post.id) }}" class="img gallery-image">
+          <img
+            alt="Image {{ post.id }}"
+            src="{{ url_for('image', id=post.id) }}"
+            class="img gallery-image"
+            data-id="{{ post.id }}"
+          />
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript file -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
 </html>

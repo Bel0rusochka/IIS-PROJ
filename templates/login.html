@@ -3,21 +3,23 @@
 {% block title %}Log In{% endblock %}
 
 {% block content %}
+<!-- Login form container -->
 <div class="projekt-content">
     <div class="alignment-container-outer">
+        <!-- Form to handle login functionality -->
         <form class="form-container" method="POST" action="/login">
             <span class="form-container-header-text"><span>Log In</span></span>
 
-        
+            <!-- Email/Login input field -->
             <div class="input-container">
-      
                 <label for="login_email" class="floating-label">Email/Login<span class="required-field">*</span></label>
                 <input type="text" id="login_email" name="login_email" class="form-container-input" placeholder="" required>
                 <span class="info-icon">ℹ
                     <span class="tooltip">Please enter your email or login.</span>
                 </span>
             </div>
-         
+
+            <!-- Password input field -->
             <div class="input-container">
                 <label for="password" class="floating-label">Password<span class="required-field">*</span></label>
                 <input type="password" id="password" name="password" class="form-container-input" autocomplete="current-password" required>
@@ -31,11 +33,13 @@
                     *Indicates mandatory-field fields
                 </div>
             </div>
-            
+
+            <!-- Submit button to login -->
             <button type="submit" class="form-container-button-big">
                 <span class="form-container-button-submit"><span>Log in</span></span>
             </button>
 
+            <!-- Link to sign up page -->
             <div class="pagesignup-haveacc">
                 <span class="form-change-question">
                     <span>Don't have an account?</span>

@@ -1,70 +1,74 @@
 {% extends "base.html" %}
 
-{% block title %}Settings{% endblock %}
+{% block title %}Edit Profile{% endblock %}
 
 {% block content %}
+<!-- Main content container -->
 <div class="projekt-content">
     <div class="alignment-container-outer">
         <div class="alignment-container-inner">
-			<form class="form-container" method="POST" action="{{ url_for('setting',login=user.login) }}">
-				<a href="{{ url_for('go_back') }}">
-					<img class="back-button" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
-				</a>
-				<div class="add-viewer-text">Edit profile</div>
-				<div class="cred">
-					<label>Login: @{{ user.login }}</label>
-					<label>Email: {{ user.mail }}</label>
-				</div>
-					<div class="form-fullname">
-						<div class="input-container">
-							<label for="name" class="floating-label">Name</label>
-							<input type="text" id="name" name="name" class="form-container-input" value="{{ user.name }}">
-							<span class="info-icon">ℹ
-                            	<span class="tooltip"> Name must be no longer than 60 characters and contain only latin letters and numbers. </span>
-                        	</span>
-						</div>
-						<div class="input-container">
-							<label for="surname" class="floating-label">Surname</label>
-							<input type="text" id="surname" name="surname" class="form-container-input"  value="{{ user.surname }}">
-							<span class="info-icon">ℹ
-                            	<span class="tooltip">Surname must be no longer than 60 characters and contain only latin letters and numbers. </span>
-                        	</span>
-						</div>
-					</div>
-					{% if session.user == user.login %}
-
-					<div class="input-container">
-                    	<label for="password" class="floating-label">Password</label>
-                    	<input type="password" id="password" name="password" class="form-container-input" placeholder="">
-                    	<span class="toggle-password" onclick="togglePassword()">
-                        	<i class="fas fa-eye-slash" id="togglePasswordIcon"></i>
-                    	</span>
-                    	<span class="info-icon">ℹ
-                        	<span class="tooltip">Password must be at least 8 characters.</span>
-                    	</span>
-                	</div>
-					
-					<div class="input-container">
-                    	<label for="confirm_password" class="floating-label">Confirm Password</label>
-                    	<input type="password" id="confirm_password" name="confirm_password" class="form-container-input" placeholder="">
-                    	<span class="toggle-password" onclick="toggleConfirmPassword()">
-                        	<i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon"></i>
-                    	</span>
-                    	<span class="info-icon">ℹ
-                        	<span class="tooltip">Please re-enter your password for confirmation.</span>
-                    	</span>
-						<div class="mandatory-field-confirm">
-							*To change password, please fill in both fields. If you don't want to change password, leave them empty.
-						</div>
-                	</div>
-					{% endif %}
-					<button type="submit" class="form-container-button-big">
-						<span class="form-container-button-submit"><span>Save changes</span></span>
-					</button>
-
-			</form>
-    		
-  	  	</div>
-  	</div>
+            <!-- Form for editing user profile -->
+            <form class="form-container" method="POST" action="{{ url_for('setting', login=user.login) }}">
+                <!-- Back button -->
+                <a href="{{ url_for('go_back') }}">
+                    <img class="back-button" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
+                </a>
+                <!-- Header for edit profile section -->
+                <div class="add-viewer-text">Edit profile</div>
+                <!-- Display user's login and email -->
+                <div class="cred">
+                    <label>Login: @{{ user.login }}</label>
+                    <label>Email: {{ user.mail }}</label>
+                </div>
+                <!-- Input fields for user's name and surname -->
+                <div class="form-fullname">
+                    <div class="input-container">
+                        <label for="name" class="floating-label">Name</label>
+                        <input type="text" id="name" name="name" class="form-container-input" value="{{ user.name }}">
+                        <span class="info-icon">ℹ
+                            <span class="tooltip"> Name must be no longer than 60 characters and contain only latin letters and numbers. </span>
+                        </span>
+                    </div>
+                    <div class="input-container">
+                        <label for="surname" class="floating-label">Surname</label>
+                        <input type="text" id="surname" name="surname" class="form-container-input"  value="{{ user.surname }}">
+                        <span class="info-icon">ℹ
+                            <span class="tooltip">Surname must be no longer than 60 characters and contain only latin letters and numbers. </span>
+                        </span>
+                    </div>
+                </div>
+                <!-- Password fields, only visible if user is editing their own profile -->
+                {% if session.user == user.login %}
+                <div class="input-container">
+                    <label for="password" class="floating-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-container-input" placeholder="">
+                    <span class="toggle-password" onclick="togglePassword()">
+                        <i class="fas fa-eye-slash" id="togglePasswordIcon"></i>
+                    </span>
+                    <span class="info-icon">ℹ
+                        <span class="tooltip">Password must be at least 8 characters.</span>
+                    </span>
+                </div>
+                <div class="input-container">
+                    <label for="confirm_password" class="floating-label">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-container-input" placeholder="">
+                    <span class="toggle-password" onclick="toggleConfirmPassword()">
+                        <i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon"></i>
+                    </span>
+                    <span class="info-icon">ℹ
+                        <span class="tooltip">Please re-enter your password for confirmation.</span>
+                    </span>
+                    <div class="mandatory-field-confirm">
+                        *To change password, please fill in both fields. If you don't want to change password, leave them empty.
+                    </div>
+                </div>
+                {% endif %}
+                <!-- Submit button to save changes -->
+                <button type="submit" class="form-container-button-big">
+                    <span class="form-container-button-submit"><span>Save changes</span></span>
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

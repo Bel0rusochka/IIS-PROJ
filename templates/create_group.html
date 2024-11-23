@@ -3,40 +3,47 @@
 {% block title %}Create Group{% endblock %}
 
 {% block content %}
-<div class="projekt-content">
+  <!-- Group creation form container -->
+  <div class="projekt-content">
     <div class="alignment-container-outer">
-        <div class="create-group-container">
-          <a href="{{ url_for('go_back') }}">
-            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
-          </a>
-            <form method="POST" class="form-container" action="{{ url_for('create_group') }}">
-              <div class="add-viewer-text">Create a Group</div>
-                <div class="input-container">
-                  <label for="group-name" class="floating-label">Enter a Group Name<span class="required-field">*</span></label>
-                  <input type="text" id="group-name" name="group-name" class="form-container-input"{% if previous_values.group_name %}value="{{ previous_values.group_name }}"{% endif %}>
-                  <span class="info-icon">ℹ
-                    <span class="tooltip">Group name must be 2-60 characters and contain only latin letters and numbers.</span>
-                  </span>
-                </div>
-                <div class="input-container">
-                  <label for="group-name" class="floating-label">Enter a Group Description</label>
-                    <input type="text" id="group-description" name="group-description" class="form-container-input" {% if previous_values.group_description %}value="{{ previous_values.group_description }}"{% endif %}>
-                    <span class="info-icon">ℹ
-						<span class="tooltip">Group description must be no longer than 60 characters. </span>
-                    </span>
-                    <div class="mandatory-field">
-                      *Indicates mandatory-field fields
-                  </div>
-                  </div>
-                  
-                <button type="submit" class="form-container-button-big">
-                    <span class="form-container-button-submit"><span>Create</span></span>
-                </button>
-    
-            </form>
-        </div>
+      <div class="create-group-container">
+        <!-- Back button -->
+        <a href="{{ url_for('go_back') }}">
+          <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+        </a>
+        
+        <!-- Group creation form -->
+        <form method="POST" class="form-container" action="{{ url_for('create_group') }}">
+          <div class="add-viewer-text">Create a Group</div>
+          
+          <!-- Group name input field -->
+          <div class="input-container">
+            <label for="group-name" class="floating-label">Enter a Group Name<span class="required-field">*</span></label>
+            <input type="text" id="group-name" name="group-name" class="form-container-input"{% if previous_values.group_name %}value="{{ previous_values.group_name }}"{% endif %}>
+            <span class="info-icon">ℹ
+              <span class="tooltip">Group name must be 2-60 characters and contain only latin letters and numbers.</span>
+            </span>
+          </div>
+          
+          <!-- Group description input field -->
+          <div class="input-container">
+            <label for="group-description" class="floating-label">Enter a Group Description</label>
+            <input type="text" id="group-description" name="group-description" class="form-container-input" {% if previous_values.group_description %}value="{{ previous_values.group_description }}"{% endif %}>
+            <span class="info-icon">ℹ
+              <span class="tooltip">Group description must be no longer than 60 characters.</span>
+            </span>
+            <div class="mandatory-field">
+              *Indicates mandatory-field fields
+            </div>
+          </div>
+          
+          <!-- Create button -->
+          <button type="submit" class="form-container-button-big">
+            <span class="form-container-button-submit"><span>Create</span></span>
+          </button>
+        </form>
+      </div>
     </div>
-</div>
-
+  </div>
 
 {% endblock %}

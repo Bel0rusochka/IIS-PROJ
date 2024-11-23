@@ -1,6 +1,8 @@
+<!-- Base HTML template for FITstagram -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Page title, can be overridden by child templates -->
     <title>{% block title %}FITstagram{% endblock %}</title>
     <meta charset="utf-8"> <!-- Sets character encoding -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- For responsive design -->
@@ -15,6 +17,7 @@
     <link rel="stylesheet" href="../static/css/style.css"> 
   </head>
   <body>
+    <!-- Container for flash messages -->
     <div id="flashMessages" class="flash-container">
       {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -27,6 +30,7 @@
       {% endwith %}
   </div>
 
+    <!-- Sidebar, only visible if user is logged in -->
     {% if session.user %}
       <div id="sidebar" class="class-sidebar">
         <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar"> <!-- User avatar -->
@@ -42,6 +46,7 @@
       </div>
     {% endif %}
     
+    <!-- Main content container -->
     <div class="projekt-container">
       <div class="projekt-flex">
         <div class="projekt-header">
@@ -56,10 +61,12 @@
             {% endif %}
           </div>
         </div>
-        {% block content %}{% endblock %} <!-- Placeholder for child templates -->
+        <!-- Placeholder for child templates -->
+        {% block content %}{% endblock %} 
       </div>
     </div>
     
+    <!-- Main JavaScript file -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
   

@@ -1,100 +1,100 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- Added lang attribute for language declaration -->
+<html lang="en"> 
+<!-- Added lang attribute for language declaration -->
 <head>
-  	<meta charset="utf-8">
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  	<title>Profile</title> <!-- Corrected title capitalization -->
-
-  	<link rel="stylesheet" href="../static/css/style.css">
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap">
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap">
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title> 
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap">
 </head>
 <body>
-	<div id="flashMessages" class="flash-container">
-		{% with messages = get_flashed_messages(with_categories=true) %}
-			{% if messages %}
-				{% for category, message in messages %}
-					<div class="flash-message {{ category }}">
-						{{ message }}
-					</div>
-	
-				{% endfor %}
-			{% endif %}
-		{% endwith %}
-	</div>
-  	<div class="profile">
-		<div class="my-profile">
-			<div class="fit-arrow">
-				<a href="{{ url_for('go_back') }}">
-					<img class="arrow-icon" alt="Back" src="../static/images/arrow.svg" id="arrowIcon">
-				</a>
-				<a href="{{ url_for('index') }}" class="header-text">FITstagram</a>
-			</div>
-			<div class="white">
-				<div class="username-edit">
-					<img class="generic-avatar-icon" alt="User avatar" src="../static/images/no_avatar.svg"> <!-- Added alt text for accessibility -->
-					<div class="user-info">
-						<div class="user-name">{{ user.name }} {{ user.surname }}</div>
-						<div class="user-login">@{{ user.login }}</div>
-					</div>	
-					<div class="user-info-gap">
-					
-						<div class="user-stats">
-						  <div class="user-followers">Followers: {{ user.get_followers_count() }}</div>
-						  <div class="user-following">Following: {{ user.get_following_count() }}</div>
-						</div>
-						<div class="button-group">
-						  {% if session.user == user.login %}
-							<a class="edit-buttons" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
-							<form method="POST" action="{{ url_for('delete_user') }}">
-							  <input type="hidden" name="user_login" value="{{ user.login }}">
-							  <button type="submit" class="delete-profile">Delete profile</button>
-							</form>
-						  {% else %}
-							{% if is_following %}
-							  <form method="POST" action="{{ url_for('unfollow') }}">
-								<input type="hidden" name="user_login" value="{{ user.login }}">
-								<button type="submit" class="delete-profile" class="unfollow">Unfollow</button>
-							  </form>
-							{% else %}
-							  <form method="POST" action="{{ url_for('follow') }}">
-								<input type="hidden" name="user_login" value="{{ user.login }}">
-								<button type="submit" class="edit-buttons" class="follow">Follow</button>
-							  </form>
-							{% endif %}
-						  {% endif %}
-						</div>
-					  </div>
-				</div>
-			</div>
-		</div>
-		<div class="my-posts">
-			{% if session.user == user.login %}
-				<form method="GET" action="{{ url_for('profile', login=user.login) }}">
-					<input type="hidden" name="posts_type" value="not_group">
-					<button type="submit" class="add-post">My Posts</button>
-				</form>
-				|
-				<form method="GET" action="{{ url_for('profile', login=user.login) }}">
-					<input type="hidden" name="posts_type" value="group">
-					<button type="submit" class="add-post">My Groups Posts</button>
-				</form>
-			{% else %}
-				All Posts
-			{% endif %}
-			<div class="line"></div>
-			<div class="posts-and-new">
-				<div class="gallery-photo">
-					{% for post in posts %}
-						<a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
-							<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="gallery-image" data-id="{{ post.id }}"> <!-- Corrected syntax -->
-						</a>
-					{% endfor %}
-				</div>
-			</div>
-		</div>
-	</div>
+    <div id="flashMessages" class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    <div class="profile">
+        <div class="my-profile">
+            <div class="fit-arrow">
+                <a href="{{ url_for('go_back') }}">
+                    <img class="arrow-icon" alt="Back" src="../static/images/arrow.svg" id="arrowIcon">
+                </a>
+                <a href="{{ url_for('index') }}" class="header-text">FITstagram</a>
+            </div>
+            <div class="white">
+                <div class="username-edit">
+                    <img class="generic-avatar-icon" alt="User avatar" src="../static/images/no_avatar.svg"> 
+                    <!-- Added alt text for accessibility -->
+                    <div class="user-info">
+                        <div class="user-name">{{ user.name }} {{ user.surname }}</div>
+                        <div class="user-login">@{{ user.login }}</div>
+                    </div>  
+                    <div class="user-info-gap">
+                        <div class="user-stats">
+                            <div class="user-followers">Followers: {{ user.get_followers_count() }}</div>
+                            <div class="user-following">Following: {{ user.get_following_count() }}</div>
+                        </div>
+                        <div class="button-group">
+                            {% if session.user == user.login %}
+                                <a class="edit-buttons" id="editProfileButton" href="{{ url_for('setting', login=user.login) }}">Edit Profile</a>
+                                <form method="POST" action="{{ url_for('delete_user') }}">
+                                    <input type="hidden" name="user_login" value="{{ user.login }}">
+                                    <button type="submit" class="delete-profile">Delete profile</button>
+                                </form>
+                            {% else %}
+                                {% if is_following %}
+                                    <form method="POST" action="{{ url_for('unfollow') }}">
+                                        <input type="hidden" name="user_login" value="{{ user.login }}">
+                                        <button type="submit" class="delete-profile" class="unfollow">Unfollow</button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST" action="{{ url_for('follow') }}">
+                                        <input type="hidden" name="user_login" value="{{ user.login }}">
+                                        <button type="submit" class="edit-buttons" class="follow">Follow</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-posts">
+            {% if session.user == user.login %}
+                <form method="GET" action="{{ url_for('profile', login=user.login) }}">
+                    <input type="hidden" name="posts_type" value="not_group">
+                    <button type="submit" class="add-post">My Posts</button>
+                </form>
+                |
+                <form method="GET" action="{{ url_for('profile', login=user.login) }}">
+                    <input type="hidden" name="posts_type" value="group">
+                    <button type="submit" class="add-post">My Groups Posts</button>
+                </form>
+            {% else %}
+                All Posts
+            {% endif %}
+            <div class="line"></div>
+            <div class="posts-and-new">
+                <div class="gallery-photo">
+                    {% for post in posts %}
+                        <a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
+                            <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="gallery-image" data-id="{{ post.id }}"> 
+                            <!-- Corrected syntax -->
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

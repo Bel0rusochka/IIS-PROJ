@@ -1,92 +1,103 @@
 {% extends "base.html" %}
 
-{% block title %}Post Details{% endblock %}
+{% block title %}Edit Group{% endblock %}
 
 {% block content %}
+<!-- Main content container -->
 <div class="projekt-content">
+    <!-- Alignment container -->
     <div class="alignment-container-outer">
         <div class="alignment-container-inner">
 
-			<form method="POST" class="form-container" action="{{ url_for('edit_group', id = group.id) }}">
-				<div class="add-viewer-text">Edit Group</div>
-			
-				<a href="{{ url_for('go_back') }}">
-					<img class="back-button" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
-				</a>
-				<div class="input-container">
-					<label for="name" class="floating-label">Group Name</label>
-					<input type="text" id="name" name="name" class="form-container-input" value="{{ group.name }}">
-					<span class="info-icon">ℹ
-						<span class="tooltip">Group name must be 2-60 characters and contain only latin letters and numbers.</span>
-					</span>
-				</div>
-			
-				<div class="input-container">
-					<label for="description" class="floating-label">Description</label>
-					<input type="text" id="description" name="description" class="form-container-input" value="{{ group.description }}">
-					<span class="info-icon">ℹ
-						<span class="tooltip">Group description must be no longer than 60 characters.</span>
-					</div>
-			
-				<button type="submit" name="action" value="save" class="form-container-button-big">Save changes</button>
-				<button type="submit" name="action" value="delete" class="form-container-button-big" formaction="{{ url_for('delete_group') }}">Delete group</button>
-				<input type="hidden" name="group_id" value="{{ group.id }}">
-			</form>
-	<div class="my-members">Users
-		<div class="line"></div>
-	
-		<div class="members-list">
-			{% for login,role in users.items() %}
-				<div class="member-item">
-					<a href="{{ url_for('profile', login=login ) }}" class="member-name">{{ login }} ({{role}})</a>
-					<form method="POST" action="{{ url_for('manage_users_group') }}" class="member-actions">
-						<input type="hidden" name="user_login" value="{{ login }}">
-						<input type="hidden" name="group_id" value="{{ group.id }}">
-	
-						{% if role != 'admin' %}
-							<button type="submit" name="action" value="delete" class="edit-buttons">Delete</button>
-						{% endif %}
-	
-						{% if role == 'member' %}
-							<button type="submit" name="action" value="make_admin" class="edit-buttons">Make Admin</button>
-						{% endif %}
-	
-						{% if role == 'pending' %}
-							<button type="submit" name="action" value="accept_pending" class="edit-buttons">Accept</button>
-						{% endif %}
-					</form>
-				</div>
-			{% endfor %}
-	</div>
-</div>
-</div>
-</div>
-<div class="my-posts">Posts
-	<div class="line"></div>
-		{% for post in posts %}
-			<div class="my-members">
-				<div class="post-header">
-					<div class="left-section">
-						<a href="{{ url_for('profile', login=post.author.login) }}" class="author">
-							<span>@{{ post.author.login }}</span>
-						</a>
-					</div>
-					<div class="right-section">
-						<form method="POST" action="{{ url_for('manage_posts_group') }}" class="post-actions">
-							<input type="hidden" name="group_id" value="{{ group.id }}">
-							<input type="hidden" name="post_id" value="{{ post.id }}">
-							<button type="submit" name="action" value="delete" class="delete-profile">Delete</button>
-						</form>
-					</div>
-				</div>
-				<a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
-					<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}"class="gallery-image" data-id="{{ post.id }}"> 
-				</a>
-			</div>
-		{% endfor %}
-	</div>
-</div>
-</div>
+            <!-- Edit group form -->
+            <form method="POST" class="form-container" action="{{ url_for('edit_group', id = group.id) }}">
+                <div class="add-viewer-text">Edit Group</div>
+            
+                <!-- Back button -->
+                <a href="{{ url_for('go_back') }}">
+                    <img class="back-button" alt="" src="../static/images/arrow2.svg" id="arrowIcon">
+                </a>
 
+                <!-- Group name input -->
+                <div class="input-container">
+                    <label for="name" class="floating-label">Group Name</label>
+                    <input type="text" id="name" name="name" class="form-container-input" value="{{ group.name }}">
+                    <span class="info-icon">ℹ
+                        <span class="tooltip">Group name must be 2-60 characters and contain only latin letters and numbers.</span>
+                    </span>
+                </div>
+
+                <!-- Group description input -->
+                <div class="input-container">
+                    <label for="description" class="floating-label">Description</label>
+                    <input type="text" id="description" name="description" class="form-container-input" value="{{ group.description }}">
+                    <span class="info-icon">ℹ
+                        <span class="tooltip">Group description must be no longer than 60 characters.</span>
+                    </span>
+                </div>
+
+                <!-- Save and delete buttons -->
+                <button type="submit" name="action" value="save" class="form-container-button-big">Save changes</button>
+                <button type="submit" name="action" value="delete" class="form-container-button-big" formaction="{{ url_for('delete_group') }}">Delete group</button>
+                <input type="hidden" name="group_id" value="{{ group.id }}">
+            </form>
+
+            <!-- Users list -->
+            <div class="my-members">Users
+                <div class="line"></div>
+    
+                <div class="members-list">
+                    {% for login,role in users.items() %}
+                        <div class="member-item">
+                            <a href="{{ url_for('profile', login=login ) }}" class="member-name">{{ login }} ({{role}})</a>
+                            <form method="POST" action="{{ url_for('manage_users_group') }}" class="member-actions">
+                                <input type="hidden" name="user_login" value="{{ login }}">
+                                <input type="hidden" name="group_id" value="{{ group.id }}">
+
+                                {% if role != 'admin' %}
+                                    <button type="submit" name="action" value="delete" class="edit-buttons">Delete</button>
+                                {% endif %}
+
+                                {% if role == 'member' %}
+                                    <button type="submit" name="action" value="make_admin" class="edit-buttons">Make Admin</button>
+                                {% endif %}
+
+                                {% if role == 'pending' %}
+                                    <button type="submit" name="action" value="accept_pending" class="edit-buttons">Accept</button>
+                                {% endif %}
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Posts list -->
+            <div class="my-posts">Posts
+                <div class="line"></div>
+                {% for post in posts %}
+                    <div class="my-members">
+                        <div class="post-header">
+                            <div class="left-section">
+                                <a href="{{ url_for('profile', login=post.author.login) }}" class="author">
+                                    <span>@{{ post.author.login }}</span>
+                                </a>
+                            </div>
+                            <div class="right-section">
+                                <form method="POST" action="{{ url_for('manage_posts_group') }}" class="post-actions">
+                                    <input type="hidden" name="group_id" value="{{ group.id }}">
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                                    <button type="submit" name="action" value="delete" class="delete-profile">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
+                            <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}"class="gallery-image" data-id="{{ post.id }}"> 
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -3,46 +3,59 @@
 {% block title %}FITstagram - Home{% endblock %}
 
 {% block content %}
- <!-- Search Bar -->
-<div class="projekt-search-outer" id="searchBarContainer">
-  <div class="projekt-search-container">
-    <img alt="search" src="../static/images/search.svg" class="projekt-search-inner" id="searchIcon" onclick="toggleSearchBar()">
-    <form method="GET" action="{{ url_for('index') }}" id="searchForm">
-      <input type="text" name="query" placeholder="Search by tags..." {% if request.args.get('query') %}value="{{ request.args.get('query') }}"{% endif %}>
-      <select name="sort_by">
-        <option value="date" {% if request.args.get('sort_by') == 'date' %}selected{% endif %}>Date</option>
-        <option value="comments" {% if request.args.get('sort_by') == 'comments' %}selected{% endif %}>Comments</option>
-        <option value="likes" {% if request.args.get('sort_by') == 'likes' %}selected{% endif %}>Likes</option>
-        <option value="shares" {% if request.args.get('sort_by') == 'shares' %}selected{% endif %}>Shares</option>
-      </select>
-      {% if session.get('user') %}
-        <select name="filter">
-          <option value="all" {% if request.args.get('filter') == 'all' %}selected{% endif %}>All</option>
-          <option value="following" {% if request.args.get('filter') == 'following' %}selected{% endif %}>Following</option>
-          <option value="followers" {% if request.args.get('filter') == 'followers' %}selected{% endif %}>Followers</option>
+  <!-- Search Bar -->
+  <div class="projekt-search-outer" id="searchBarContainer">
+    <div class="projekt-search-container">
+      <!-- Search Icon -->
+      <img alt="search" src="../static/images/search.svg" class="projekt-search-inner" id="searchIcon" onclick="toggleSearchBar()">
+      
+      <!-- Search Form -->
+      <form method="GET" action="{{ url_for('index') }}" id="searchForm">
+        <!-- Search Input -->
+        <input type="text" name="query" placeholder="Search by tags..." {% if request.args.get('query') %}value="{{ request.args.get('query') }}"{% endif %}>
+        
+        <!-- Sort By Select -->
+        <select name="sort_by">
+          <option value="date" {% if request.args.get('sort_by') == 'date' %}selected{% endif %}>Date</option>
+          <option value="comments" {% if request.args.get('sort_by') == 'comments' %}selected{% endif %}>Comments</option>
+          <option value="likes" {% if request.args.get('sort_by') == 'likes' %}selected{% endif %}>Likes</option>
+          <option value="shares" {% if request.args.get('sort_by') == 'shares' %}selected{% endif %}>Shares</option>
         </select>
-      {% endif %}
-      <button type="submit">Search</button>
-    </form>
+        
+        <!-- Filter Select (only visible if user is logged in) -->
+        {% if session.get('user') %}
+          <select name="filter">
+            <option value="all" {% if request.args.get('filter') == 'all' %}selected{% endif %}>All</option>
+            <option value="following" {% if request.args.get('filter') == 'following' %}selected{% endif %}>Following</option>
+            <option value="followers" {% if request.args.get('filter') == 'followers' %}selected{% endif %}>Followers</option>
+          </select>
+        {% endif %}
+        
+        <!-- Search Button -->
+        <button type="submit">Search</button>
+      </form>
+    </div>
   </div>
-</div>
 
-  
   <!-- Gallery of Posts -->
   <div class="projekt-photo">
     {% for post in posts %}
+      <!-- Post Link -->
       <a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
+        <!-- Post Image -->
         <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="gallery-image" data-id="{{ post.id }}">
       </a>
     {% endfor %}
   </div>
-    {% if session.user %}
-      <div class="addPost">
-        <a href="{{ url_for('create_post') }}">
-          <div class="ellipse">
-            <span class="projekt-text5">+</span>
-          </div>
-        </a>
-      </div>
-    {% endif %}
+  
+  <!-- Add Post Button (only visible if user is logged in) -->
+  {% if session.user %}
+    <div class="addPost">
+      <a href="{{ url_for('create_post') }}">
+        <div class="ellipse">
+          <span class="projekt-text5">+</span>
+        </div>
+      </a>
+    </div>
+  {% endif %}
 {% endblock %}

@@ -1,19 +1,24 @@
+<!-- Template for displaying a banned page -->
 <!DOCTYPE html>
 <html>
 <head>
   	<meta charset="utf-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1.0">
   	<title>You are Banned</title>
+  	<!-- Linking stylesheets for styling -->
   	<link rel="stylesheet"  href="../static/css/style.css" />
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" />
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400&display=swap" />
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" />
 </head>
 <body class="banned-page-body">
+  <!-- Container for displaying flash messages -->
   <div id="flashMessages" class="flash-container">
 		{% with messages = get_flashed_messages(with_categories=true) %}
 			{% if messages %}
+				<!-- Looping through each flash message -->
 				{% for category, message in messages %}
+					<!-- Displaying each flash message with its category -->
 					<div class="flash-message {{ category }}">
 						{{ message }}
 					</div>
@@ -21,11 +26,14 @@
 			{% endif %}
 		{% endwith %}
 	</div>
+    <!-- Main content of the banned page -->
     <div class="banned-page">
       <h1>You are banned</h1>
       <p>Sorry, you are banned.</p>
+      <!-- Link to logout -->
       <a href="/logout" class="logout-link">Logout</a>
     </div>
   </body>
+  <!-- Linking the main JavaScript file -->
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </html>

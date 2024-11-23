@@ -3,42 +3,46 @@
 {% block title %}Users{% endblock %}
 
 {% block content %}
-<div class="projekt-search-outer"id="searchBarContainer">
+  <!-- Search bar container -->
+  <div class="projekt-search-outer" id="searchBarContainer">
     <div class="projekt-search-container">
-    <img alt="search" src="../static/images/search.svg" class="projekt-search-inner" id="searchIcon" onclick="toggleSearchBar()">
-    <form method="GET" action="{{ url_for(request.endpoint) }}"id="searchForm">
-        <input type="text" name="query" placeholder="Search in users..." {% if  request.args.get('query') %}value="{{  request.args.get('query') }}"{% endif %}>
+      <img alt="search" src="../static/images/search.svg" class="projekt-search-inner" id="searchIcon" onclick="toggleSearchBar()">
+      <form method="GET" action="{{ url_for(request.endpoint) }}" id="searchForm">
+        <input type="text" name="query" placeholder="Search in users..." {% if request.args.get('query') %}value="{{ request.args.get('query') }}"{% endif %}>
         <button type="submit">Search</button>
-    </form>
+      </form>
     </div>
-</div>
-    <div class="viewers">
-        <a href="{{ url_for('index') }}">
-            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
-        </a>
-        <div class="all-users">
-            <div class="button-container">
-                <a href="{{ url_for('users') }}" id="allUsersButton" class="butt-my-viewers {% if request.endpoint == 'users' %}active{% else %}passive{% endif %}">All Users</a>
-                <a href="{{ url_for('users_following') }}" id="myFollowingButton" class="butt-my-viewers {% if request.endpoint == 'users_following' %}active{% else %}passive{% endif %}">My Following</a>
-                <a href="{{ url_for('users_followers') }}" id="myFollowersButton" class="butt-my-viewers {% if request.endpoint == 'users_followers' %}active{% else %}passive{% endif %}">My Followers</a>
-            </div>
-            
-            <!-- Loop through users from the database -->
-            <div class="users" id="usersList">
-                {% for user in users %}
-                <a href="{{ url_for('profile', login=user.login) }}" class="user">
-                    <div class="user">
-                        <img class="avatar" alt="" src="{{ user.avatar_url or '../static/images/no_avatar.svg' }}">
-                        <div class="name-user">
-                            <div class="user-name">{{ user.name }} {{ user.surname }}</div>
-                            <div class="login">@{{ user.login }}</div>
-                        </div>
-                    </div>
-                </a>
-                <div class="line"></div>
+  </div>
 
-                {% endfor %}
+  <!-- Users list container -->
+  <div class="viewers">
+    <a href="{{ url_for('index') }}">
+      <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+    </a>
+    <div class="all-users">
+      <!-- Button container for user types -->
+      <div class="button-container">
+        <a href="{{ url_for('users') }}" id="allUsersButton" class="butt-my-viewers {% if request.endpoint == 'users' %}active{% else %}passive{% endif %}">All Users</a>
+        <a href="{{ url_for('users_following') }}" id="myFollowingButton" class="butt-my-viewers {% if request.endpoint == 'users_following' %}active{% else %}passive{% endif %}">My Following</a>
+        <a href="{{ url_for('users_followers') }}" id="myFollowersButton" class="butt-my-viewers {% if request.endpoint == 'users_followers' %}active{% else %}passive{% endif %}">My Followers</a>
+      </div>
+
+      <!-- Users list -->
+      <div class="users" id="usersList">
+        {% for user in users %}
+        <a href="{{ url_for('profile', login=user.login) }}" class="user">
+          <div class="user">
+            <img class="avatar" alt="" src="{{ user.avatar_url or '../static/images/no_avatar.svg' }}">
+            <div class="name-user">
+              <div class="user-name">{{ user.name }} {{ user.surname }}</div>
+              <div class="login">@{{ user.login }}</div>
             </div>
-        </div>
+          </div>
+        </a>
+        <div class="line"></div>
+
+        {% endfor %}
+      </div>
     </div>
+  </div>
 {% endblock %}

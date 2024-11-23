@@ -3,54 +3,58 @@
 {% block title %}Groups{% endblock %}
 
 {% block content %}
-	<div class="projekt-search-outer"id="searchBarContainer">
-		<div class="projekt-search-container">
-		<img alt="search" src="../static/images/search.svg" class="projekt-search-inner" id="searchIcon" onclick="toggleSearchBar()">
-		<form method="GET" action="{{ url_for(request.endpoint) }}"id="searchForm">
-			<input type="text" name="query" placeholder="Search in groups..." {% if  request.args.get('query') %}value="{{  request.args.get('query') }}"{% endif %}>
-			<button type="submit">Search</button>
-		</form>
-		</div>
-	</div>
-  	<div class="viewers">
-		<a href="{{ url_for('go_back') }}">
-            <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
-        </a>
-		<div class="all-users">
-			<div class="button-container">
-				<a href="{{ url_for('groups') }}" id="allGroupsButton" class="butt-my-viewers {% if request.endpoint == 'groups' %}active{% else %}passive{% endif %}">All Groups</a>
-				<a href="{{ url_for('following_groups') }}" id="followingGroupsButton" class="butt-my-viewers {% if request.endpoint == 'following_groups' %}active{% else %}passive{% endif %}">Followed</a>
-				<a href="{{ url_for('managed_groups') }}" id="managedGroupsButton" class="butt-my-viewers {% if request.endpoint == 'managed_groups' %}active{% else %}passive{% endif %}">Managed</a>
-				<a class="add-viewer-button" href="{{ url_for('create_group') }}">Create Group</a>
-			</div>
-			
+  <!-- Search bar container -->
+  <div class="projekt-search-outer" id="searchBarContainer">
+    <div class="projekt-search-container">
+      <img alt="search" src="../static/images/search.svg" class="projekt-search-inner" id="searchIcon" onclick="toggleSearchBar()">
+      <form method="GET" action="{{ url_for(request.endpoint) }}" id="searchForm">
+        <input type="text" name="query" placeholder="Search in groups..." 
+               {% if request.args.get('query') %}value="{{ request.args.get('query') }}"{% endif %}>
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  </div>
 
-            <!-- Loop through users from the database -->
-            <div class="users" id="usersList">
-				{% for group in groups %}
-				<a href="{{ url_for('group', id=group.id) }}" class="user">
-					<div class="user">
-						<img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/avatar_group.svg' }}">
-						<div class="name-user">
-							<div class="user-name">{{ group.name }}</div>
-							<div class="subscribers">Members: {{ group.members_count() }}</div>
+  <!-- Viewers container -->
+  <div class="viewers">
+    <a href="{{ url_for('go_back') }}">
+      <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
+    </a>
+    <div class="all-users">
+      <div class="button-container">
+        <a href="{{ url_for('groups') }}" id="allGroupsButton" class="butt-my-viewers {% if request.endpoint == 'groups' %}active{% else %}passive{% endif %}">All Groups</a>
+        <a href="{{ url_for('following_groups') }}" id="followingGroupsButton" class="butt-my-viewers {% if request.endpoint == 'following_groups' %}active{% else %}passive{% endif %}">Followed</a>
+        <a href="{{ url_for('managed_groups') }}" id="managedGroupsButton" class="butt-my-viewers {% if request.endpoint == 'managed_groups' %}active{% else %}passive{% endif %}">Managed</a>
+        <a class="add-viewer-button" href="{{ url_for('create_group') }}">Create Group</a>
+      </div>
 
-								<form method="POST" action="{{url_for('manage_users_group')}}">
-									<input type="hidden" name="group_id" value="{{group.id}}">
-									<input type="hidden" name="user_login" value="{{session.user}}">
-									{% if group.is_subscribed(session.user) %}
-										<button type="submit" class="delete-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
-									{% else %}
-										<button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
-									{% endif %}
-								</form>
+      <!-- Loop through groups from the database -->
+      <div class="users" id="usersList">
+        {% for group in groups %}
+        <a href="{{ url_for('group', id=group.id) }}" class="user">
+          <div class="user">
+            <img class="avatar" alt="" src="{{ group.avatar_url or '../static/images/avatar_group.svg' }}">
+            <div class="name-user">
+              <div class="user-name">{{ group.name }}</div>
+              <div class="subscribers">Members: {{ group.members_count() }}</div>
 
-						</div>
-					</div>
-				</a>
-				<div class="line"></div>
-                {% endfor %}
+              <!-- Join/Leave group form -->
+              <form method="POST" action="{{ url_for('manage_users_group') }}">
+                <input type="hidden" name="group_id" value="{{ group.id }}">
+                <input type="hidden" name="user_login" value="{{ session.user }}">
+                {% if group.is_subscribed(session.user) %}
+                  <button type="submit" class="delete-profile" id="leaveProfileButton" name="action" value="delete">Leave Group</button>
+                {% else %}
+                  <button type="submit" class="edit-buttons" id="joinProfileButton" name="action" value="add">Join Group</button>
+                {% endif %}
+              </form>
+
             </div>
-		</div>
-  	</div>
+          </div>
+        </a>
+        <div class="line"></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 {% endblock %}

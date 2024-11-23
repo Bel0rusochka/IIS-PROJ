@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Post Details{% endblock %}
+{% block title %}Edit Post{% endblock %}
 
 {% block content %}
     <a href="{{ url_for('post', post_id=post.id) }}">
@@ -9,72 +9,82 @@
     <div class="projekt-content">
         <div class="alignment-container-outer">
 
-    <form action="{{ url_for('edit_post', post_id=post.id) }}"class="form-container"  method="POST">
-        <div id="imageDescription">
-            <div class="popup-header">
-                <h2 class="popup-title">Update Post</h2>
-                <button type="submit" class="post-button">Update</button>
-              </div>
-    
-            <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}">
-            <h3>Description:</h3>
-            <textarea id="caption" rows="8" cols="50" placeholder="Write a text (max 1000 symbols)..." name="text">{{ post.text }}</textarea>
-        </div>
-        <div id="imageTags">
-            <span id="tagsList">Tags:</span>
-            <textarea id="tags" placeholder="Add tags starting with # and separated by # (max 60 symbols per tag)" name="tags">{% if post.associated_tags %}#{{ post.associated_tags | map(attribute='name') | join('#') }}{% endif %}</textarea>
-        </div>
+            <!-- Edit Post Form -->
+            <form action="{{ url_for('edit_post', post_id=post.id) }}" class="form-container" method="POST">
+                <div id="imageDescription">
+                    <div class="popup-header">
+                        <h2 class="popup-title">Update Post</h2>
+                        <button type="submit" class="post-button">Update</button>
+                    </div>
 
-        <div class="post-privacy post-privacy2">
-            <label for="privacyOptions">Post Privacy:</label>
-            <select id="privacyOptions" name="privacy" onchange="toggleGroupList()">
-                <option value="public" {% if post.status == "public" %}selected{% endif %}>Public - Visible to everyone</option>
-                <option value="private" {% if post.status == "private" %}selected{% endif %}>Private - Visible to followers</option>
-                <option value="group" {% if post.status == "group" %}selected{% endif %}>Groups - Visible only in groups</option>
-            </select>
-        </div>
-        <form id="postForm" class="form-container" method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
-
-            <div id="groupList" class="group-list" style="display: {% if privacy == 'group' %}block{% else %}none{% endif %};">
-                <label>Select Groups:</label>
-                <div>
-                    {% for group in user.get_approved_groups() %}
-                        <label>
-                            <label for="group{{ group.id }}">{{ group.name }}</label>
-                            <input type="checkbox" name="groups" value="{{ group.id }}" id="group{{ group.id }}" 
-                            {% if group in post.get_connected_groups() %}checked{% endif %}>
-                        </label><br>
-                    {% endfor %}
+                    <!-- Post Image and Description -->
+                    <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" id="selectedImage" data-id="{{ post.id }}">
+                    <h3>Description:</h3>
+                    <textarea id="caption" rows="8" cols="50" placeholder="Write a text (max 1000 symbols)..." name="text">{{ post.text }}</textarea>
                 </div>
-            </div>
-            
-    </form>
 
-    </form>
-</div>
-</div>
+                <!-- Post Tags -->
+                <div id="imageTags">
+                    <span id="tagsList">Tags:</span>
+                    <textarea id="tags" placeholder="Add tags starting with # and separated by # (max 60 symbols per tag)" name="tags">
+                        {% if post.associated_tags %}#{{ post.associated_tags | map(attribute='name') | join('#') }}{% endif %}
+                    </textarea>
+                </div>
+
+                <!-- Post Privacy Settings -->
+                <div class="post-privacy post-privacy2">
+                    <label for="privacyOptions">Post Privacy:</label>
+                    <select id="privacyOptions" name="privacy" onchange="toggleGroupList()">
+                        <option value="public" {% if post.status == "public" %}selected{% endif %}>Public - Visible to everyone</option>
+                        <option value="private" {% if post.status == "private" %}selected{% endif %}>Private - Visible to followers</option>
+                        <option value="group" {% if post.status == "group" %}selected{% endif %}>Groups - Visible only in groups</option>
+                    </select>
+                </div>
+
+                <!-- Group List Form (nested form) -->
+                <form id="postForm" class="form-container" method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
+                    <div id="groupList" class="group-list" style="display: {% if privacy == 'group' %}block{% else %}none{% endif %};">
+                        <label>Select Groups:</label>
+                        <div>
+                            {% for group in user.get_approved_groups() %}
+                                <label>
+                                    <label for="group{{ group.id }}">{{ group.name }}</label>
+                                    <input type="checkbox" name="groups" value="{{ group.id }}" id="group{{ group.id }}" 
+                                    {% if group in post.get_connected_groups() %}checked{% endif %}>
+                                </label><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </form>
+            </form>
+        </div>
+    </div>
 </div>
 
- <script>
+<!-- Toggle Group List Script -->
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         toggleGroupList();
     });
+
+    // Toggle group list based on post privacy settings
     function toggleGroupList() {
-    const privacySelect = document.getElementById('privacyOptions');
-    const groupList = document.getElementById('groupList');
+        const privacySelect = document.getElementById('privacyOptions');
+        const groupList = document.getElementById('groupList');
 
-    // Show the group list only when "Groups" is selected in privacy settings
-    if (privacySelect.value === 'group') {
-        groupList.style.display = 'block';
-        window.scrollTo({
-            top: groupList.offsetTop, // Scroll to the group list
-            behavior: 'smooth' // Smooth scroll effect
-        });
-    } else {
-        groupList.style.display = 'none';
+        // Show the group list only when "Groups" is selected in privacy settings
+        if (privacySelect.value === 'group') {
+            groupList.style.display = 'block';
+            window.scrollTo({
+                top: groupList.offsetTop, // Scroll to the group list
+                behavior: 'smooth' // Smooth scroll effect
+            });
+        } else {
+            groupList.style.display = 'none';
+        }
     }
-}
 
+    // Call toggleGroupList on window load
     window.onload = function() {
         toggleGroupList();
     };
