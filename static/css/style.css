@@ -1833,13 +1833,13 @@ body.banned-page-body {
   background-color: #33ff33;
 }
 /* ---------------------------- MEDIA QUERIES ---------------------------- */
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .gallery-image {
     width: calc(100% / 2 - 20px); /* When screen is smaller, each image takes up 1/2 of the container */
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1000px) {
   .projekt-search1 {
     left: auto;
     transform: none;
@@ -1860,7 +1860,7 @@ body.banned-page-body {
   .back-button {
     top: 220px;   }
 }
-@media (min-width: 1200px) {
+@media (min-width: 1000px) {
   .projekt-search2 {
   cursor:auto;
   background-color: transparent;

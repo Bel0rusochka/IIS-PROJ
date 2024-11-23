@@ -186,7 +186,7 @@ function displayImage(file) {
     }
     function toggleSearchBar() {
       var searchForm = document.getElementById('searchBarContainer');
-      if (window.innerWidth < 1200) {
+      if (window.innerWidth < 1000) {
         searchForm.classList.toggle('hidden');
       }
     }
