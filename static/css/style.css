@@ -683,6 +683,10 @@ img {
   justify-content: center;
 }
 
+.post-header .delete-button i, .post-header .edit-button i {
+  margin-right: 5px;
+}
+
 /* Delete and edit button hover effects */
 .post-header .delete-button:hover {
   background-color: #e74c3c;
@@ -700,6 +704,12 @@ img {
 
 .post-header .edit-button:hover i {
   color: white;
+}
+
+/* Styling the form inside post-header */
+.post-header .post-actions {
+  display: inline-block;
+  margin-left: 15px;
 }
 
 /* Post header styles */
@@ -723,18 +733,24 @@ img {
   align-items: center;
 }
 
-/* Post header actions styles */
-.post-header .post-actions {
-  display: inline-block;
-  margin-left: 15px;
+/* Add a subtle shadow to make the buttons stand out more */
+.post-header .delete-button, .post-header .edit-button {
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
-/* Comment text styles */
+.post-header .delete-button i, .post-header .edit-button i {
+  font-size: 18px;
+}
+
+.post-header{
+  display: flex;
+  padding: 20px;
+}
 .comment-text {
   margin-top: 5px;
   word-wrap: break-word;
   word-break: break-word;
-  white-space: normal;
+  white-space: normal; 
 }
 
 /* User styles */
@@ -1315,6 +1331,7 @@ textarea {
 .my-profile {
   background-color: #a6bdd8;
   border-radius: 15px;
+  gap: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1334,6 +1351,7 @@ textarea {
   font-size: 24px;
   display: flex;
   align-items: center;
+  gap: 20px;
   width: 100%;
   padding: 10px;
 }
@@ -1402,7 +1420,7 @@ textarea {
 }
 
 /* Delete profile button styles */
-.delete-profile {
+.edit-buttons,.delete-profile {
   background-color: #ecf0f1;
   border-radius: 8px;
   border: none;
@@ -1528,6 +1546,7 @@ textarea {
 
 /* Hover effects for buttons */
 .butt-my-viewers:hover,
+.button2:hover,
 .add-viewer-button:hover {
   box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
 }
@@ -1613,100 +1632,10 @@ textarea {
   font-size: 30px;
 }
 
-/* Styles for search window */
-.window-search {
-  height: 50px;
-  width: 100%;
-  border-radius: 10px;
-  background-color: #eeecec;
-  border: 1px solid #9d9a9a;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
-}
-
 /* Styles for search icon and text */
 .search {
   display: flex;
   align-items: center;
-}
-
-.search-icon {
-  width: 28px;
-  height: 28px;
-}
-
-.search-text {
-  margin-left: 15px;
-  font-size: 20px;
-  color: #747272;
-}
-
-/* Styles for chevron icon */
-.chevronIcon {
-  cursor: pointer;
-  width: 27px;
-  height: 27px;
-  margin-left: auto;
-}
-
-/* Styles for add button */
-.button-add {
-  cursor: pointer;
-  margin: 0 auto;
-  border-radius: 10px;
-  background-color: #cde1f9;
-  border: 1px solid #24558f;
-  box-sizing: border-box;
-  width: 235px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Styles for hidden users container */
-#hiddenUsers {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  overflow-y: auto;
-  max-height: 160px;
-}
-
-/* Styles for window hide container */
-.window-hide {
-  position: relative;
-  border-radius: 0px 0px 10px 10px;
-  background-color: #eeecec;
-  border: 1px solid #b1afaf;
-  box-sizing: border-box;
-  width: 585px;
-  height: 170px;
-  max-height: 250px;
-  overflow: hidden;
-}
-
-/* Styles for hidden users images */
-#hiddenUsers img {
-  position: relative;
-  height: 70px;
-  width: 70px;
-  margin-left: -325px;
-  margin-top: 0px;
-  border-radius: 100px;
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-/* Styles for hidden users names */
-#hiddenUsers .name-user {
-  font-size: 20px;
-  padding-left: 5px;
 }
 
 /* Styles for users container */
@@ -1836,6 +1765,14 @@ body.banned-page-body {
   margin: 30px;
 }
 
+.my-members a {
+  width: 100%;
+ }
+ 
+.members-list {
+  margin-top: 20px;
+}
+
 /* Member list item */
 .member-item {
   display: flex;
@@ -1843,6 +1780,21 @@ body.banned-page-body {
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ccc;
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+
+.member-name:hover {
+  color: #666;
 }
 
 /* Member actions */
@@ -1861,20 +1813,33 @@ body.banned-page-body {
   cursor: pointer;
 }
 
+.action-button:hover {
+  background-color: #f0f0f0;
+}
+
 /* Specific action buttons */
 .delete-button {
   background-color: #ff6666;
   border: none;
+}
+.delete-button:hover {
+  background-color: #ff3333;
 }
 .make-admin-button {
   background-color: #66ccff;
   color: #fff;
   border: none;
 }
+.make-admin-button:hover {
+  background-color: #33ccff;
+}
 .accept-button {
   background-color: #66ff66;
   color: #fff;
   border: none;
+}
+.accept-button:hover {
+  background-color: #33ff33;
 }
 /* ---------------------------- MEDIA QUERIES ---------------------------- */
 
