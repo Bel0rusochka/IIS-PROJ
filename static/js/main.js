@@ -86,27 +86,6 @@ function toggleConfirmPassword() {
   }
 }
 
-// Toggle the popup modal
-function togglePopup() {
-  var popup = document.getElementById("popupModal");
-  var imageInput = document.getElementById("imageUpload");
-  var captionInput = document.getElementById("caption");
-  var tagsInput = document.getElementById("tags");
-  var dropZone = document.getElementById("dropZone");
-
-  if (popup.style.display === "none" || popup.style.display === "") {
-    popup.style.display = "block";
-  } else {
-    // Reset inputs and clear image preview
-    imageInput.value = ""; // Clear the file input
-    captionInput.value = ""; // Clear the caption
-    tagsInput.value = ""; // Clear the tags
-    dropZone.style.backgroundImage = "none"; // Clear background image
-    dropZone.classList.remove("expanded"); // Remove expanded class if any
-    popup.style.display = "none"; // Close the modal
-  }
-}
-
 function toggleSharePopup() {
   const sharePopup = document.getElementById("sharePopupModal");
   sharePopup.style.display =
@@ -115,23 +94,6 @@ function toggleSharePopup() {
       : "none";
 }
 
-// Placeholder function for the Post button (you can customize this as needed)
-function submitPost() {
-  var imageInput = document.getElementById("imageUpload");
-  var caption = document.getElementById("caption").value;
-  var tags = document.getElementById("tags").value;
-
-  if (imageInput.files.length === 0) {
-    alert("Please select an image.");
-    return;
-  }
-
-  // This is where you can handle the form data, e.g., sending it to a server
-  alert("Post submitted with caption: " + caption + " and tags: " + tags);
-
-  // Close the popup after submission
-  togglePopup();
-}
 
 const dropZone = document.getElementById("dropZone");
 const imageInput = document.getElementById("imageUpload");
