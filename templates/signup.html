@@ -7,7 +7,7 @@
     <div class="alignment-container-outer">
         <div class="alignment-container-inner">
             <form class="form-container" method="POST" action="/signup">
-                <span class="pagesignup-text12"><a>Sign up</a></span>
+                <span class="form-container-header-text"><a>Sign up</a></span>
                 
                 <div class="input-container">
                     
@@ -26,7 +26,7 @@
                     </span>
                 </div>
             
-                <div class="pagesignup-fullname">
+                <div class="form-fullname">
                     <div class="input-container">
                         <label for="name" class="floating-label">Name</label>
                         <input type="text" id="name" name="name" class="form-container-input" placeholder="" value= "{{ previous_values.name if previous_values else '' }}" >
@@ -70,15 +70,15 @@
                 </div>
 
                 <button type="submit" class="form-container-button-big">
-                    <span class="pagesignup-text22"><span>Sign up</span></span>
+                    <span class="form-container-button-submit"><span>Sign up</span></span>
                 </button>
 
                 <div class="pagesignup-haveacc">
-                    <span class="pagesignup-text24">
+                    <span class="form-change-question">
                         <span>Have an account?</span>
                     </span>
                     <a href="{{url_for('login')}}" class="pagesignup-buttlogin">
-                        <span class="pagesignup-text26"><span>log in</span></span>
+                        <span class="form-change"><span>log in</span></span>
                     </a>
                 </div>
             </form>

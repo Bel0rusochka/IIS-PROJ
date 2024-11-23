@@ -45,11 +45,11 @@
     <div class="projekt-container">
       <div class="projekt-flex">
         <div class="projekt-header">
-          <a href="{{ url_for('index') }}" class="header_text">FITstagram</a> 
+          <a href="{{ url_for('index') }}" class="header-text">FITstagram</a> 
           <div class="projekt-frame2" id="iconContainer">
             {% if not session.user %}
               <a href="{{ url_for('login') }}" class="pagesignup-buttlogin"> 
-                <span class="pagesignup-text26">log in</span>
+                <span class="form-change">log in</span>
               </a>
             {% else %}
               <img alt="menu" src="../static/images/menu211-wd1k.svg" class="projekt-menu" onclick="toggleNav()"> <!-- Menu toggle -->

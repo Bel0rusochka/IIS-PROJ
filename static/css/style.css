@@ -117,28 +117,13 @@ img {
   justify-content: center;
 }
 
-/* Header (blue fit section) */
-.pagesignup-bluefit {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  height: 77px;
-  background-color: rgba(205, 226, 250, 1);
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: calc(100% - 40px);
-  margin: 20px;
-  box-sizing: border-box;
-}
-
 /* Title text styles */
-.header_text, .pagesignup-text22, .projekt-text2 {
+.header-text, .form-container-button-submit {
   font-size: 32px;
   color: rgba(0, 0, 0, 1);
 }
 
-.header_text {
+.header-text {
   background-color: #83b4e9;
   padding: 10px 20px;
   border-radius: 8px;
@@ -146,7 +131,7 @@ img {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.header_text:hover {
+.header-text:hover {
   color: white;
   background-color: #457bb4;
   transform: translateY(-2px);
@@ -154,7 +139,7 @@ img {
   transition:  0.5s ease
 }
 
-.header_text:active {
+.header-text:active {
   transform: translateY(1px);
 }
 
@@ -172,7 +157,7 @@ img {
 }
 
 /* Signup form large heading */
-.pagesignup-text12 {
+.form-container-header-text {
   font-size: 38px;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -329,23 +314,13 @@ img {
   color: #333;
 }
 
-/* Style for pagesignup-fullname wrapper */
-.pagesignup-fullname {
+/* Style for form-fullname wrapper */
+.form-fullname {
   width: 100%;
   display: flex;
   gap: 20px;
 }
 
-/* Label styles for input fields */
-.pagesignup-text16, .pagesignup-text20, .pagesignup-text14, 
-.pagesignup-text17, .pagesignup-text18, .pagesignup-text19 {
-  position: absolute;
-  top: 5px;
-  left: 10px;
-  font-size: 15px;
-  color: rgba(0, 0, 0, 0.7);
-  pointer-events: none;
-}
 /* Signup button styles */
 .form-container-button-big {
   display: flex;
@@ -376,7 +351,7 @@ img {
 }
 
 /* Text for 'have an account' */
-.pagesignup-text24 {
+.form-change-question {
   font-size: 20px;
 }
 
@@ -393,56 +368,10 @@ img {
 }
 
 /* Small text inside buttons */
-.pagesignup-text26 {
+.form-change {
   font-size: 16px;
 }
 
-/* ---------------------------- 404 PAGE STYLES ---------------------------- */
-
-/* Full-screen container for 404 page */
-.not-found-container1 {
-  width: 100%;
-  display: flex;
-  overflow: auto;
-  min-height: 100vh;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Inner container for 404 page */
-.not-found-container2 {
-  display: flex;
-  position: relative;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Large error code text */
-.not-found-text2 {
-  color: rgb(38, 38, 38);
-  font-size: 252px;
-  margin-top: -20px;
-  font-weight: 900;
-  margin-bottom: -20px;
-  letter-spacing: -20px;
-}
-
-/* Container for error message */
-.not-found-container3 {
-  width: 421px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Error message text */
-.not-found-text3 {
-  text-align: center;
-  font-weight: 400;
-}
 /* ---------------------------- MAIN INDEX PAGE STYLE ---------------------------- */
 
 /* Header styles */
@@ -1143,33 +1072,6 @@ img {
   cursor: pointer;
 }
 
-/* Form Styling for DropZone Form */
-#dropZoneForm input[type="file"],
-#dropZoneForm textarea,
-#dropZoneForm input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-/* Style for form button */
-#dropZoneForm button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #2b5a92;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Change form button styles on hover */
-#dropZoneForm button:hover {
-  background-color: #1d4370;
-}
-
 /* Style for drop zone */
 .drop-zone {
   width: 100%;
@@ -1347,7 +1249,7 @@ textarea {
 }
 
 /* Container for user details and buttons */
-.usernameedit {
+.username-edit {
   font-size: 24px;
   display: flex;
   align-items: center;
