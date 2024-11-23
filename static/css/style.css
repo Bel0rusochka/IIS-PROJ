@@ -447,7 +447,6 @@ img {
   height: 60px;
 }
 
-/* Sidebar link styles */
 .class-sidebar a {
   padding: 10px 15px;
   text-decoration: none;
@@ -489,7 +488,6 @@ img {
   padding: 10px;
 }
 
-/* Container styles */
 .projekt-container {
   width: calc(100% - 0);
   display: flex;
@@ -499,7 +497,6 @@ img {
   transition: margin-right 0.5s;
 }
 
-/* Project styles */
 .projekt-flex {
   width: 100%;
   display: flex;
@@ -509,7 +506,7 @@ img {
   flex-wrap: wrap;
 }
 
-/* Gallery styles */
+/* Project photo styles */
 .gallery-photo, .projekt-photo {
   display: flex;
   flex-wrap: wrap;
@@ -517,12 +514,10 @@ img {
   margin: 0;
 }
 
-/* Project photo styles */
 .projekt-photo {
   padding-top: 100px;
 }
 
-/* Gallery image styles */
 .gallery-image {
   display: flex;
   align-items: center;
@@ -532,7 +527,6 @@ img {
   border-radius: 20px;
 }
 
-/* Gallery image hover effect */
 .gallery-image img {
   width: 95%;
   height: 50vh;
@@ -544,7 +538,6 @@ img {
   transform: scale(1.05);
 }
 
-/* Image detail styles */
 #imageDetail {
   position: fixed;
   margin: 30px;
@@ -562,7 +555,6 @@ img {
   overflow-y: auto;
 }
 
-/* Selected image styles */
 #selectedImage {
   width: 100%;
   height: auto;
@@ -635,13 +627,12 @@ img {
   color: white;
 }
 
-/* Styling the form inside post-header */
+/* Post header styles */
 .post-header .post-actions {
   display: inline-block;
   margin-left: 15px;
 }
 
-/* Post header styles */
 .post-header {
   display: flex;
   align-items: center;
@@ -650,19 +641,16 @@ img {
   border-bottom: 1px solid #ecf0f1;
 }
 
-/* Post header left section styles */
 .post-header .left-section {
   display: flex;
   align-items: center;
 }
 
-/* Post header right section styles */
 .post-header .right-section {
   display: flex;
   align-items: center;
 }
 
-/* Add a subtle shadow to make the buttons stand out more */
 .post-header .delete-button, .post-header .edit-button {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
 }
@@ -817,7 +805,7 @@ img {
   transform: scale(1);
 }
 
-/* Like Button Styles */
+/* Button Styles */
 .like-button:hover {
   color: #f00;
 }
@@ -836,7 +824,6 @@ img {
   color: #f00;
 }
 
-/* Retweet Button Styles */
 .retweet-button:hover {
   color: lightgreen;
 }
@@ -960,7 +947,7 @@ img {
   border-radius: 5px;
   margin-right: 10px;
 }
-/* Style for the sort_by dropdown */
+
 .projekt-search-outer select {
   border: none;
   padding: 10px;
@@ -1033,7 +1020,7 @@ img {
   user-select: none;
 }
 
-/* Popup Modal Styling */
+/* Popup Styling */
 .popup-modal {
   display: none;
   position: fixed;
@@ -1059,14 +1046,12 @@ img {
   overflow-y: auto;
 }
 
-/* Style for close popup button */
 .close-popup {
   color: #aaa;
   font-size: 50px;
   font-weight: bold;
 }
 
-/* Change close popup button styles on hover */
 .close-popup:hover {
   color: #000;
   cursor: pointer;
@@ -1218,7 +1203,7 @@ textarea {
   min-width: 900px;
 }
 
-/* My posts container styles */
+/* Posts container styles */
 .my-posts {
   padding: 20px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
@@ -1229,7 +1214,6 @@ textarea {
   padding-top: 20px;
 }
 
-/* My profile container styles */
 .my-profile {
   background-color: #a6bdd8;
   border-radius: 15px;
@@ -1283,25 +1267,21 @@ textarea {
   white-space: nowrap;
 }
 
-/* User name styles */
 .user-name {
   font-size: 28px;
 }
 
-/* User login styles */
 .user-login {
   font-size: 20px;
   color: #666;
 }
 
-/* User stats container styles */
 .user-stats {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-/* User followers, following, and posts styles */
 .user-followers, .user-following, .user-posts {
   font-size: 26px;
   color: #666;
@@ -1314,14 +1294,12 @@ textarea {
   align-items: flex-end;
 }
 
-/* Edit buttons styles */
 .edit-buttons {
   font-size: 20px;
   cursor: pointer;
   margin: 10px;
 }
 
-/* Delete profile button styles */
 .edit-buttons,.delete-profile {
   background-color: #ecf0f1;
   border-radius: 8px;
@@ -1336,7 +1314,6 @@ textarea {
   justify-content: center;
 }
 
-/* Button hover effects */
 .edit-buttons:hover,
 .delete-profile:hover {
   color: white;
@@ -1441,12 +1418,10 @@ textarea {
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Specific styles for butt-my-viewers button */
 .butt-my-viewers {
   background-color: #ebebeb
 }
 
-/* Hover effects for buttons */
 .butt-my-viewers:hover,
 .button2:hover,
 .add-viewer-button:hover {
