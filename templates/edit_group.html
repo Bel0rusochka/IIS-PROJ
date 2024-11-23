@@ -71,34 +71,33 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <!-- Posts list -->
-            <div class="my-posts">Posts
-                <div class="line"></div>
-                {% for post in posts %}
-                    <div class="my-members">
-                        <div class="post-header">
-                            <div class="left-section">
-                                <a href="{{ url_for('profile', login=post.author.login) }}" class="author">
-                                    <span>@{{ post.author.login }}</span>
-                                </a>
-                            </div>
-                            <div class="right-section">
-                                <form method="POST" action="{{ url_for('manage_posts_group') }}" class="post-actions">
-                                    <input type="hidden" name="group_id" value="{{ group.id }}">
-                                    <input type="hidden" name="post_id" value="{{ post.id }}">
-                                    <button type="submit" name="action" value="delete" class="delete-profile">Delete</button>
-                                </form>
-                            </div>
-                        </div>
-                        <a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
-                            <img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}"class="gallery-image" data-id="{{ post.id }}"> 
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+		</div>
+	</div>
+	<!-- Posts list -->
+	<div class="my-posts">Posts
+		<div class="line"></div>
+		{% for post in posts %}
+			<div class="my-members">
+				<div class="post-header">
+					<div class="left-section">
+						<a href="{{ url_for('profile', login=post.author.login) }}" class="author">
+							<span>@{{ post.author.login }}</span>
+						</a>
+					</div>
+					<div class="right-section">
+						<form method="POST" action="{{ url_for('manage_posts_group') }}" class="post-actions">
+							<input type="hidden" name="group_id" value="{{ group.id }}">
+							<input type="hidden" name="post_id" value="{{ post.id }}">
+							<button type="submit" name="action" value="delete" class="delete-profile">Delete</button>
+						</form>
+					</div>
+				</div>
+				<a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
+					<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}"class="gallery-image" data-id="{{ post.id }}"> 
+				</a>
+			</div>
+		{% endfor %}
+	</div>
 </div>
 
 {% endblock %}
