@@ -110,7 +110,7 @@ img {
 }
 
 /* General container for the signup page */
-.pagesignup-container {
+.alignment-container-outer {
   display: flex;
   padding: 30px;
   align-items: center;
@@ -159,7 +159,7 @@ img {
 }
 
 /* Signup form container */
-.pagesignup-signup {
+.form-container {
   width: 600px;
   display: flex;
   flex-direction: column;
@@ -203,7 +203,7 @@ img {
 }
 
 /* Input field styles */
-.pagesignup-input {
+.form-container-input {
   width: 100%;
   padding: 20px;
   font-size: 15px;
@@ -233,7 +233,7 @@ img {
   margin-left: 3px;
 }
 
-.mandatory,.mandatory2 {
+.mandatory-field,.mandatory-field-confirm {
   position: absolute;
   bottom: -20px;
   right: 0;
@@ -242,7 +242,7 @@ img {
   font-size: 14px;
 }
 
-.mandatory2 {
+.mandatory-field-confirm {
   bottom: -35px;
 }
 
@@ -321,8 +321,8 @@ img {
 }
 
 /* When input is focused or has value, move the label */
-.pagesignup-input:focus + .floating-label,
-.pagesignup-input:not(:placeholder-shown) + .floating-label {
+.form-container-input:focus + .floating-label,
+.form-container-input:not(:placeholder-shown) + .floating-label {
   top: -10px;
   left: 10px;
   font-size: 12px;
@@ -347,7 +347,7 @@ img {
   pointer-events: none;
 }
 /* Signup button styles */
-.pagesignup-buttonsingupbig {
+.form-container-button-big {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -364,7 +364,7 @@ img {
 }
 
 /* Hover effect for signup and login buttons */
-.pagesignup-buttonsingupbig:hover, .pagesignup-buttlogin:hover {
+.form-container-button-big:hover, .pagesignup-buttlogin:hover {
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -481,7 +481,7 @@ img {
 }
 
 /* Sidebar styles */
-.projekt-sidebar {
+.class-sidebar {
   right: 0;
   top: 0;
   height: calc(100vh - 100px);
@@ -506,7 +506,7 @@ img {
 }
 
 /* Avatar styles */
-.projekt-sidebar .avatar {
+.class-sidebar .avatar {
   height: 200px;
   width: 200px;
 }
@@ -519,7 +519,7 @@ img {
 }
 
 /* Sidebar link styles */
-.projekt-sidebar a {
+.class-sidebar a {
   padding: 10px 15px;
   text-decoration: none;
   font-size: 25px;
@@ -529,12 +529,12 @@ img {
 }
 
 /* Hover effect for sidebar links */
-.projekt-sidebar a:hover {
+.class-sidebar a:hover {
   color: #f1f1f1;
 }
 
 /* Sidebar item styles */
-.projekt-sidebar-item {
+.class-sidebar-item {
   color: rgba(35, 84, 143, 1);
   font-size: 24px;
   font-weight: 400;
@@ -547,7 +547,7 @@ img {
 }
 
 /* Hover effect for sidebar items */
-.projekt-sidebar-item:hover {
+.class-sidebar-item:hover {
   color: rgba(15, 55, 100, 1);
   background-color: rgba(81, 99, 189, 0.2);
 }
@@ -571,7 +571,7 @@ img {
 }
 
 /* Project styles */
-.projekt-projekt {
+.projekt-flex {
   width: 100%;
   display: flex;
   position: relative;
@@ -581,7 +581,7 @@ img {
 }
 
 /* Gallery styles */
-.gallery-foto, .projekt-foto {
+.gallery-photo, .projekt-photo {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -589,7 +589,7 @@ img {
 }
 
 /* Project photo styles */
-.projekt-foto {
+.projekt-photo {
   padding-top: 100px;
 }
 
@@ -959,7 +959,7 @@ img {
 }
 
 /* Search Bar Styles */
-.projekt-search1 {
+.projekt-search-outer {
   position: fixed;
   top: 27px;
   left: 50%;
@@ -982,32 +982,32 @@ img {
   display: none;
 }
 
-.projekt-search2 {
+.projekt-search-inner {
   cursor: pointer;
   background-color: #b8cce2;
   border-radius: 20px;
 }
 
 /* Search Input and Sort By Dropdown Styles */
-.projekt-group1 {
+.projekt-search-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0;
 }
 
-.projekt-search2 {
+.projekt-search-inner {
   margin-right: 10px;
   height: 20px;
 }
 
-.projekt-search1 form {
+.projekt-search-outer form {
   display: flex;
   align-items: center;
   width: 100%;
 }
 
-.projekt-search1 input[type="text"] {
+.projekt-search-outer input[type="text"] {
   border: none;
   width: 100%;
   padding: 10px;
@@ -1016,7 +1016,7 @@ img {
   margin-right: 10px;
 }
 /* Style for the sort_by dropdown */
-.projekt-search1 select {
+.projekt-search-outer select {
   border: none;
   padding: 10px;
   font-size: 16px;
@@ -1027,13 +1027,13 @@ img {
 }
 
 /* Change styles when dropdown is focused */
-.projekt-search1 select:focus {
+.projekt-search-outer select:focus {
   outline: none;
   background-color: #e0e0e0;
 }
 
 /* Button styling */
-.projekt-search1 button {
+.projekt-search-outer button {
   background-color: #83b4e9;
   color: black;
   border: none;
@@ -1043,7 +1043,7 @@ img {
 }
 
 /* Change button styles on hover */
-.projekt-search1 button:hover {
+.projekt-search-outer button:hover {
   background-color: #457bb4;
 }
 
@@ -1887,7 +1887,7 @@ body.banned-page-body {
 
 /* Adjust layout for smaller screens (max-width: 1000px) */
 @media (max-width: 1000px) {
-  .projekt-search1 {
+  .projekt-search-outer {
     left: auto;
     transform: none;
     width: 96%;
@@ -1897,7 +1897,7 @@ body.banned-page-body {
     margin-left: 20px;
     margin-right: 20px;
   }
-  .projekt-foto {
+  .projekt-photo {
     padding-top: 0;
   }
   .viewers {
@@ -1910,7 +1910,7 @@ body.banned-page-body {
 
 /* Adjust layout for larger screens (min-width: 1000px) */
 @media (min-width: 1000px) {
-  .projekt-search2 {
+  .projekt-search-inner {
     cursor: auto;
     background-color: transparent;
   }

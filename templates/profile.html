@@ -85,7 +85,7 @@
 			{% endif %}
 			<div class="line"></div>
 			<div class="posts-and-new">
-				<div class="gallery-foto">
+				<div class="gallery-photo">
 					{% for post in posts %}
 						<a href="{{ url_for('post', post_id=post.id) }}" class="gallery-image">
 							<img alt="Image {{ post.id }}" src="{{ url_for('image', id=post.id) }}" class="gallery-image" data-id="{{ post.id }}"> <!-- Corrected syntax -->

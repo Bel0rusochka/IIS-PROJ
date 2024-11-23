@@ -4,10 +4,10 @@
 
 {% block content %}
 <div class="projekt-content">
-    <div class="pagesignup-container">
-        <div class="pagesignup-pagesignup">
+    <div class="alignment-container-outer">
+        <div class="alignment-container-inner">
 
-			<form method="POST" class="pagesignup-signup" action="{{ url_for('edit_group', id = group.id) }}">
+			<form method="POST" class="form-container" action="{{ url_for('edit_group', id = group.id) }}">
 				<div class="add-viewer-text">Edit Group</div>
 			
 				<a href="{{ url_for('go_back') }}">
@@ -15,7 +15,7 @@
 				</a>
 				<div class="input-container">
 					<label for="name" class="floating-label">Group Name</label>
-					<input type="text" id="name" name="name" class="pagesignup-input" value="{{ group.name }}">
+					<input type="text" id="name" name="name" class="form-container-input" value="{{ group.name }}">
 					<span class="info-icon">ℹ
 						<span class="tooltip">Group name must be 2-60 characters and contain only latin letters and numbers.</span>
 					</span>
@@ -23,13 +23,13 @@
 			
 				<div class="input-container">
 					<label for="description" class="floating-label">Description</label>
-					<input type="text" id="description" name="description" class="pagesignup-input" value="{{ group.description }}">
+					<input type="text" id="description" name="description" class="form-container-input" value="{{ group.description }}">
 					<span class="info-icon">ℹ
 						<span class="tooltip">Group description must be no longer than 60 characters.</span>
 					</div>
 			
-				<button type="submit" name="action" value="save" class="pagesignup-buttonsingupbig">Save changes</button>
-				<button type="submit" name="action" value="delete" class="pagesignup-buttonsingupbig" formaction="{{ url_for('delete_group') }}">Delete group</button>
+				<button type="submit" name="action" value="save" class="form-container-button-big">Save changes</button>
+				<button type="submit" name="action" value="delete" class="form-container-button-big" formaction="{{ url_for('delete_group') }}">Delete group</button>
 				<input type="hidden" name="group_id" value="{{ group.id }}">
 			</form>
 	<div class="my-members">Users

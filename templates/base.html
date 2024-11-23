@@ -28,22 +28,22 @@
   </div>
 
     {% if session.user %}
-      <div id="mySidebar" class="projekt-sidebar">
+      <div id="sidebar" class="class-sidebar">
         <img alt="avatar" src="../static/images/no_avatar.svg" class="avatar"> <!-- User avatar -->
-        <a href="{{ url_for('profile', login=user.login) }}" class="projekt-sidebar-item">@{{ user.login }}</a>
-        <a href="{{ url_for('users') }}" class="projekt-sidebar-item">Users</a> 
-        <a href="{{ url_for('groups') }}" class="projekt-sidebar-item">Groups</a> 
-        <a href="{{ url_for('shares') }}" class="projekt-sidebar-item">Shares</a> 
-        <a href="{{ url_for('setting', login=user.login) }}" class="projekt-sidebar-item">Settings</a>
+        <a href="{{ url_for('profile', login=user.login) }}" class="class-sidebar-item">@{{ user.login }}</a>
+        <a href="{{ url_for('users') }}" class="class-sidebar-item">Users</a> 
+        <a href="{{ url_for('groups') }}" class="class-sidebar-item">Groups</a> 
+        <a href="{{ url_for('shares') }}" class="class-sidebar-item">Shares</a> 
+        <a href="{{ url_for('setting', login=user.login) }}" class="class-sidebar-item">Settings</a>
         {% if user.role == 'admin' or user.role == 'moderator' %}
-          <a href="{{ url_for('admin_panel_users') }}" class="projekt-sidebar-item" style="color: red;">Admin</a> <!-- Admin link -->
+          <a href="{{ url_for('admin_panel_users') }}" class="class-sidebar-item" style="color: red;">Admin</a> <!-- Admin link -->
         {% endif %}
-        <a href="{{ url_for('logout') }}" class="projekt-sidebar-item">Log Out</a> 
+        <a href="{{ url_for('logout') }}" class="class-sidebar-item">Log Out</a> 
       </div>
     {% endif %}
     
     <div class="projekt-container">
-      <div class="projekt-projekt">
+      <div class="projekt-flex">
         <div class="projekt-header">
           <a href="{{ url_for('index') }}" class="header_text">FITstagram</a> 
           <div class="projekt-frame2" id="iconContainer">

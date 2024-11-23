@@ -4,15 +4,15 @@
 
 {% block content %}
 <div class="projekt-content">
-    <div class="pagesignup-container">
-        <form class="pagesignup-signup" method="POST" action="/login">
+    <div class="alignment-container-outer">
+        <form class="form-container" method="POST" action="/login">
             <span class="pagesignup-text12"><span>Log In</span></span>
 
         
             <div class="input-container">
       
                 <label for="login_email" class="floating-label">Email/Login<span class="required-field">*</span></label>
-                <input type="text" id="login_email" name="login_email" class="pagesignup-input" placeholder="" required>
+                <input type="text" id="login_email" name="login_email" class="form-container-input" placeholder="" required>
                 <span class="info-icon">ℹ
                     <span class="tooltip">Please enter your email or login.</span>
                 </span>
@@ -20,19 +20,19 @@
          
             <div class="input-container">
                 <label for="password" class="floating-label">Password<span class="required-field">*</span></label>
-                <input type="password" id="password" name="password" class="pagesignup-input" autocomplete="current-password" required>
+                <input type="password" id="password" name="password" class="form-container-input" autocomplete="current-password" required>
                 <span class="toggle-password" onclick="togglePassword()">
                     <i class="fas fa-eye-slash" id="togglePasswordIcon"></i> 
                 </span>
                 <span class="info-icon">ℹ
                     <span class="tooltip">Please enter your password.</span>
                 </span>
-                <div class="mandatory">
-                    *Indicates mandatory fields
+                <div class="mandatory-field">
+                    *Indicates mandatory-field fields
                 </div>
             </div>
             
-            <button type="submit" class="pagesignup-buttonsingupbig">
+            <button type="submit" class="form-container-button-big">
                 <span class="pagesignup-text22"><span>Log in</span></span>
             </button>
 

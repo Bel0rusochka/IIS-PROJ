@@ -7,9 +7,9 @@
         <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
     </a>
     <div class="projekt-content">
-        <div class="pagesignup-container">
+        <div class="alignment-container-outer">
 
-    <form action="{{ url_for('edit_post', post_id=post.id) }}"class="pagesignup-signup"  method="POST">
+    <form action="{{ url_for('edit_post', post_id=post.id) }}"class="form-container"  method="POST">
         <div id="imageDescription">
             <div class="popup-header">
                 <h2 class="popup-title">Update Post</h2>
@@ -33,7 +33,7 @@
                 <option value="group" {% if post.status == "group" %}selected{% endif %}>Groups - Visible only in groups</option>
             </select>
         </div>
-        <form id="postForm" class="pagesignup-signup" method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
+        <form id="postForm" class="form-container" method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
 
             <div id="groupList" class="group-list" style="display: {% if privacy == 'group' %}block{% else %}none{% endif %};">
                 <label>Select Groups:</label>

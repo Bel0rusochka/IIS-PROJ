@@ -7,8 +7,8 @@
     <a href="{{ url_for('go_back') }}">
         <img class="back-button" alt="Back" src="../static/images/arrow2.svg" id="arrowIcon">
       </a>
-    <div id="postForm" class="pagesignup-container">
-        <form id="postForm" class="pagesignup-signup" method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
+    <div id="postForm" class="alignment-container-outer">
+        <form id="postForm" class="form-container" method="POST" action="{{ url_for('create_post') }}" enctype="multipart/form-data">
           <div class="popup-header">
             <h2 class="popup-title">New Post</h2>
             <button type="submit" class="post-button">Post</button>

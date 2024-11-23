@@ -4,15 +4,15 @@
 
 {% block content %}
 <div class="projekt-content">
-    <div class="pagesignup-container">
-        <div class="pagesignup-pagesignup">
-            <form class="pagesignup-signup" method="POST" action="/signup">
+    <div class="alignment-container-outer">
+        <div class="alignment-container-inner">
+            <form class="form-container" method="POST" action="/signup">
                 <span class="pagesignup-text12"><a>Sign up</a></span>
                 
                 <div class="input-container">
                     
                     <label for="email" class="floating-label">Email<span class="required-field">*</span></label>
-                    <input type="email" id="email" name="email" class="pagesignup-input" placeholder="" value= "{{ previous_values.email if previous_values else '' }}" required>
+                    <input type="email" id="email" name="email" class="form-container-input" placeholder="" value= "{{ previous_values.email if previous_values else '' }}" required>
                     <span class="info-icon">ℹ
                         <span class="tooltip">Please enter a valid email address.</span>
                     </span>
@@ -20,7 +20,7 @@
             
                 <div class="input-container">
                     <label for="login" class="floating-label">Login<span class="required-field">*</span></label>
-                    <input type="text" id="login" name="login" class="pagesignup-input" placeholder="" value= "{{ previous_values.login if previous_values else '' }}" required>
+                    <input type="text" id="login" name="login" class="form-container-input" placeholder="" value= "{{ previous_values.login if previous_values else '' }}" required>
                     <span class="info-icon">ℹ
                         <span class="tooltip">Login must be 2-60 characters long and contain only latin letters and numbers.</span>
                     </span>
@@ -29,7 +29,7 @@
                 <div class="pagesignup-fullname">
                     <div class="input-container">
                         <label for="name" class="floating-label">Name</label>
-                        <input type="text" id="name" name="name" class="pagesignup-input" placeholder="" value= "{{ previous_values.name if previous_values else '' }}" >
+                        <input type="text" id="name" name="name" class="form-container-input" placeholder="" value= "{{ previous_values.name if previous_values else '' }}" >
                         <span class="info-icon">ℹ
                             <span class="tooltip"> Name must be no longer than 60 characters and contain only latin letters and numbers. </span>
                         </span>
@@ -37,7 +37,7 @@
 
                     <div class="input-container">
                         <label for="surname" class="floating-label">Surname</label>
-                        <input type="text" id="surname" name="surname" class="pagesignup-input" placeholder="" value= "{{ previous_values.surname if previous_values else '' }}" >
+                        <input type="text" id="surname" name="surname" class="form-container-input" placeholder="" value= "{{ previous_values.surname if previous_values else '' }}" >
                         <span class="info-icon">ℹ
                             <span class="tooltip">Surname must be no longer than 60 characters and contain only latin letters and numbers. </span>
                         </span>
@@ -46,7 +46,7 @@
                 
                 <div class="input-container">
                     <label for="password" class="floating-label">Password<span class="required-field">*</span></label>
-                    <input type="password" id="password" name="password" class="pagesignup-input"autocomplete="current-password"  value="{{ previous_values.password if previous_values else '' }}" required>
+                    <input type="password" id="password" name="password" class="form-container-input"autocomplete="current-password"  value="{{ previous_values.password if previous_values else '' }}" required>
                     <span class="toggle-password" onclick="togglePassword()">
                         <i class="fas fa-eye-slash" id="togglePasswordIcon"></i> 
                     </span>
@@ -57,19 +57,19 @@
             
                 <div class="input-container">
                     <label for="confirm_password" class="floating-label">Confirm Password<span class="required-field">*</span></label>
-                    <input type="password" id="confirm_password" name="confirm_password" class="pagesignup-input" placeholder="" value="{{ previous_values.confirm_password if previous_values else '' }}" required>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-container-input" placeholder="" value="{{ previous_values.confirm_password if previous_values else '' }}" required>
                     <span class="toggle-password" onclick="toggleConfirmPassword()">
                         <i class="fas fa-eye-slash" id="toggleConfirmPasswordIcon"></i> 
                     </span>
                     <span class="info-icon">ℹ
                         <span class="tooltip">Please re-enter your password for confirmation.</span>
                     </span>
-                    <div class="mandatory">
-                        *Indicates mandatory fields
+                    <div class="mandatory-field">
+                        *Indicates mandatory-field fields
                     </div>
                 </div>
 
-                <button type="submit" class="pagesignup-buttonsingupbig">
+                <button type="submit" class="form-container-button-big">
                     <span class="pagesignup-text22"><span>Sign up</span></span>
                 </button>
 
