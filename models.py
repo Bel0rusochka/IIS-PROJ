@@ -145,7 +145,7 @@ class Users(db.Model):
             if filter_condition is None:
                 flash("Invalid request", "error")
                 return []
-            return Posts.query.filter(filter_condition).all()
+            return Posts.query.filter(filter_condition).order_by(Posts.date.desc()).all()
 
     #The following method is used to add a follower to the user.
     def add_follower(self, follower_login):
